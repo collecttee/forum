@@ -431,7 +431,7 @@ function deleteMembers($users, $check_not_admin = false)
  * @param bool $return_errors Whether to return the errors
  * @return int|array The ID of the newly registered user or an array of error info if $return_errors is true
  */
-function registerMember(&$regOptions, $return_errors = false)
+function registerMember(&$regOptions, $return_errors = false,$from_dao = false)
 {
 	global $scripturl, $txt, $modSettings, $context, $sourcedir;
 	global $user_info, $smcFunc;
@@ -470,9 +470,10 @@ function registerMember(&$regOptions, $return_errors = false)
 	$regOptions['username'] = $smcFunc['htmlspecialchars']($regOptions['username']);
 
 	// @todo Separate the sprintf?
-	if (empty($regOptions['email']) || !filter_var($regOptions['email'], FILTER_VALIDATE_EMAIL) || strlen($regOptions['email']) > 255)
-		$reg_errors[] = array('lang', 'profile_error_bad_email');
-
+	if ($from_dao === false){
+		if (empty($regOptions['email']) || !filter_var($regOptions['email'], FILTER_VALIDATE_EMAIL) || strlen($regOptions['email']) > 255)
+			$reg_errors[] = array('lang', 'profile_error_bad_email');
+	}
 	$username_validation_errors = validateUsername(0, $regOptions['username'], true, !empty($regOptions['check_reserved_name']));
 	if (!empty($username_validation_errors))
 		$reg_errors = array_merge($reg_errors, $username_validation_errors);
@@ -519,17 +520,29 @@ function registerMember(&$regOptions, $return_errors = false)
 		isBannedEmail($regOptions['email'], 'cannot_register', $txt['ban_register_prohibited']);
 
 	// Check if the email address is in use.
-	$request = $smcFunc['db_query']('', '
+    //todo this changed
+	/*$request = $smcFunc['db_query']('', '
 		SELECT id_member
 		FROM {db_prefix}members
-		WHERE email_address = {string:email_address}
+		WHERE account = {string:email_address}
 			OR email_address = {string:username}
 		LIMIT 1',
 		array(
 			'email_address' => $regOptions['email'],
 			'username' => $regOptions['username'],
 		)
-	);
+	);*/
+    $request = $smcFunc['db_query']('', '
+		SELECT id_member
+		FROM {db_prefix}members
+		WHERE member_name = {string:username}
+			OR address = {string:address}
+		LIMIT 1',
+        array(
+            'address' => $regOptions['address'],
+            'username' => $regOptions['username'],
+        )
+    );
 	// @todo Separate the sprintf?
 	if ($smcFunc['db_num_rows']($request) != 0)
 		$reg_errors[] = array('lang', 'email_in_use', false, array($smcFunc['htmlspecialchars']($regOptions['email'])));
@@ -590,12 +603,14 @@ function registerMember(&$regOptions, $return_errors = false)
 		fatal_lang_error('no_theme');
 
 	// Some of these might be overwritten. (the lower ones that are in the arrays below.)
+
 	$regOptions['register_vars'] = array(
 		'member_name' => $regOptions['username'],
 		'email_address' => $regOptions['email'],
 		'passwd' => hash_password($regOptions['username'], $regOptions['password']),
 		'password_salt' => bin2hex($smcFunc['random_bytes'](16)),
 		'posts' => 0,
+		'address' => $regOptions['address'],
 		'date_registered' => time(),
 		'member_ip' => $regOptions['interface'] == 'admin' ? '127.0.0.1' : $user_info['ip'],
 		'member_ip2' => $regOptions['interface'] == 'admin' ? '127.0.0.1' : $_SERVER['BAN_CHECK_IP'],

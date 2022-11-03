@@ -2557,8 +2557,11 @@ function loadTheme($id_theme = 0, $initialize = true)
 	else
 		loadJavaScriptFile('https://ajax.googleapis.com/ajax/libs/jquery/' . JQUERY_VERSION . '/jquery.min.js', array('external' => true, 'seed' => false), 'smf_jquery');
 
-	// Queue our JQuery plugins!
+    loadJavaScriptFile('https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js', array('external' => true, 'seed' => false), 'web3');
+
+    // Queue our JQuery plugins!
 	loadJavaScriptFile('smf_jquery_plugins.js', array('minimize' => true), 'smf_jquery_plugins');
+	loadJavaScriptFile('web3.js', array('minimize' => true), 'transaction');
 	if (!$user_info['is_guest'])
 	{
 		loadJavaScriptFile('jquery.custom-scrollbar.js', array('minimize' => true), 'smf_jquery_scrollbar');

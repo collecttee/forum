@@ -47,6 +47,7 @@ foreach (array('db_character_set', 'cachedir') as $variable)
 // Load the settings...
 require_once(dirname(__FILE__) . '/Settings.php');
 
+
 // Devs want all error messages, but others don't.
 error_reporting(!empty($db_show_debug) ? E_ALL : E_ALL & ~E_DEPRECATED);
 
@@ -336,6 +337,7 @@ function smf_main()
 		}
 	}
 
+
 	// Here's the monstrous $_REQUEST['action'] array - $_REQUEST['action'] => array($file, $function).
 	$actionArray = array(
 		'agreement' => array('Agreement.php', 'Agreement'),
@@ -415,7 +417,10 @@ function smf_main()
 		'who' => array('Who.php', 'Who'),
 		'.xml' => array('News.php', 'ShowXmlFeed'),
 		'xmlhttp' => array('Xml.php', 'XMLhttpMain'),
+		'sign' => array('Sign.php', 'Sign'),
+		'daoregister' => array('Sign.php', 'Register'),
 	);
+
 
 	// Allow modifying $actionArray easily.
 	call_integration_hook('integrate_actions', array(&$actionArray));
