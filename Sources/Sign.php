@@ -3,7 +3,7 @@
 
 function Sign() {
     global $smcFunc,$boarddir,$sourcedir,$user_settings;
-    require_once($boarddir . './Ecrecover.php');
+    require_once($boarddir . '/Ecrecover.php');
     if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'sign') {
         $time  = time();
         $sortanow = $time - ($time % 600);
