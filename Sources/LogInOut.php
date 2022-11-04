@@ -633,7 +633,7 @@ function checkActivation()
 /**
  * Perform the logging in. (set cookie, call hooks, etc)
  */
-function DoLogin()
+function DoLogin($from = '')
 {
 	global $user_info, $user_settings, $smcFunc;
 	global $maintenance, $modSettings, $context, $sourcedir;
@@ -714,6 +714,8 @@ function DoLogin()
 	// Just log you back out if it's in maintenance mode and you AREN'T an admin.
 	if (empty($maintenance) || allowedTo('admin_forum'))
 		redirectexit('action=login2;sa=check;member=' . $user_info['id'], $context['server']['needs_login_fix']);
+	elseif ($from == 'firedao')
+		echo json_encode(array('status'=>0,'error'=>'OK'));
 	else
 		redirectexit('action=logout;' . $context['session_var'] . '=' . $context['session_id'], $context['server']['needs_login_fix']);
 }

@@ -28,14 +28,14 @@ function Sign() {
             }else{
                 if (isset($_REQUEST['verify']) && $_REQUEST['verify'] == 1) {
                     $_SESSION['sign_address'] = $address;
-                    echo 'sign success';die;
+                    echo json_encode(array('status'=>1,'error'=>'sign success'));die;
                 } else {
-                    echo 'not found this address';die;
+                    echo json_encode(array('status'=>0,'error'=>'not found this address'));die;
                 }
 
             }
         }else{
-            echo 'sign failed';die;
+            echo json_encode(array('status'=>0,'error'=>'sign failed'));die;
         }
     }
 }
