@@ -17,21 +17,22 @@ window.addEventListener('load', function() {
             }
         )
     }
-    ethereum.enable()
-        .catch(function(reason) {
-            //如果用户拒绝了登录请求
-            if (reason === "User rejected provider access") {
-                // 用户拒绝登录后执行语句；
-            } else {
-                // 本不该执行到这里，但是真到这里了，说明发生了意外
-                Message.warning("There was a problem signing you in");
-            }
-        }).then(function(accounts) {
-        // 判断是否连接以太
-        // if (ethereum.networkVersion !== desiredNetwork) {}
-        doSign(accounts)
-    });
-
+    if (smf_member_id == 0) {
+        ethereum.enable()
+            .catch(function(reason) {
+                //如果用户拒绝了登录请求
+                if (reason === "User rejected provider access") {
+                    // 用户拒绝登录后执行语句；
+                } else {
+                    // 本不该执行到这里，但是真到这里了，说明发生了意外
+                    Message.warning("There was a problem signing you in");
+                }
+            }).then(function(accounts) {
+            // 判断是否连接以太
+            // if (ethereum.networkVersion !== desiredNetwork) {}
+            doSign(accounts)
+        });
+    }
     ethereum.on('accountsChanged', function (accounts) {
         doSign(accounts)
     })
