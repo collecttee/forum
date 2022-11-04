@@ -8,8 +8,8 @@ window.addEventListener('load', function() {
         web3.eth.defaultAccount = accounts[0];
         let rightnow = (Date.now() / 1000).toFixed(0)
         let sortanow = rightnow - (rightnow % 600)
-        console.log('Signning in to ' + document.domain + 'at' + sortanow, web3.eth.defaultAccount);
-        web3.eth.personal.sign('Signning in to ' + document.domain + 'at' + sortanow, web3.eth.defaultAccount, "test password!").then(
+        console.log('Signning in to firedao' + 'at' + sortanow, web3.eth.defaultAccount);
+        web3.eth.personal.sign('Signning in to firedao' + 'at' + sortanow, web3.eth.defaultAccount, "test password!").then(
             function(data){
                 $.post("./index.php?action=sign",{sign:data,address:web3.eth.defaultAccount},function(result){
                     console.log(result)

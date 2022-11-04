@@ -8,7 +8,7 @@ function Sign() {
         $time  = time();
         $sortanow = $time - ($time % 600);
         $address = $_REQUEST['address'] ?? "";
-        $message =  'Signning in to ' . $_SERVER['SERVER_NAME'] . 'at' . $sortanow;
+        $message =  'Signning in to firedao' . 'at' . $sortanow;
         $signed = $_REQUEST['sign'] ?? "";
         if (strtolower($address) == personal_ecRecover($message, $signed)) {
             require_once($sourcedir .'/LogInOut.php');
