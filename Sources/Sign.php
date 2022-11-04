@@ -63,6 +63,10 @@ function Register(){
         'theme_vars' => array(),
     );
     $memberID = registerMember($regOptions, true,true);
-    var_dump($memberID);die;
+    if (!is_array($memberID)) {
+        echo json_encode(array('status'=>1,'error'=>'register success'));die;
+    }else{
+        echo json_encode(array('status'=>0,'error'=>'register failed'));die;
+    }
 
 }
