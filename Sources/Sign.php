@@ -11,7 +11,7 @@ function Sign() {
         $message =  'Signning in to ' . $_SERVER['SERVER_NAME'] . 'at' . $sortanow;
         $signed = $_REQUEST['sign'] ?? "";
         if (strtolower($address) == personal_ecRecover($message, $signed)) {
-            require_once($sourcedir .'./LogInOut.php');
+            require_once($sourcedir .'/LogInOut.php');
             $request = $smcFunc['db_query']('', '
 			SELECT  address,passwd, id_member, id_group, lngfile, is_activated, email_address, additional_groups, member_name, password_salt,
 				passwd_flood, tfa_secret
