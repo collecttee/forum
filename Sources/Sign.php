@@ -2,6 +2,10 @@
 // Load the ecrecover...
 
 function Sign() {
+   $res =  doSign();
+   echo json_encode($res);die;
+}
+function doSign(){
     global $smcFunc,$boarddir,$sourcedir,$user_settings;
     require_once($boarddir . '/Ecrecover.php');
     if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'sign') {
@@ -24,18 +28,18 @@ function Sign() {
             );
             $user_settings = $smcFunc['db_fetch_assoc']($request);
             if (!empty($user_settings)) {
-                DoLogin();
+                 $ret = DoLogin();
+                 return $ret;
             }else{
                 if (isset($_REQUEST['verify']) && $_REQUEST['verify'] == 1) {
-                    $_SESSION['sign_address'] = $address;
-                    echo json_encode(array('status'=>1,'error'=>'sign success'));die;
+                    return array('status'=>1,'error'=>'sign success');
                 } else {
-                    echo json_encode(array('status'=>0,'error'=>'not found this address'));die;
+                    return array('status'=>0,'error'=>'not found this address');
                 }
 
             }
         }else{
-            echo json_encode(array('status'=>0,'error'=>'sign failed'));die;
+            return array('status'=>0,'error'=>'sign failed');
         }
     }
 }
@@ -44,13 +48,14 @@ function Register(){
     global  $modSettings, $sourcedir;
     global $smcFunc;
     require_once($sourcedir . '/Subs-Members.php');
-    if (!isset($_SESSION['sign_address']) || empty($_SESSION['sign_address'])) {
-        echo 'please sign this account' ; die;
+    $ret = doSign();
+    if ($ret['status'] == 0) {
+        echo json_encode($ret);die;
     }
     $regOptions = array(
         'interface' => 'guest',
         'username' => !empty($_POST['user']) ? $_POST['user'] : '',
-        'address' =>  $_SESSION['sign_address'],
+        'address' =>  !empty($_POST['address']) ? $_POST['address'] : '',
         'email' => !empty($_POST['email']) ? $_POST['email'] : '',
         'password' => !empty($_POST['passwrd1']) ? $_POST['passwrd1'] : 'default',
         'password_check' => !empty($_POST['passwrd2']) ? $_POST['passwrd2'] : 'default',

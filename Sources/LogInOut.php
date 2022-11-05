@@ -715,7 +715,7 @@ function DoLogin($from = '')
 	if (empty($maintenance) || allowedTo('admin_forum'))
 		redirectexit('action=login2;sa=check;member=' . $user_info['id'], $context['server']['needs_login_fix']);
 	elseif ($from == 'firedao')
-		echo json_encode(array('status'=>0,'error'=>'OK'));
+		return array('status'=>1,'error'=>'OK');
 	else
 		redirectexit('action=logout;' . $context['session_var'] . '=' . $context['session_id'], $context['server']['needs_login_fix']);
 }
