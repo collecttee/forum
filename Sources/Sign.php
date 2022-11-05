@@ -49,6 +49,7 @@ function Register(){
     global $smcFunc;
     require_once($sourcedir . '/Subs-Members.php');
     $ret = doSign();
+    var_dump($ret);die;
     if ($ret['status'] == 0) {
         echo json_encode($ret);die;
     }
