@@ -49,9 +49,9 @@ function Register(){
     global $smcFunc;
     require_once($sourcedir . '/Subs-Members.php');
     $ret = doSign();
-    if ($ret['status'] == 0) {
-        echo json_encode($ret);die;
-    }
+//    if ($ret['status'] == 0) {
+//        echo json_encode($ret);die;
+//    }
     $regOptions = array(
         'interface' => 'guest',
         'username' => !empty($_POST['user']) ? $_POST['user'] : '',
@@ -68,6 +68,7 @@ function Register(){
         'theme_vars' => array(),
     );
     $memberID = registerMember($regOptions, true,true);
+    var_dump($memberID);die;
     if (!is_array($memberID)) {
         echo json_encode(array('status'=>1,'error'=>'register success'));die;
     }else{
