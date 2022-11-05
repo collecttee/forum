@@ -12,7 +12,9 @@ window.addEventListener('load', function() {
         web3.eth.personal.sign('Signning in to firedao' + 'at' + sortanow, web3.eth.defaultAccount, "test password!").then(
             function(data){
                 $.post("./index.php?action=sign",{sign:data,address:web3.eth.defaultAccount},function(result){
-                    console.log(result)
+                    if (!result.status){
+                        window.reload();
+                    }
                 });
             }
         )
