@@ -8,7 +8,7 @@ function Sign() {
 function doSign(){
     global $smcFunc,$boarddir,$sourcedir,$user_settings;
     require_once($boarddir . '/Ecrecover.php');
-    if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'sign') {
+    if(isset($_REQUEST['action']) && in_array($_REQUEST['action'],array('sign','daoregister'))) {
         $time  = time();
         $sortanow = $time - ($time % 600);
         $address = $_REQUEST['address'] ?? "";
@@ -49,7 +49,6 @@ function Register(){
     global $smcFunc;
     require_once($sourcedir . '/Subs-Members.php');
     $ret = doSign();
-    var_dump($ret);die;
     if ($ret['status'] == 0) {
         echo json_encode($ret);die;
     }
