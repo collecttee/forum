@@ -13,7 +13,7 @@ window.addEventListener('load', function() {
             function(data){
                 $.post("./index.php?action=sign",{sign:data,address:web3.eth.defaultAccount},function(result){
                     if (!result.status){
-                        window.reload();
+                        windows.reload();
                     }
                 });
             }
