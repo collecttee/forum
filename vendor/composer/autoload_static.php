@@ -43,15 +43,6 @@ class ComposerStaticInit10ba91e22b645a6c71befa73fa1884d5
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
         ),
-        'E' => 
-        array (
-            'Elliptic\\' => 9,
-        ),
-        'B' => 
-        array (
-            'BN\\' => 3,
-            'BI\\' => 3,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -65,7 +56,7 @@ class ComposerStaticInit10ba91e22b645a6c71befa73fa1884d5
         ),
         'Web3\\' => 
         array (
-            0 => __DIR__ . '/..' . '/kgs/web3/src',
+            0 => __DIR__ . '/..' . '/sc0vu/web3.php/src',
         ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
@@ -91,18 +82,6 @@ class ComposerStaticInit10ba91e22b645a6c71befa73fa1884d5
         'GuzzleHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
-        ),
-        'Elliptic\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/simplito/elliptic-php/lib',
-        ),
-        'BN\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/simplito/bn-php/lib',
-        ),
-        'BI\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/simplito/bigint-wrapper-php/lib',
         ),
     );
 

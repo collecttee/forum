@@ -359,67 +359,6 @@
             "install-path": "../guzzlehttp/psr7"
         },
         {
-            "name": "kgs/web3",
-            "version": "dev-master",
-            "version_normalized": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yukaige/web3.php.git",
-                "reference": "23771e0f43bd5ab643e70925f5467e85e9dabf01"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yukaige/web3.php/zipball/23771e0f43bd5ab643e70925f5467e85e9dabf01",
-                "reference": "23771e0f43bd5ab643e70925f5467e85e9dabf01",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^6.0|^7.0",
-                "kornrunner/keccak": "^1.0",
-                "php": "^7.0|^8.0",
-                "simplito/elliptic-php": "^1.0"
-            },
-            "time": "2021-12-31T14:05:59+00:00",
-            "default-branch": true,
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "Web3\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "yukaige",
-                    "email": "yukaige@yukaige.com"
-                }
-            ],
-            "description": "A simple encapsulation of Web3 framework in PHP environment.",
-            "keywords": [
-                "USDT",
-                "contract",
-                "dai",
-                "eth",
-                "sign",
-                "web3"
-            ],
-            "support": {
-                "issues": "https://github.com/yukaige/web3.php/issues",
-                "source": "https://github.com/yukaige/web3.php/tree/master"
-            },
-            "install-path": "../kgs/web3"
-        },
-        {
             "name": "kornrunner/keccak",
             "version": "1.1.0",
             "version_normalized": "1.1.0.0",
@@ -837,65 +776,18 @@
             "install-path": "../ralouphie/getallheaders"
         },
         {
-            "name": "simplito/bigint-wrapper-php",
-            "version": "1.0.0",
-            "version_normalized": "1.0.0.0",
+            "name": "sc0vu/web3.php",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/simplito/bigint-wrapper-php.git",
-                "reference": "cf21ec76d33f103add487b3eadbd9f5033a25930"
+                "url": "https://github.com/sc0Vu/web3.php.git",
+                "reference": "fb94ea92c565dd6e9b8a522d821d2b22b3e271f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplito/bigint-wrapper-php/zipball/cf21ec76d33f103add487b3eadbd9f5033a25930",
-                "reference": "cf21ec76d33f103add487b3eadbd9f5033a25930",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "time": "2018-02-27T12:38:08+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "BI\\": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Simplito Team",
-                    "email": "s.smyczynski@simplito.com",
-                    "homepage": "https://simplito.com"
-                }
-            ],
-            "description": "Common interface for php_gmp and php_bcmath modules",
-            "support": {
-                "issues": "https://github.com/simplito/bigint-wrapper-php/issues",
-                "source": "https://github.com/simplito/bigint-wrapper-php/tree/1.0.0"
-            },
-            "install-path": "../simplito/bigint-wrapper-php"
-        },
-        {
-            "name": "simplito/bn-php",
-            "version": "1.1.3",
-            "version_normalized": "1.1.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/simplito/bn-php.git",
-                "reference": "189167f940cdb681288a967b0f4d66de81adcd97"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/simplito/bn-php/zipball/189167f940cdb681288a967b0f4d66de81adcd97",
-                "reference": "189167f940cdb681288a967b0f4d66de81adcd97",
+                "url": "https://api.github.com/repos/sc0Vu/web3.php/zipball/fb94ea92c565dd6e9b8a522d821d2b22b3e271f2",
+                "reference": "fb94ea92c565dd6e9b8a522d821d2b22b3e271f2",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -905,17 +797,22 @@
                 ]
             },
             "require": {
-                "simplito/bigint-wrapper-php": "~1.0.0"
+                "ext-mbstring": "*",
+                "guzzlehttp/guzzle": "^6.3|^7.0",
+                "kornrunner/keccak": "~1.0",
+                "php": "^7.1",
+                "phpseclib/phpseclib": "~2.0.11"
             },
             "require-dev": {
-                "phpunit/phpunit": "*"
+                "phpunit/phpunit": "~6.0"
             },
-            "time": "2022-08-12T18:58:14+00:00",
+            "time": "2021-08-15T03:28:10+00:00",
+            "default-branch": true,
             "type": "library",
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "BN\\": "lib/"
+                    "Web3\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -924,91 +821,15 @@
             ],
             "authors": [
                 {
-                    "name": "Simplito Team",
-                    "email": "s.smyczynski@simplito.com",
-                    "homepage": "https://simplito.com"
+                    "name": "sc0Vu",
+                    "email": "alk03073135@gmail.com"
                 }
             ],
-            "description": "Big number implementation compatible with bn.js",
+            "description": "Ethereum web3 interface.",
             "support": {
-                "issues": "https://github.com/simplito/bn-php/issues",
-                "source": "https://github.com/simplito/bn-php/tree/1.1.3"
+                "source": "https://github.com/sc0Vu/web3.php/tree/master"
             },
-            "install-path": "../simplito/bn-php"
-        },
-        {
-            "name": "simplito/elliptic-php",
-            "version": "1.0.10",
-            "version_normalized": "1.0.10.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/simplito/elliptic-php.git",
-                "reference": "a6228f480c729cf8efe2650a617c8500e981716d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/simplito/elliptic-php/zipball/a6228f480c729cf8efe2650a617c8500e981716d",
-                "reference": "a6228f480c729cf8efe2650a617c8500e981716d",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "ext-gmp": "*",
-                "simplito/bn-php": "~1.1.0"
-            },
-            "require-dev": {
-                "phpbench/phpbench": "@dev",
-                "phpunit/phpunit": "*"
-            },
-            "time": "2022-08-12T19:00:25+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "Elliptic\\": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Simplito Team",
-                    "email": "s.smyczynski@simplito.com",
-                    "homepage": "https://simplito.com"
-                }
-            ],
-            "description": "Fast elliptic curve cryptography",
-            "homepage": "https://github.com/simplito/elliptic-php",
-            "keywords": [
-                "Curve25519",
-                "ECDSA",
-                "Ed25519",
-                "EdDSA",
-                "cryptography",
-                "curve",
-                "curve25519-weier",
-                "ecc",
-                "ecdh",
-                "elliptic",
-                "nistp192",
-                "nistp224",
-                "nistp256",
-                "nistp384",
-                "nistp521",
-                "secp256k1"
-            ],
-            "support": {
-                "issues": "https://github.com/simplito/elliptic-php/issues",
-                "source": "https://github.com/simplito/elliptic-php/tree/1.0.10"
-            },
-            "install-path": "../simplito/elliptic-php"
+            "install-path": "../sc0vu/web3.php"
         },
         {
             "name": "symfony/deprecation-contracts",
