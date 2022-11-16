@@ -492,12 +492,12 @@ function registerMember(&$regOptions, $return_errors = false,$from_dao = false)
 	}
 	// Does the first password match the second?
 	elseif ($regOptions['password'] != $regOptions['password_check'])
-		$reg_errors[] = array('lang', 'passwords_dont_match');
+		//$reg_errors[] = array('lang', 'passwords_dont_match');  todo change
 
 	// That's kind of easy to guess...
 	if ($regOptions['password'] == '')
 	{
-		$reg_errors[] = array('lang', 'no_password');
+		//$reg_errors[] = array('lang', 'no_password'); todo change
 	}
 
 	// Now perform hard password validation as required.
