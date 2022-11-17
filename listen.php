@@ -19,12 +19,22 @@ $client = new GuzzleHttp(array_merge(['timeout' => 60, 'verify' => false], ['bas
 $abi = file_get_contents("user.json");
 $contract = new Contract($rpcUrl,$abi);
 $contractAbi  = $contract->getEthabi();
-$block = request($client,'eth_blockNumber', []);
-$data = ['fromBlock'=>'0x0','toBlock'=>$block,'address'=>$contractAddress];
-$res = request($client,'eth_getLogs', [$data]);
-$ret = $contractAbi->decodeParameters(['uint256','string','address','string','uint256'],$res[0]->data);
-Register($ret[1],$ret[2],$ret[3]);
-
+while (true){
+    $block = request($client,'eth_blockNumber', []);
+    $data = ['fromBlock'=>$block,'toBlock'=>$block,'address'=>$contractAddress];
+    $res = request($client,'eth_getLogs', [$data]);
+    if (!empty($res)){
+        foreach ($res as $val){
+            $ret = $contractAbi->decodeParameters(['uint256','string','address','string','uint256'],$val->data);
+            if (!empty($ret)){
+                $ret = Register($ret[1],$ret[2],$ret[3]);
+                echo json_encode($ret);
+                echo PHP_EOL;
+            }
+        }
+    }
+    sleep(5);
+}
 
 function request($client,$method, $params = []){
 
@@ -68,11 +78,26 @@ function Register($user,$address,$email){
         'extra_register_vars' => array(),
         'theme_vars' => array(),
     );
+    $request = $smcFunc['db_query']('', '
+		SELECT id_member
+		FROM {db_prefix}members
+		WHERE member_name = {string:username}
+			OR address = {string:address}
+		LIMIT 1',
+        array(
+            'address' => $address,
+            'username' => $user,
+        )
+    );
+    // @todo Separate the sprintf?
+    if ($smcFunc['db_num_rows']($request) != 0){
+        return ['status'=>0,'msg'=>'exists','account'=>$user,'address'=>$address];
+    }
     $memberID = registerMember($regOptions, true,true);
     if (!is_array($memberID)) {
-        echo json_encode(array('status'=>1,'error'=>'register success'));die;
+       return ['status'=>0,'msg'=>'Ok','account'=>$user,'address'=>$address];
     }else{
-        echo json_encode(array('status'=>0,'error'=>'register failed'));die;
+        return ['status'=>0,'msg'=>$memberID,'account'=>$user,'address'=>$address];
     }
 
 }

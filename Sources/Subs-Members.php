@@ -455,12 +455,12 @@ function registerMember(&$regOptions, $return_errors = false,$from_dao = false)
 	elseif ($regOptions['interface'] == 'guest')
 	{
 		// You cannot register twice...
-		if (empty($user_info['is_guest']))
+//		if (empty($user_info['is_guest']))
 //			redirectexit();
 
 		// Make sure they didn't just register with this session.
-		if (!empty($_SESSION['just_registered']) && empty($modSettings['disableRegisterCheck']))
-			fatal_lang_error('register_only_once', false);
+//		if (!empty($_SESSION['just_registered']) && empty($modSettings['disableRegisterCheck']))
+			//fatal_lang_error('register_only_once', false);
 	}
 
 	// Spaces and other odd characters are evil...
