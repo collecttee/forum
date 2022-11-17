@@ -185,6 +185,7 @@ function Login2()
 	elseif (isset($_GET['sa']) && $_GET['sa'] == 'check')
 	{
 		// Strike!  You're outta there!
+
 		if ($_GET['member'] != $user_info['id'])
 			fatal_lang_error('login_cookie_error', false);
 
@@ -712,6 +713,7 @@ function DoLogin($from = '')
 		);
 
 	// Just log you back out if it's in maintenance mode and you AREN'T an admin.
+
 	if (empty($maintenance) || allowedTo('admin_forum'))
 		redirectexit('action=login2;sa=check;member=' . $user_info['id'], $context['server']['needs_login_fix']);
 	elseif ($from == 'firedao')

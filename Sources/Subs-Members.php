@@ -456,7 +456,7 @@ function registerMember(&$regOptions, $return_errors = false,$from_dao = false)
 	{
 		// You cannot register twice...
 		if (empty($user_info['is_guest']))
-			redirectexit();
+//			redirectexit();
 
 		// Make sure they didn't just register with this session.
 		if (!empty($_SESSION['just_registered']) && empty($modSettings['disableRegisterCheck']))
@@ -612,8 +612,8 @@ function registerMember(&$regOptions, $return_errors = false,$from_dao = false)
 		'posts' => 0,
 		'address' => $regOptions['address'],
 		'date_registered' => time(),
-		'member_ip' => $regOptions['interface'] == 'admin' ? '127.0.0.1' : $user_info['ip'],
-		'member_ip2' => $regOptions['interface'] == 'admin' ? '127.0.0.1' : $_SERVER['BAN_CHECK_IP'],
+		'member_ip' => $regOptions['interface'] == 'admin' ? '127.0.0.1' : '127.0.0.1',//$user_info['ip'] todo change
+		'member_ip2' => $regOptions['interface'] == 'admin' ? '127.0.0.1' : '127.0.0.1', //$_SERVER['BAN_CHECK_IP']
 		'validation_code' => $validation_code,
 		'real_name' => $regOptions['username'],
 		'personal_text' => $modSettings['default_personal_text'],
@@ -853,7 +853,7 @@ function registerMember(&$regOptions, $return_errors = false,$from_dao = false)
 
 		$emaildata = loadEmailTemplate('register_pending', $replacements);
 
-		sendmail($regOptions['email'], $emaildata['subject'], $emaildata['body'], null, 'reg_pending', $emaildata['is_html'], 0);
+		//sendmail($regOptions['email'], $emaildata['subject'], $emaildata['body'], null, 'reg_pending', $emaildata['is_html'], 0);
 
 		// Admin gets informed here...
 		adminNotify('approval', $memberID, $regOptions['username']);

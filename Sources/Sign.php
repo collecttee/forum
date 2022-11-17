@@ -28,8 +28,7 @@ function doSign(){
             );
             $user_settings = $smcFunc['db_fetch_assoc']($request);
             if (!empty($user_settings)) {
-                 $ret = DoLogin();
-                 return $ret;
+                DoLogin('firedao');
             }else{
                 if (isset($_REQUEST['verify']) && $_REQUEST['verify'] == 1) {
                     return array('status'=>1,'error'=>'sign success');
@@ -56,6 +55,7 @@ function Register(){
         'interface' => 'guest',
         'username' => !empty($_POST['user']) ? $_POST['user'] : '',
         'address' =>  !empty($_POST['address']) ? $_POST['address'] : '',
+        'is_activated' => 1,
         'email' => !empty($_POST['email']) ? $_POST['email'] : '',
         'password' => !empty($_POST['passwrd1']) ? $_POST['passwrd1'] : 'default',
         'password_check' => !empty($_POST['passwrd2']) ? $_POST['passwrd2'] : 'default',
@@ -63,7 +63,7 @@ function Register(){
         'check_password_strength' => true,
         'check_email_ban' => true,
         'send_welcome_email' => !empty($modSettings['send_welcomeEmail']),
-        'require' => !empty($modSettings['coppaAge']) && empty($_SESSION['skip_coppa']) ? 'coppa' : (empty($modSettings['registration_method']) ? 'nothing' : ($modSettings['registration_method'] == 1 ? 'activation' : 'approval')),
+        'require' => 'nothing',
         'extra_register_vars' => array(),
         'theme_vars' => array(),
     );

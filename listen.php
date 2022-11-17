@@ -1,20 +1,30 @@
 <?php
 require_once './vendor/autoload.php';
-require_once 'index.php';
+require_once(dirname(__FILE__) . '/Settings.php');
 use Web3\Contract;
 use GuzzleHttp\Client as GuzzleHttp;
+define('SMF', 1);
+define('SMF_VERSION', '2.1.2');
+define('SMF_FULL_VERSION', 'SMF ' . SMF_VERSION);
+define('SMF_SOFTWARE_YEAR', '2022');
+
+define('JQUERY_VERSION', '3.6.0');
+define('POSTGRE_TITLE', 'PostgreSQL');
+define('MYSQL_TITLE', 'MySQL');
+define('SMF_USER_AGENT', 'Mozilla/5.0 (' . php_uname('s') . ' ' . php_uname('m') . ') AppleWebKit/605.1.15 (KHTML, like Gecko)  SMF/' . strtr(SMF_VERSION, ' ', '.'));
+$smcFunc = array();
 $rpcUrl = 'https://goerli.infura.io/v3/a2705a79f1da451ca9683d095bd5d87f';
-$contractAddress = '0x683fc3657036720a89e2695ab16fc9ae018299da';
+$contractAddress = '0x37953e725cCc5650E7D822191FC23F3C4D702FB2';
 $client = new GuzzleHttp(array_merge(['timeout' => 60, 'verify' => false], ['base_uri' => $rpcUrl]));
 $abi = file_get_contents("user.json");
 $contract = new Contract($rpcUrl,$abi);
 $contractAbi  = $contract->getEthabi();
 $block = request($client,'eth_blockNumber', []);
-
 $data = ['fromBlock'=>'0x0','toBlock'=>$block,'address'=>$contractAddress];
 $res = request($client,'eth_getLogs', [$data]);
-$a = $contractAbi->decodeParameters(['uint256','string','address','uint256'],$res[0]->data);
-var_dump($a);die;
+$ret = $contractAbi->decodeParameters(['uint256','string','address','string','uint256'],$res[0]->data);
+Register($ret[1],$ret[2],$ret[3]);
+
 
 function request($client,$method, $params = []){
 
@@ -33,22 +43,28 @@ function request($client,$method, $params = []){
     }
     return $body->result;
 }
-function Register($user,$address){
+function Register($user,$address,$email){
     global  $modSettings, $sourcedir;
+    require_once($sourcedir . '/Load.php');
     global $smcFunc;
     require_once($sourcedir . '/Subs-Members.php');
+    require_once($sourcedir . '/Subs.php');
+    require_once($sourcedir . '/Security.php');
+    require_once($sourcedir . '/Logging.php');
+    loadDatabase();
+    reloadSettings();
     $regOptions = array(
         'interface' => 'guest',
         'username' => $user,
         'address' =>  $address,
-        'email' => '',
+        'email' => $email,
         'password' => '',
         'password_check' => '',
         'check_reserved_name' => true,
         'check_password_strength' => true,
         'check_email_ban' => true,
-        'send_welcome_email' => !empty($modSettings['send_welcomeEmail']),
-        'require' => !empty($modSettings['coppaAge']) && empty($_SESSION['skip_coppa']) ? 'coppa' : (empty($modSettings['registration_method']) ? 'nothing' : ($modSettings['registration_method'] == 1 ? 'activation' : 'approval')),
+        'send_welcome_email' => false,
+        'require' => 'nothing',
         'extra_register_vars' => array(),
         'theme_vars' => array(),
     );
