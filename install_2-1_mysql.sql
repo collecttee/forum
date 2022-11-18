@@ -738,6 +738,7 @@ CREATE TABLE {$db_prefix}members (
 	timezone VARCHAR(80) NOT NULL DEFAULT '',
 	tfa_secret VARCHAR(24) NOT NULL DEFAULT '',
 	tfa_backup VARCHAR(64) NOT NULL DEFAULT '',
+    address varchar(255) DEFAULT NULL,
 	PRIMARY KEY (id_member),
 	INDEX idx_member_name (member_name),
 	INDEX idx_real_name (real_name),

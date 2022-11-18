@@ -56,30 +56,19 @@ $language = 'english';
  *
  * @var string
  */
-$boardurl = 'http://47.98.46.3:9528';
+$boardurl = 'http://127.0.0.1/smf';
 /**
  * Email address to send emails from. (like noreply@yourdomain.com.)
  *
  * @var string
  */
-$webmaster_email = 'admin@admin.com';
+$webmaster_email = 'noreply@myserver.com';
 /**
  * Name of the cookie to set for authentication.
  *
  * @var string
  */
-$cookiename = 'SMFCookie891';
-/**
- * Secret key used to create and verify cookies, tokens, etc.
- * Do not change this unless absolutely necessary, and NEVER share it.
- *
- * Note: Changing this will immediately log out all members of your forum
- * and break the token-based links in all previous email notifications,
- * among other possible effects.
- *
- * @var string
- */
-$auth_secret = '3a9aca0596cbab60476eb180eced8c4a39d797bf3700773c91a54298fb4c1df1';
+$cookiename = 'SMFCookie11';
 
 ########## Database Info ##########
 /**
@@ -95,31 +84,31 @@ $db_type = 'mysql';
  *
  * @var int
  */
-$db_port = 3306;
+$db_port = 0;
 /**
  * The server to connect to (or a Unix socket)
  *
  * @var string
  */
-$db_server = '127.0.0.1';
+$db_server = 'localhost';
 /**
  * The database name
  *
  * @var string
  */
-$db_name = 'smf2';
+$db_name = 'smf';
 /**
  * Database username
  *
  * @var string
  */
-$db_user = 'smf2';
+$db_user = 'root';
 /**
  * Database password
  *
  * @var string
  */
-$db_passwd = 'smf2';
+$db_passwd = '';
 /**
  * Database user for when connecting with SSI
  *
@@ -167,15 +156,6 @@ $db_mb4 = null;
  *
  * @var string
  */
-
-########## Cache Info ##########
-/**
- * Select a cache system. You want to leave this up to the cache area of the admin panel for
- * proper detection of memcached, output_cache, or smf file system
- * (you can add more with a mod).
- *
- * @var string
- */
 $cache_accelerator = '';
 /**
  * The level at which you would like to cache. Between 0 (off) through 3 (cache a lot).
@@ -189,13 +169,14 @@ $cache_enable = 0;
  * @var array
  */
 $cache_memcached = '';
+
 /**
  * This is only for the 'smf' file cache system. It is the path to the cache directory.
  * It is also recommended that you place this in /tmp/ if you are going to use this.
  *
  * @var string
  */
-$cachedir = '/data/wordpress/sites/smf2/www/cache';
+$cachedir = dirname(__FILE__) . '/cache';
 
 ########## Image Proxy ##########
 # This is done entirely in Settings.php to avoid loading the DB while serving the images
@@ -204,13 +185,13 @@ $cachedir = '/data/wordpress/sites/smf2/www/cache';
  *
  * @var bool
  */
-$image_proxy_enabled = false;
+$image_proxy_enabled = true;
 /**
  * Secret key to be used by the proxy
  *
  * @var string
  */
-$image_proxy_secret = '5f1b8332a4cf1d11c2e2';
+$image_proxy_secret = 'smfisawesome';
 /**
  * Maximum file size (in KB) for individual files
  *
@@ -225,38 +206,37 @@ $image_proxy_maxsize = 5192;
  *
  * @var string
  */
-$boarddir = '/data/wordpress/sites/smf2/www';
+$boarddir = dirname(__FILE__);
 /**
  * Path to the Sources directory.
  *
  * @var string
  */
-$sourcedir = '/data/wordpress/sites/smf2/www/Sources';
+$sourcedir = dirname(__FILE__) . '/Sources';
 /**
  * Path to the Packages directory.
  *
  * @var string
  */
-$packagesdir = '/data/wordpress/sites/smf2/www/Packages';
+$packagesdir = dirname(__FILE__) . '/Packages';
 /**
  * Path to the tasks directory.
  *
  * @var string
  */
-$tasksdir = '/data/wordpress/sites/smf2/www/Sources/tasks';
-$cachedir_sqlite = '/data/wordpress/sites/smf2/www/cache';
+$tasksdir = $sourcedir . '/tasks';
 
 # Make sure the paths are correct... at least try to fix them.
 if (!is_dir(realpath($boarddir)) && file_exists(dirname(__FILE__) . '/agreement.txt'))
-	$boarddir = dirname(__FILE__);
+    $boarddir = dirname(__FILE__);
 if (!is_dir(realpath($sourcedir)) && is_dir($boarddir . '/Sources'))
-	$sourcedir = $boarddir . '/Sources';
+    $sourcedir = $boarddir . '/Sources';
 if (!is_dir(realpath($tasksdir)) && is_dir($sourcedir . '/tasks'))
-	$tasksdir = $sourcedir . '/tasks';
+    $tasksdir = $sourcedir . '/tasks';
 if (!is_dir(realpath($packagesdir)) && is_dir($boarddir . '/Packages'))
-	$packagesdir = $boarddir . '/Packages';
+    $packagesdir = $boarddir . '/Packages';
 if (!is_dir(realpath($cachedir)) && is_dir($boarddir . '/cache'))
-	$cachedir = $boarddir . '/cache';
+    $cachedir = $boarddir . '/cache';
 
 ######### Legacy Settings #########
 # UTF-8 is now the only character set supported in 2.1.
@@ -265,13 +245,28 @@ $db_character_set = 'utf8';
 ########## Error-Catching ##########
 # Note: You shouldn't touch these settings.
 if (file_exists((isset($cachedir) ? $cachedir : dirname(__FILE__)) . '/db_last_error.php'))
-	include((isset($cachedir) ? $cachedir : dirname(__FILE__)) . '/db_last_error.php');
+    include((isset($cachedir) ? $cachedir : dirname(__FILE__)) . '/db_last_error.php');
 
 if (!isset($db_last_error))
 {
-	// File does not exist so lets try to create it
-	file_put_contents((isset($cachedir) ? $cachedir : dirname(__FILE__)) . '/db_last_error.php', '<' . '?' . "php\n" . '$db_last_error = 0;' . "\n" . '?' . '>');
-	$db_last_error = 0;
+    // File does not exist so lets try to create it
+    file_put_contents((isset($cachedir) ? $cachedir : dirname(__FILE__)) . '/db_last_error.php', '<' . '?' . "php\n" . '$db_last_error = 0;' . "\n" . '?' . '>');
+    $db_last_error = 0;
+}
+
+if (file_exists(dirname(__FILE__) . '/install.php'))
+{
+    $secure = false;
+    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')
+        $secure = true;
+    elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on')
+        $secure = true;
+
+    if (basename($_SERVER['PHP_SELF']) != 'install.php')
+    {
+        header('location: http' . ($secure ? 's' : '') . '://' . (empty($_SERVER['HTTP_HOST']) ? $_SERVER['SERVER_NAME'] . (empty($_SERVER['SERVER_PORT']) || $_SERVER['SERVER_PORT'] == '80' ? '' : ':' . $_SERVER['SERVER_PORT']) : $_SERVER['HTTP_HOST']) . (strtr(dirname($_SERVER['PHP_SELF']), '\\', '/') == '/' ? '' : strtr(dirname($_SERVER['PHP_SELF']), '\\', '/')) . '/install.php');
+        exit;
+    }
 }
 
 ?>
