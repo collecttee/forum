@@ -56,19 +56,30 @@ $language = 'english';
  *
  * @var string
  */
-$boardurl = 'http://127.0.0.1/smf';
+$boardurl = 'http://47.98.46.3:9528';
 /**
  * Email address to send emails from. (like noreply@yourdomain.com.)
  *
  * @var string
  */
-$webmaster_email = 'noreply@myserver.com';
+$webmaster_email = 'webmaster@admin.com';
 /**
  * Name of the cookie to set for authentication.
  *
  * @var string
  */
-$cookiename = 'SMFCookie11';
+$cookiename = 'SMFCookie891';
+/**
+ * Secret key used to create and verify cookies, tokens, etc.
+ * Do not change this unless absolutely necessary, and NEVER share it.
+ *
+ * Note: Changing this will immediately log out all members of your forum
+ * and break the token-based links in all previous email notifications,
+ * among other possible effects.
+ *
+ * @var string
+ */
+$auth_secret = '39dc50d5a3f327e0ae7f08e8948b5c114739d8de544f51fcbb1741c22f311e23';
 
 ########## Database Info ##########
 /**
@@ -84,7 +95,7 @@ $db_type = 'mysql';
  *
  * @var int
  */
-$db_port = 0;
+$db_port = 3306;
 /**
  * The server to connect to (or a Unix socket)
  *
@@ -96,19 +107,19 @@ $db_server = 'localhost';
  *
  * @var string
  */
-$db_name = 'smf';
+$db_name = 'smf2';
 /**
  * Database username
  *
  * @var string
  */
-$db_user = 'root';
+$db_user = 'smf2';
 /**
  * Database password
  *
  * @var string
  */
-$db_passwd = '';
+$db_passwd = 'smf2';
 /**
  * Database user for when connecting with SSI
  *
@@ -156,6 +167,15 @@ $db_mb4 = null;
  *
  * @var string
  */
+
+########## Cache Info ##########
+/**
+ * Select a cache system. You want to leave this up to the cache area of the admin panel for
+ * proper detection of memcached, output_cache, or smf file system
+ * (you can add more with a mod).
+ *
+ * @var string
+ */
 $cache_accelerator = '';
 /**
  * The level at which you would like to cache. Between 0 (off) through 3 (cache a lot).
@@ -169,14 +189,13 @@ $cache_enable = 0;
  * @var array
  */
 $cache_memcached = '';
-
 /**
  * This is only for the 'smf' file cache system. It is the path to the cache directory.
  * It is also recommended that you place this in /tmp/ if you are going to use this.
  *
  * @var string
  */
-$cachedir = dirname(__FILE__) . '/cache';
+$cachedir = '/data/wordpress/sites/smf2/www/cache';
 
 ########## Image Proxy ##########
 # This is done entirely in Settings.php to avoid loading the DB while serving the images
@@ -185,13 +204,13 @@ $cachedir = dirname(__FILE__) . '/cache';
  *
  * @var bool
  */
-$image_proxy_enabled = true;
+$image_proxy_enabled = false;
 /**
  * Secret key to be used by the proxy
  *
  * @var string
  */
-$image_proxy_secret = 'smfisawesome';
+$image_proxy_secret = '5948b88e2c785d4f6e0e';
 /**
  * Maximum file size (in KB) for individual files
  *
@@ -206,25 +225,25 @@ $image_proxy_maxsize = 5192;
  *
  * @var string
  */
-$boarddir = dirname(__FILE__);
+$boarddir = '/data/wordpress/sites/smf2/www';
 /**
  * Path to the Sources directory.
  *
  * @var string
  */
-$sourcedir = dirname(__FILE__) . '/Sources';
+$sourcedir = '/data/wordpress/sites/smf2/www/Sources';
 /**
  * Path to the Packages directory.
  *
  * @var string
  */
-$packagesdir = dirname(__FILE__) . '/Packages';
+$packagesdir = '/data/wordpress/sites/smf2/www/Packages';
 /**
  * Path to the tasks directory.
  *
  * @var string
  */
-$tasksdir = $sourcedir . '/tasks';
+$tasksdir = '/data/wordpress/sites/smf2/www/Sources/tasks';
 
 # Make sure the paths are correct... at least try to fix them.
 if (!is_dir(realpath($boarddir)) && file_exists(dirname(__FILE__) . '/agreement.txt'))
@@ -252,21 +271,6 @@ if (!isset($db_last_error))
     // File does not exist so lets try to create it
     file_put_contents((isset($cachedir) ? $cachedir : dirname(__FILE__)) . '/db_last_error.php', '<' . '?' . "php\n" . '$db_last_error = 0;' . "\n" . '?' . '>');
     $db_last_error = 0;
-}
-
-if (file_exists(dirname(__FILE__) . '/install.php'))
-{
-    $secure = false;
-    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')
-        $secure = true;
-    elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on')
-        $secure = true;
-
-    if (basename($_SERVER['PHP_SELF']) != 'install.php')
-    {
-        header('location: http' . ($secure ? 's' : '') . '://' . (empty($_SERVER['HTTP_HOST']) ? $_SERVER['SERVER_NAME'] . (empty($_SERVER['SERVER_PORT']) || $_SERVER['SERVER_PORT'] == '80' ? '' : ':' . $_SERVER['SERVER_PORT']) : $_SERVER['HTTP_HOST']) . (strtr(dirname($_SERVER['PHP_SELF']), '\\', '/') == '/' ? '' : strtr(dirname($_SERVER['PHP_SELF']), '\\', '/')) . '/install.php');
-        exit;
-    }
 }
 
 ?>
