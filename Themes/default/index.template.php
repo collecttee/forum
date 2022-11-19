@@ -273,11 +273,25 @@ function template_body_above()
 					', sprintf($txt['welcome_to_forum'], $context['forum_name_html_safe']), '
 				</li>
 				<li class="button_login">
+					<a href="javascript:connectMeatMask()" class="', $context['current_action'] == 'login' ? 'active' : 'open','">
+						<span class="main_icons login"></span>
+						<span class="textmenu">Wallet Login</span>
+					</a>
+				</li>
+				<li class="button_login">
 					<a href="', $scripturl, '?action=login" class="', $context['current_action'] == 'login' ? 'active' : 'open','" onclick="return reqOverlayDiv(this.href, ' . JavaScriptEscape($txt['login']) . ', \'login\');">
 						<span class="main_icons login"></span>
-						<span class="textmenu">', $txt['login'], '</span>
+						<span class="textmenu">Username Login</span>
 					</a>
-				</li>';
+				</li>
+				<li class="button_signup">
+					<a href="http://register.firedao.online/"  class="', $context['current_action'] == 'signup' ? 'active' : 'open','">
+						<span class="main_icons regcenter"></span>
+						<span class="textmenu">Wallet Signup</span>
+					</a>
+				</li>
+				';
+
 
 			if ($context['can_register'])
 				echo '
