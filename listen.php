@@ -20,20 +20,25 @@ $abi = file_get_contents("user.json");
 $contract = new Contract($rpcUrl,$abi);
 $contractAbi  = $contract->getEthabi();
 while (true){
-    $block = request($client,'eth_blockNumber', []);
-    $data = ['fromBlock'=>$block,'toBlock'=>$block,'address'=>$contractAddress];
-    $res = request($client,'eth_getLogs', [$data]);
-    if (!empty($res)){
-        foreach ($res as $val){
-            $ret = $contractAbi->decodeParameters(['uint256','string','address','string','uint256'],$val->data);
-            if (!empty($ret)){
-                $ret = Register($ret[1],$ret[2],$ret[3]);
-                echo json_encode($ret);
-                echo PHP_EOL;
+    try {
+        $block = request($client,'eth_blockNumber', []);
+        $data = ['fromBlock'=>$block,'toBlock'=>$block,'address'=>$contractAddress];
+        $res = request($client,'eth_getLogs', [$data]);
+        if (!empty($res)){
+            foreach ($res as $val){
+                $ret = $contractAbi->decodeParameters(['uint256','string','address','string','uint256'],$val->data);
+                if (!empty($ret)){
+                    $ret = Register($ret[1],$ret[2],$ret[3]);
+                    echo json_encode($ret);
+                    echo PHP_EOL;
+                }
             }
         }
+        sleep(5);
+    } catch (Exception $exception) {
+        echo $exception->getMessage();
     }
-    sleep(5);
+
 }
 
 function request($client,$method, $params = []){
