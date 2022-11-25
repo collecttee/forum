@@ -739,6 +739,7 @@ CREATE TABLE {$db_prefix}members (
 	tfa_secret VARCHAR(24) NOT NULL DEFAULT '',
 	tfa_backup VARCHAR(64) NOT NULL DEFAULT '',
     address varchar(255) DEFAULT NULL,
+    initialize_password int(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY (id_member),
 	INDEX idx_member_name (member_name),
 	INDEX idx_real_name (real_name),

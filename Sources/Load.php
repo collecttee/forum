@@ -867,6 +867,7 @@ function loadUserSettings()
 		'ignoreusers' => !empty($user_settings['pm_ignore_list']) ? explode(',', $user_settings['pm_ignore_list']) : array(),
 		'warning' => isset($user_settings['warning']) ? $user_settings['warning'] : 0,
 		'permissions' => array(),
+		'initialize_password' => isset($user_settings['initialize_password']) ? $user_settings['initialize_password'] : 0,
 	);
 	$user_info['groups'] = array_unique($user_info['groups']);
 	$user_info['can_manage_boards'] = !empty($user_info['is_admin']) || (!empty($modSettings['board_manager_groups']) && count(array_intersect($user_info['groups'], explode(',', $modSettings['board_manager_groups']))) > 0);

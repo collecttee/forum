@@ -5745,6 +5745,7 @@ function call_integration_hook($hook, $parameters = array())
 		return $results;
 
 	$functions = explode(',', $modSettings[$hook]);
+
 	// Loop through each function.
 	foreach ($functions as $function)
 	{
@@ -5753,7 +5754,6 @@ function call_integration_hook($hook, $parameters = array())
 			continue;
 
 		$call = call_helper($function, true);
-
 		// Is it valid?
 		if (!empty($call))
 			$results[$function] = call_user_func_array($call, $parameters);

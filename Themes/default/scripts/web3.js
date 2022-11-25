@@ -1,5 +1,23 @@
 // window.addEventListener('load', function() {
     let currentProvider = null;
+    function initializePassword(){
+        let password = $("#new_password").val();
+        let password2 =  $("#new_passwrd2").val();
+        if (password != password2){
+            alert('The passwords entered twice are inconsistent')
+            return;
+        }
+        $.post("./index.php?action=initializepassword",{password:password2,password2:password2},function(result){
+            console.log(result)
+            result = JSON.parse(result);
+            if (result.status == 1) {
+                alert('Operation succeeded, please log in again');
+                window.location.reload();
+            }else{
+                alert(result.msg);
+            }
+        });
+    }
     function connectMeatMask(){
         ethereum.enable()
             .catch(function(reason) {

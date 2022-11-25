@@ -5,6 +5,36 @@ function Sign() {
    $res =  doSign();
    echo json_encode($res);die;
 }
+function initializePassword(){
+    global  $modSettings, $sourcedir,$user_info;
+    global $smcFunc;
+    require_once($sourcedir . '/Subs-Members.php');
+    if (empty($user_info)){
+        echo json_encode(['status'=>0,'msg'=>'This user does not exist']);die;
+    }
+    if ($_POST['password'] != $_POST['password2']){
+        echo json_encode(['status'=>0,'msg'=>'The passwords entered twice are inconsistent']);die;
+    }
+    $password = $_POST['password'];
+
+    $passwd =  hash_password($user_info['username'], $password);
+    $ret = $smcFunc['db_query']('', '
+					UPDATE {db_prefix}members
+					SET passwd = {string:passwd},
+					initialize_password = 1
+					WHERE id_member = {int:id}',
+        array(
+            'passwd' => $passwd,
+            'id' => $user_info['id'],
+        )
+    );
+    if ($ret){
+        echo json_encode(['status'=>1,'msg'=>'ok']);die;
+    }else{
+        echo json_encode(['status'=>0,'msg'=>'operation failed']);die;
+    }
+}
+
 function doSign(){
     global $smcFunc,$boarddir,$sourcedir,$user_settings;
     require_once($boarddir . '/Ecrecover.php');

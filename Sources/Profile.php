@@ -656,6 +656,7 @@ function ModifyProfile($post_errors = array())
 	$profile_vars = array();
 
 	// Right - are we saving - if so let's save the old data first.
+
 	if ($context['completed_save'])
 	{
 		// Clean up the POST variables.
@@ -679,7 +680,6 @@ function ModifyProfile($post_errors = array())
 
 			// Does the integration want to check passwords?
 			$good_password = in_array(true, call_integration_hook('integrate_verify_password', array($cur_profile['member_name'], $password, false)), true);
-
 			// Bad password!!!
 			if (!$good_password && !hash_verify_password($user_profile[$memID]['member_name'], $password, $user_info['passwd']))
 				$post_errors[] = 'bad_password';
@@ -733,7 +733,6 @@ function ModifyProfile($post_errors = array())
 		}
 
 		call_integration_hook('integrate_profile_save', array(&$profile_vars, &$post_errors, $memID, $cur_profile, $current_area));
-
 		// There was a problem, let them try to re-enter.
 		if (!empty($post_errors))
 		{
@@ -746,7 +745,6 @@ function ModifyProfile($post_errors = array())
 			// If we've changed the password, notify any integration that may be listening in.
 			if (isset($profile_vars['passwd']))
 				call_integration_hook('integrate_reset_pass', array($cur_profile['member_name'], $cur_profile['member_name'], $_POST['passwrd2']));
-
 			updateMemberData($memID, $profile_vars);
 
 			// What if this is the newest member?
@@ -791,7 +789,6 @@ function ModifyProfile($post_errors = array())
 			cache_put_data('member_data-profile-' . $memID, null, 0);
 		}
 	}
-
 	// Have some errors for some reason?
 	if (!empty($post_errors))
 	{

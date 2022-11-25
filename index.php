@@ -418,6 +418,7 @@ function smf_main()
 		'.xml' => array('News.php', 'ShowXmlFeed'),
 		'xmlhttp' => array('Xml.php', 'XMLhttpMain'),
 		'sign' => array('Sign.php', 'Sign'),
+		'initializepassword' => array('Sign.php', 'initializePassword'),
 		'daoregister' => array('Sign.php', 'Register'),
 	);
 

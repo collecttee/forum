@@ -1453,7 +1453,24 @@ function template_edit_options()
 	if ($context['page_desc'])
 		echo '
 			<p class="information">', $context['page_desc'], '</p>';
-
+	if ($context['initialize_password'] == 0)
+	echo '<div class="roundframe"><dl class="settings">
+					<dt>
+						<strong><label for="new_password">Initialize password</label></strong>
+						<br>
+						<span class="smalltext">This function is valid only once, when the user initializes the password here, this function box will disappear.</span>
+					</dt>
+					<dd>
+						<input type="password" name="new_password" id="new_password" size="20" value="" maxlength="60">
+					</dd>
+					<dt>
+						<strong><label for="new_passwrd2">Verify Password</label></strong>
+					</dt>
+					<dd>
+						<input type="password" name="new_passwrd2" id="new_passwrd2" size="20" value="">
+					</dd>
+				</dl>
+				<input type="button" name="new_save" onclick="initializePassword()" value="Initialize password" class="button floatright"></div>';
 	echo '
 			<div class="roundframe">';
 

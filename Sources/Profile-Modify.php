@@ -813,7 +813,6 @@ function saveProfileFields()
 
 	// Assume we log nothing.
 	$context['log_changes'] = array();
-
 	// Cycle through the profile fields working out what to do!
 	foreach ($profile_fields as $key => $field)
 	{
@@ -824,7 +823,6 @@ function saveProfileFields()
 
 		// What gets updated?
 		$db_key = isset($field['save_key']) ? $field['save_key'] : $key;
-
 		// Right - we have something that is enabled, we can act upon and has a value posted to it. Does it have a validation function?
 		if (isset($field['input_validate']))
 		{
@@ -854,11 +852,9 @@ function saveProfileFields()
 			$_POST[$key] = (float) $_POST[$key];
 		elseif ($field['cast_type'] == 'check')
 			$_POST[$key] = !empty($_POST[$key]) ? 1 : 0;
-
 		// If we got here we're doing OK.
 		if ($field['type'] != 'hidden' && (!isset($old_profile[$key]) || $_POST[$key] != $old_profile[$key]))
 		{
-			// Set the save variable.
 			$profile_vars[$db_key] = $_POST[$key];
 			// And update the user profile.
 			$cur_profile[$key] = $_POST[$key];
@@ -930,7 +926,6 @@ function saveProfileFields()
 				$post_errors = array_merge($post_errors, $custom_fields_errors);
 		}
 	}
-
 	// Free memory!
 	unset($profile_fields);
 }
@@ -1779,7 +1774,7 @@ function editIgnoreList($memID)
  */
 function account($memID)
 {
-	global $context, $txt;
+	global $context, $txt,$user_info;
 
 	loadThemeOptions($memID);
 	if (allowedTo(array('profile_identity_own', 'profile_identity_any', 'profile_password_own', 'profile_password_any')))
@@ -1787,7 +1782,7 @@ function account($memID)
 
 	$context['sub_template'] = 'edit_options';
 	$context['page_desc'] = $txt['account_info'];
-
+	$context['initialize_password'] = $user_info['initialize_password'];
 	setupProfileContext(
 		array(
 			'member_name', 'real_name', 'date_registered', 'posts', 'lngfile', 'hr',
@@ -1930,6 +1925,8 @@ function theme($memID)
 
 	$context['sub_template'] = 'edit_options';
 	$context['page_desc'] = $txt['theme_info'];
+
+
 
 	setupProfileContext(
 		array(

@@ -62,7 +62,7 @@ $boardurl = 'http://47.98.46.3:9528';
  *
  * @var string
  */
-$webmaster_email = 'webmaster@admin.com';
+$webmaster_email = 'hgg7758521@126.com';
 /**
  * Name of the cookie to set for authentication.
  *
