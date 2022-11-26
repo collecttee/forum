@@ -2017,6 +2017,8 @@ function Post2()
 		$post_errors[] = 'no_message';
 	elseif (!empty($modSettings['max_messageLength']) && $smcFunc['strlen']($_POST['message']) > $modSettings['max_messageLength'])
 		$post_errors[] = array('long_message', array($modSettings['max_messageLength']));
+    elseif  ($smcFunc['strlen']($_POST['message']) < 20)
+        $post_errors[] = array('short_message', array(20));
 	else
 	{
 		// Prepare the message a bit for some additional testing.
