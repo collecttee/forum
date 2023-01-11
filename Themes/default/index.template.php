@@ -285,7 +285,7 @@ function template_body_above()
 					</a>
 				</li>
 				<li class="button_signup">
-					<a href="http://register.firedao.online/"  class="', $context['current_action'] == 'signup' ? 'active' : 'open','">
+					<a href="http://apptest.firedao.co/MintPassPort"  class="', $context['current_action'] == 'signup' ? 'active' : 'open','">
 						<span class="main_icons regcenter"></span>
 						<span class="textmenu">Wallet Signup</span>
 					</a>
