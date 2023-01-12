@@ -34,9 +34,9 @@ while (true){
                 }
             }
         }
-        sleep(5);
+        sleep(2);
     } catch (Exception $exception) {
-        echo $exception->getMessage();
+        echo 'error:'.$exception->getMessage().PHP_EOL;
     }
 
 }
@@ -66,6 +66,7 @@ function Register($user,$address,$email){
     require_once($sourcedir . '/Subs.php');
     require_once($sourcedir . '/Security.php');
     require_once($sourcedir . '/Logging.php');
+    require_once($sourcedir . '/Errors.php');
     loadDatabase();
     reloadSettings();
     $regOptions = array(
