@@ -14,7 +14,7 @@ define('MYSQL_TITLE', 'MySQL');
 define('SMF_USER_AGENT', 'Mozilla/5.0 (' . php_uname('s') . ' ' . php_uname('m') . ') AppleWebKit/605.1.15 (KHTML, like Gecko)  SMF/' . strtr(SMF_VERSION, ' ', '.'));
 $smcFunc = array();
 $rpcUrl = 'https://goerli.infura.io/v3/a2705a79f1da451ca9683d095bd5d87f';
-$contractAddress = '0xEF30E79a5F209cd5417b6a9B246D411685fc0BB5';
+$contractAddress = '0x7D9A61C062d51e8b45b7711E79e9Af501f7Ff0e5';
 $client = new GuzzleHttp(array_merge(['timeout' => 60, 'verify' => false], ['base_uri' => $rpcUrl]));
 $abi = file_get_contents("user.json");
 $contract = new Contract($rpcUrl,$abi);
