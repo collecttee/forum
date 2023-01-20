@@ -12,7 +12,8 @@
  *
  * @version 2.1.2
  */
-
+$targetContract = '';
+$apiKey = '';
 ########## Maintenance ##########
 /**
  * The maintenance "mode"
