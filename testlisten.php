@@ -29,7 +29,7 @@ while (true){
         if (!empty($res)){
             foreach ($res as $val){
                 $ret = $contractAbi->decodeParameters(['uint256','string','address','string','uint256'],$val->data);
-                if (!empty($ret)){
+                if (!empty($ret) && !empty($ret[1])){
                     $ret = Register($ret[1],$ret[2],$ret[3]);
                     echo json_encode($ret);
                     echo PHP_EOL;
