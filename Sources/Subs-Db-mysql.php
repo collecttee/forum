@@ -587,7 +587,7 @@ function smf_db_error($db_string, $connection = null)
 
 	// Log the error.
 	if ($query_errno != 1213 && $query_errno != 1205 && function_exists('log_error'))
-		log_error($txt['database_error'] . ': ' . $query_error . (!empty($modSettings['enableErrorQueryLogging']) ? "\n\n$db_string" : ''), 'database', $file, $line);
+		//log_error($txt['database_error'] . ': ' . $query_error . (!empty($modSettings['enableErrorQueryLogging']) ? "\n\n$db_string" : ''), 'database', $file, $line);
 
 	// Database error auto fixing ;).
 	if (function_exists('cache_get_data') && (!isset($modSettings['autoFixDatabase']) || $modSettings['autoFixDatabase'] == '1'))
@@ -898,6 +898,7 @@ function smf_db_insert($method, $table, $columns, $data, $keys, $returnmode = 0,
  */
 function smf_db_error_backtrace($error_message, $log_message = '', $error_type = false, $file = null, $line = null)
 {
+	return;
 	if (empty($log_message))
 		$log_message = $error_message;
 
