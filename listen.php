@@ -15,7 +15,8 @@ define('SMF_USER_AGENT', 'Mozilla/5.0 (' . php_uname('s') . ' ' . php_uname('m')
 $smcFunc = array();
 global $apiKey;
 global $targetContract;
-$rpcUrl = 'https://goerli.infura.io/v3/'. $apiKey;
+//$rpcUrl = 'https://goerli.infura.io/v3/'. $apiKey;
+$rpcUrl = 'https://goerli-rollup.arbitrum.io/rpc';
 $contractAddress = $targetContract;
 $client = new GuzzleHttp(array_merge(['timeout' => 60, 'verify' => false], ['base_uri' => $rpcUrl]));
 $abi = file_get_contents("user.json");
