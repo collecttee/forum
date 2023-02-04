@@ -56,7 +56,7 @@ $language = 'english';
  *
  * @var string
  */
-$boardurl = 'http://127.0.0.1/smf';
+$boardurl = 'http://forum02.firedao.online';
 /**
  * Email address to send emails from. (like noreply@yourdomain.com.)
  *
@@ -68,7 +68,18 @@ $webmaster_email = 'noreply@myserver.com';
  *
  * @var string
  */
-$cookiename = 'SMFCookie11';
+$cookiename = 'SMFCookie149';
+/**
+ * Secret key used to create and verify cookies, tokens, etc.
+ * Do not change this unless absolutely necessary, and NEVER share it.
+ *
+ * Note: Changing this will immediately log out all members of your forum
+ * and break the token-based links in all previous email notifications,
+ * among other possible effects.
+ *
+ * @var string
+ */
+$auth_secret = 'ac665fcf2bcd4e6ad276a0b7c33ec092828b0adb6881cc6d7d352b4189f4ca00';
 
 ########## Database Info ##########
 /**
@@ -84,7 +95,7 @@ $db_type = 'mysql';
  *
  * @var int
  */
-$db_port = 0;
+$db_port = 3306;
 /**
  * The server to connect to (or a Unix socket)
  *
@@ -96,19 +107,19 @@ $db_server = 'localhost';
  *
  * @var string
  */
-$db_name = 'smf';
+$db_name = 'smf02';
 /**
  * Database username
  *
  * @var string
  */
-$db_user = 'root';
+$db_user = 'smf02';
 /**
  * Database password
  *
  * @var string
  */
-$db_passwd = '';
+$db_passwd = 'smf02';
 /**
  * Database user for when connecting with SSI
  *
@@ -151,7 +162,7 @@ $db_mb4 = null;
 ########## Cache Info ##########
 /**
  * Select a cache system. You want to leave this up to the cache area of the admin panel for
- * proper detection of apc, memcached, output_cache, smf, or xcache
+ * proper detection of memcached, output_cache, or smf file system
  * (you can add more with a mod).
  *
  * @var string
@@ -175,7 +186,7 @@ $cache_memcached = '';
  *
  * @var string
  */
-$cachedir = dirname(__FILE__) . '/cache';
+$cachedir = '/data/forum/sites/forum02/www/cache';
 
 ########## Image Proxy ##########
 # This is done entirely in Settings.php to avoid loading the DB while serving the images
@@ -184,13 +195,13 @@ $cachedir = dirname(__FILE__) . '/cache';
  *
  * @var bool
  */
-$image_proxy_enabled = true;
+$image_proxy_enabled = false;
 /**
  * Secret key to be used by the proxy
  *
  * @var string
  */
-$image_proxy_secret = 'smfisawesome';
+$image_proxy_secret = '896a2b8d1f45c72aa95c';
 /**
  * Maximum file size (in KB) for individual files
  *
@@ -205,25 +216,34 @@ $image_proxy_maxsize = 5192;
  *
  * @var string
  */
-$boarddir = dirname(__FILE__);
+$boarddir = '/data/forum/sites/forum02/www';
 /**
  * Path to the Sources directory.
  *
  * @var string
  */
-$sourcedir = dirname(__FILE__) . '/Sources';
+$sourcedir = '/data/forum/sites/forum02/www/Sources';
 /**
  * Path to the Packages directory.
  *
  * @var string
  */
-$packagesdir = dirname(__FILE__) . '/Packages';
+$packagesdir = '/data/forum/sites/forum02/www/Packages';
 /**
  * Path to the tasks directory.
  *
  * @var string
  */
-$tasksdir = $sourcedir . '/tasks';
+$tasksdir = '/data/forum/sites/forum02/www/Sources/tasks';
+
+########## Cache Info ##########
+/**
+ * Select a cache system. You want to leave this up to the cache area of the admin panel for
+ * proper detection of memcached, output_cache or SMF file_system
+ * (you can add more with a mod).
+ *
+ * @var string
+ */
 
 # Make sure the paths are correct... at least try to fix them.
 if (!is_dir(realpath($boarddir)) && file_exists(dirname(__FILE__) . '/agreement.txt'))
@@ -241,6 +261,10 @@ if (!is_dir(realpath($cachedir)) && is_dir($boarddir . '/cache'))
 # UTF-8 is now the only character set supported in 2.1.
 $db_character_set = 'utf8';
 
+######### Custom Settings #########
+$targetContract = '';
+$apiKey = '';
+
 ########## Error-Catching ##########
 # Note: You shouldn't touch these settings.
 if (file_exists((isset($cachedir) ? $cachedir : dirname(__FILE__)) . '/db_last_error.php'))
@@ -251,21 +275,6 @@ if (!isset($db_last_error))
 	// File does not exist so lets try to create it
 	file_put_contents((isset($cachedir) ? $cachedir : dirname(__FILE__)) . '/db_last_error.php', '<' . '?' . "php\n" . '$db_last_error = 0;' . "\n" . '?' . '>');
 	$db_last_error = 0;
-}
-
-if (file_exists(dirname(__FILE__) . '/install.php'))
-{
-	$secure = false;
-	if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')
-		$secure = true;
-	elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on')
-		$secure = true;
-
-	if (basename($_SERVER['PHP_SELF']) != 'install.php')
-	{
-		header('location: http' . ($secure ? 's' : '') . '://' . (empty($_SERVER['HTTP_HOST']) ? $_SERVER['SERVER_NAME'] . (empty($_SERVER['SERVER_PORT']) || $_SERVER['SERVER_PORT'] == '80' ? '' : ':' . $_SERVER['SERVER_PORT']) : $_SERVER['HTTP_HOST']) . (strtr(dirname($_SERVER['PHP_SELF']), '\\', '/') == '/' ? '' : strtr(dirname($_SERVER['PHP_SELF']), '\\', '/')) . '/install.php');
-		exit;
-	}
 }
 
 ?>
