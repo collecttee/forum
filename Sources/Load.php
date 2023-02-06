@@ -10,7 +10,7 @@
  * @copyright 2022 Simple Machines and individual contributors
  * @license https://www.simplemachines.org/about/smf/license.php BSD
  *
- * @version 2.1.2
+ * @version 2.1.3
  */
 
 use SMF\Cache\CacheApi;
@@ -209,30 +209,14 @@ function reloadSettings()
 			$ent_arr = preg_split('~(' . $ent_list . '|.)~' . ($utf8 ? 'u' : '') . '', $ent_check($string), -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
 			return $length === null ? implode('', array_slice($ent_arr, $start)) : implode('', array_slice($ent_arr, $start, $length));
 		},
-		'strtolower' => $utf8 ? function($string) use ($sourcedir, &$smcFunc)
+		'strtolower' => function($string) use (&$smcFunc)
 		{
-			$string = $smcFunc['normalize']($string);
-
-			if (!function_exists('mb_strtolower'))
-			{
-				require_once($sourcedir . '/Subs-Charset.php');
-				return utf8_strtolower($string);
-			}
-
-			return mb_strtolower($string, 'UTF-8');
-		} : 'strtolower',
-		'strtoupper' => $utf8 ? function($string) use ($sourcedir, &$smcFunc)
+			return $smcFunc['convert_case']($string, 'lower');
+		},
+		'strtoupper' => function($string) use (&$smcFunc)
 		{
-			$string = $smcFunc['normalize']($string);
-
-			if (!function_exists('mb_strtolower'))
-			{
-				require_once($sourcedir . '/Subs-Charset.php');
-				return utf8_strtoupper($string);
-			}
-
-			return mb_strtoupper($string, 'UTF-8');
-		} : 'strtoupper',
+			return $smcFunc['convert_case']($string, 'upper');
+		},
 		'truncate' => function($string, $length) use ($utf8, $ent_check, $ent_list, &$smcFunc)
 		{
 			$string = $ent_check($string);
@@ -242,17 +226,77 @@ function reloadSettings()
 				$string = preg_replace('~(?:' . $ent_list . '|.)$~' . ($utf8 ? 'u' : ''), '', $string);
 			return $string;
 		},
-		'ucfirst' => $utf8 ? function($string) use (&$smcFunc)
+		'ucfirst' => function($string) use (&$smcFunc)
 		{
-			return $smcFunc['strtoupper']($smcFunc['substr']($string, 0, 1)) . $smcFunc['substr']($string, 1);
-		} : 'ucfirst',
-		'ucwords' => $utf8 ? function($string) use (&$smcFunc)
+			return $smcFunc['convert_case']($string, 'ucfirst');
+		},
+		'ucwords' => function($string) use (&$smcFunc)
 		{
-			$words = preg_split('~([\s\r\n\t]+)~', $string, -1, PREG_SPLIT_DELIM_CAPTURE);
-			for ($i = 0, $n = count($words); $i < $n; $i += 2)
-				$words[$i] = $smcFunc['ucfirst']($words[$i]);
-			return implode('', $words);
-		} : 'ucwords',
+			return $smcFunc['convert_case']($string, 'ucwords');
+		},
+		'convert_case' => function($string, $case, $simple = false, $form = 'c') use (&$smcFunc, $utf8, $ent_check, $fix_utf8mb4, $sourcedir)
+		{
+			if (!$utf8)
+			{
+				switch ($case)
+				{
+					case 'upper':
+						$string = strtoupper($string);
+						break;
+
+					case 'lower':
+					case 'fold';
+						$string = strtolower($string);
+						break;
+
+					case 'title':
+						$string = ucwords(strtolower($string));
+						break;
+
+					case 'ucwords':
+						$string = ucwords($string);
+						break;
+
+					case 'ucfirst':
+						$string = ucfirst($string);
+						break;
+
+					default:
+						break;
+				}
+			}
+			else
+			{
+				// Convert numeric entities to characters, except special ones.
+				if (function_exists('mb_decode_numericentity') && strpos($string, '&#') !== false)
+				{
+					$string = strtr($ent_check($string), array(
+						'&#34;' => '&quot;',
+						'&#38;' => '&amp;',
+						'&#39;' => '&apos;',
+						'&#60;' => '&lt;',
+						'&#62;' => '&gt;',
+						'&#160;' => '&nbsp;',
+					));
+
+					$string = mb_decode_numericentity($string, array(0, 0x10FFFF, 0, 0xFFFFFF), 'UTF-8');
+				}
+
+				// Use optmized function for compatibility casefolding.
+				if ($form === 'kc_casefold' || ($case === 'fold' && $form === 'kc'))
+				{
+					$string = $smcFunc['normalize']($string, 'kc_casefold');
+				}
+				// Everything else.
+				else
+				{
+					require_once($sourcedir . '/Subs-Charset.php');
+					$string = $smcFunc['normalize'](utf8_convert_case($string, $case, $simple), $form);
+				}
+			}
+
+			return $fix_utf8mb4($string);
+		},
 		'json_decode' => 'smf_json_decode',
 		'json_encode' => 'json_encode',
 		'random_int' => function($min = 0, $max = PHP_INT_MAX)
@@ -374,6 +418,7 @@ function reloadSettings()
 	$file_max_kb = floor(memoryReturnBytes(ini_get('upload_max_filesize')) / 1024);
 	$modSettings['attachmentPostLimit'] = empty($modSettings['attachmentPostLimit']) ? $post_max_kb : min($modSettings['attachmentPostLimit'], $post_max_kb);
 	$modSettings['attachmentSizeLimit'] = empty($modSettings['attachmentSizeLimit']) ? $file_max_kb : min($modSettings['attachmentSizeLimit'], $file_max_kb);
+	$modSettings['attachmentNumPerPostLimit'] = !isset($modSettings['attachmentNumPerPostLimit']) ? 4 : $modSettings['attachmentNumPerPostLimit'];
 
 	// Integration is cool.
 	if (defined('SMF_INTEGRATION_SETTINGS'))
@@ -3124,8 +3169,19 @@ function loadLanguage($template_name, $lang = '', $fatal = true, $force_reload =
 				$found = true;
 
 				// setlocale is required for basename() & pathinfo() to work properly on the selected language
-				if (!empty($txt['lang_locale']) && !empty($modSettings['global_character_set']))
-					setlocale(LC_CTYPE, $txt['lang_locale'] . '.' . $modSettings['global_character_set']);
+				if (!empty($txt['lang_locale']))
+				{
+					if (strpos($txt['lang_locale'], '.') !== false)
+						$locale_variants = $txt['lang_locale'];
+					else
+						$locale_variants = array_unique(array_merge(
+							!empty($modSettings['global_character_set']) ? array($txt['lang_locale'] . '.' . $modSettings['global_character_set']) : array(),
+							!empty($context['utf8']) ? array($txt['lang_locale'] . '.UTF-8', $txt['lang_locale'] . '.UTF8', $txt['lang_locale'] . '.utf-8', $txt['lang_locale'] . '.utf8') : array(),
+							array($txt['lang_locale'])
+						));
+
+					setlocale(LC_CTYPE, $locale_variants);
+				}
 
 				break;
 			}
@@ -3721,7 +3777,7 @@ function loadCacheAccelerator($overrideCache = '', $fallbackSMF = true)
 		}
 
 		// Connect up to the accelerator.
-		$cache_api->connect();
+		if ($cache_api->connect() === false) return false;
 
 		// Don't set this if we are overriding the cache.
 		if (empty($overrideCache))

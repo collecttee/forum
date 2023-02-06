@@ -10,7 +10,7 @@
  * @copyright 2022 Simple Machines and individual contributors
  * @license https://www.simplemachines.org/about/smf/license.php BSD
  *
- * @version 2.1.2
+ * @version 2.1.3
  */
 
 if (!defined('SMF'))
@@ -566,8 +566,8 @@ function constructPageIndex($base_url, &$start, $max_value, $num_per_page, $flex
 	$start_invalid = $start < 0;
 
 	// $start must be within bounds and be a multiple of $num_per_page.
-	$start = max(0, $start);
-	$start = min($start - ($start % $num_per_page), $max_value);
+	$start = min(max(0, $start), $max_value);
+	$start = $start - ($start % $num_per_page);
 
 	if (!isset($context['current_page']))
 		$context['current_page'] = $start / $num_per_page;
@@ -951,16 +951,16 @@ function smf_strftime(string $format, int $timestamp = null, string $tzid = null
 	// In case this function is called before reloadSettings().
 	if (!isset($smcFunc['strtoupper']))
 	{
-		if (function_exists('mb_strtoupper'))
-		{
-			$smcFunc['strtoupper'] = 'mb_strtoupper';
-			$smcFunc['strtolower'] = 'mb_strtolower';
-		}
-		elseif (isset($sourcedir))
+		if (isset($sourcedir))
 		{
 			require_once($sourcedir . '/Subs-Charset.php');
 			$smcFunc['strtoupper'] = 'utf8_strtoupper';
 			$smcFunc['strtolower'] = 'utf8_strtolower';
+		}
+		elseif (function_exists('mb_strtoupper'))
+		{
+			$smcFunc['strtoupper'] = 'mb_strtoupper';
+			$smcFunc['strtolower'] = 'mb_strtolower';
 		}
 		else
 		{
@@ -1592,7 +1592,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				);
 		}
 
-		if (!empty($parse_tags))
+		if (!empty($parse_tags) && $message === false)
 		{
 			if (!in_array('email', $parse_tags))
 				$disabled['email'] = true;
@@ -1963,7 +1963,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'content' => '<a href="$1" target="_blank" rel="noopener">$1</a>',
 				'validate' => function (&$tag, &$data, $disabled)
 				{
-					$data[0] = normalize_iri($data[0]);
+					$data[0] = normalize_iri(strtr(trim($data[0]), array('<br>' => '', ' ' => '%20')));
 
 					$scheme = parse_iri($data[0], PHP_URL_SCHEME);
 					if (empty($scheme))
@@ -2001,7 +2001,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'content' => '<a href="$1" class="bbc_link" target="_blank" rel="noopener">$1</a>',
 				'validate' => function(&$tag, &$data, $disabled)
 				{
-					$data = normalize_iri(strtr($data, array('<br>' => '')));
+					$data = normalize_iri(strtr(trim($data), array('<br>' => '', ' ' => '%20')));
 
 					$scheme = parse_iri($data, PHP_URL_SCHEME);
 					if (empty($scheme))
@@ -2020,7 +2020,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'after' => '</a>',
 				'validate' => function(&$tag, &$data, $disabled)
 				{
-					$data = iri_to_url($data);
+					$data = iri_to_url(strtr(trim($data), array('<br>' => '', ' ' => '%20')));
 
 					$scheme = parse_iri($data, PHP_URL_SCHEME);
 					if (empty($scheme))
@@ -2080,7 +2080,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'content' => '$1',
 				'validate' => function(&$tag, &$data, $disabled, $params)
 				{
-					$url = iri_to_url(strtr($data, array('<br>' => '')));
+					$url = iri_to_url(strtr(trim($data), array('<br>' => '', ' ' => '%20')));
 
 					if (parse_iri($url, PHP_URL_SCHEME) === null)
 						$url = '//' . ltrim($url, ':/');
@@ -2100,7 +2100,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'content' => '<a href="$1" class="bbc_link">$1</a>',
 				'validate' => function(&$tag, &$data, $disabled)
 				{
-					$data = normalize_iri(strtr($data, array('<br>' => '')));
+					$data = normalize_iri(strtr(trim($data), array('<br>' => '', ' ' => '%20')));
 
 					$scheme = parse_iri($data, PHP_URL_SCHEME);
 					if (empty($scheme))
@@ -2123,7 +2123,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 						$data = '#post_' . substr($data, 1);
 					else
 					{
-						$data = iri_to_url($data);
+						$data = iri_to_url(strtr(trim($data), array('<br>' => '', ' ' => '%20')));
 
 						$scheme = parse_iri($data, PHP_URL_SCHEME);
 						if (empty($scheme))
@@ -2417,7 +2417,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'content' => '<a href="$1" class="bbc_link" target="_blank" rel="noopener">$1</a>',
 				'validate' => function(&$tag, &$data, $disabled)
 				{
-					$data = normalize_iri(strtr($data, array('<br>' => '')));
+					$data = normalize_iri(strtr(trim($data), array('<br>' => '', ' ' => '%20')));
 
 					$scheme = parse_iri($data, PHP_URL_SCHEME);
 					if (empty($scheme))
@@ -2436,7 +2436,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'after' => '</a>',
 				'validate' => function(&$tag, &$data, $disabled)
 				{
-					$data = iri_to_url($data);
+					$data = iri_to_url(strtr(trim($data), array('<br>' => '', ' ' => '%20')));
 
 					$scheme = parse_iri($data, PHP_URL_SCHEME);
 					if (empty($scheme))
@@ -2467,6 +2467,13 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			'email',
 			'img',
 			'html',
+			'attach',
+			'ftp',
+			'flash',
+			'member',
+			'code',
+			'php',
+			'nobbc',
 		);
 
 		// Let mods add new BBC without hassle.
@@ -5152,7 +5159,7 @@ function ip2range($fullip)
 		$ip_array['low'] = $fullip;
 		$ip_array['high'] = $fullip;
 		return $ip_array;
-	} // if ip 22.12.* -> 22.12.* - 22.12.*
+	} // if ip 22.12.* -> 22.12.*-22.12.*
 	elseif (count($ip_parts) == 1)
 	{
 		$ip_parts[0] = $fullip;

@@ -10,7 +10,7 @@
  * @copyright 2022 Simple Machines and individual contributors
  * @license https://www.simplemachines.org/about/smf/license.php BSD
  *
- * @version 2.1.0
+ * @version 2.1.3
  */
 
 if (!defined('SMF'))
@@ -574,17 +574,26 @@ function smf_db_insert_id($table, $field = null, $connection = null)
  */
 function smf_db_transaction($type = 'commit', $connection = null)
 {
-	global $db_connection;
+	global $db_connection, $inTransaction;
 
 	// Decide which connection to use
 	$connection = $connection === null ? $db_connection : $connection;
 
 	if ($type == 'begin')
+	{
+		$inTransaction = true;
 		return @pg_query($connection, 'BEGIN');
+	}
 	elseif ($type == 'rollback')
+	{
+		$inTransaction = false;
 		return @pg_query($connection, 'ROLLBACK');
+	}
 	elseif ($type == 'commit')
+	{
+		$inTransaction = false;
 		return @pg_query($connection, 'COMMIT');
+	}
 
 	return false;
 }
@@ -903,7 +912,7 @@ function smf_db_fetch_all($request)
  */
 function smf_db_error_insert($error_array)
 {
-	global $db_prefix, $db_connection, $db_persist;
+	global $db_prefix, $db_connection, $db_persist, $smcFunc, $inTransaction;
 	static $pg_error_data_prep;
 
 	// without database we can't do anything
@@ -912,6 +921,10 @@ function smf_db_error_insert($error_array)
 
 	if (filter_var($error_array[2], FILTER_VALIDATE_IP) === false)
 		$error_array[2] = null;
+
+	// If we are in a transaction, abort.
+	if (!empty($inTransaction))
+		smf_db_transaction('rollback');
 
 	if(empty($db_persist))
 	{ // without pooling

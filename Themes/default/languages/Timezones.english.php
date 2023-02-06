@@ -1,5 +1,5 @@
 <?php
-// Version: 2.1.2; Timezones
+// Version: 2.1.3; Timezones
 
 global $tztxt;
 
@@ -507,7 +507,7 @@ $txt['Europe/Isle_of_Man'] = 'Isle of Man';
 $txt['Europe/Istanbul'] = 'Istanbul';
 $txt['Europe/Jersey'] = 'Jersey';
 $txt['Europe/Kaliningrad'] = 'Kaliningrad';
-$txt['Europe/Kiev'] = 'Kyiv';
+$txt['Europe/Kyiv'] = 'Kyiv';
 $txt['Europe/Kirov'] = 'Kirov';
 $txt['Europe/Lisbon'] = 'Lisbon';
 $txt['Europe/Ljubljana'] = 'Ljubljana';

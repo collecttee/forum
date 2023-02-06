@@ -62,7 +62,7 @@ $boardurl = 'http://forum02.firedao.online';
  *
  * @var string
  */
-$webmaster_email = 'noreply@myserver.com';
+$webmaster_email = 'FireKun@admin.com';
 /**
  * Name of the cookie to set for authentication.
  *

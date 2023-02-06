@@ -11,7 +11,7 @@
  * @copyright 2022 Simple Machines and individual contributors
  * @license https://www.simplemachines.org/about/smf/license.php BSD
  *
- * @version 2.1.2
+ * @version 2.1.3
  */
 
 if (!defined('SMF'))
@@ -1063,6 +1063,38 @@ function Post($post_errors = array())
 			$_SESSION['attachments_can_preview'][$attachment['thumb']] = true;
 	}
 
+	// Previously uploaded attachments have 2 flavors:
+	// - Existing post - at this point, now in $context['current_attachments']
+	// - Just added, current session only - at this point, now in $_SESSION['already_attached']
+	// We need to make sure *all* of these are in $context['current_attachments'], otherwise they won't show in dropzone during edits.
+	if (!empty($_SESSION['already_attached']))
+	{
+		$request = $smcFunc['db_query']('', '
+			SELECT
+				a.id_attach, a.filename, COALESCE(a.size, 0) AS filesize, a.approved, a.mime_type, a.id_thumb
+			FROM {db_prefix}attachments AS a
+			WHERE a.attachment_type = {int:attachment_type}
+				AND a.id_attach IN ({array_int:just_uploaded})',
+			array(
+				'attachment_type' => 0,
+				'just_uploaded' => $_SESSION['already_attached']
+			)
+		);
+
+		while ($row = $smcFunc['db_fetch_assoc']($request))
+		{
+			$context['current_attachments'][$row['id_attach']] = array(
+				'name' => $smcFunc['htmlspecialchars']($row['filename']),
+				'size' => $row['filesize'],
+				'attachID' => $row['id_attach'],
+				'approved' => $row['approved'],
+				'mime_type' => $row['mime_type'],
+				'thumb' => $row['id_thumb'],
+			);
+		}
+		$smcFunc['db_free_result']($request);
+	}
+
 	// Do we need to show the visual verification image?
 	$context['require_verification'] = !$user_info['is_mod'] && !$user_info['is_admin'] && !empty($modSettings['posts_require_captcha']) && ($user_info['posts'] < $modSettings['posts_require_captcha'] || ($user_info['is_guest'] && $modSettings['posts_require_captcha'] == -1));
 	if ($context['require_verification'])
@@ -1226,7 +1258,7 @@ function Post($post_errors = array())
 	if ($context['can_post_attachment'])
 	{
 		// If they've unchecked an attachment, they may still want to attach that many more files, but don't allow more than num_allowed_attachments.
-		$context['num_allowed_attachments'] = min(ini_get('max_file_uploads'), (empty($modSettings['attachmentNumPerPostLimit']) ? 50 : $modSettings['attachmentNumPerPostLimit']));
+		$context['num_allowed_attachments'] = !isset($modSettings['attachmentNumPerPostLimit']) ? 4 : $modSettings['attachmentNumPerPostLimit'];
 		$context['can_post_attachment_unapproved'] = allowedTo('post_attachment');
 		$context['attachment_restrictions'] = array();
 		$context['allowed_extensions'] = !empty($modSettings['attachmentCheckExtensions']) ? (strtr(strtolower($modSettings['attachmentExtensions']), array(',' => ', '))) : '';
@@ -2342,10 +2374,6 @@ function Post2()
 			$msgOptions['poster_time'] = $row['poster_time'];
 		}
 
-		// This will save some time...
-		if (empty($approve_has_changed))
-			unset($msgOptions['approved']);
-
 		modifyPost($msgOptions, $topicOptions, $posterOptions);
 	}
 	// This is a new topic or an already existing one. Save it.
@@ -3107,6 +3135,7 @@ function JavaScriptModify()
 			'body' => isset($_POST['message']) ? $_POST['message'] : null,
 			'icon' => isset($_REQUEST['icon']) ? preg_replace('~[\./\\\\*\':"<>]~', '', $_REQUEST['icon']) : null,
 			'modify_reason' => (isset($_POST['modify_reason']) ? $_POST['modify_reason'] : ''),
+			'approved' => (isset($row['approved']) ? $row['approved'] : null),
 		);
 		$topicOptions = array(
 			'id' => $topic,

@@ -11,7 +11,7 @@
  * @copyright 2022 Simple Machines and individual contributors
  * @license https://www.simplemachines.org/about/smf/license.php BSD
  *
- * @version 2.1.0
+ * @version 2.1.3
  */
 
 if (!defined('SMF'))
@@ -1039,8 +1039,13 @@ function Display()
 					'now' => time(),
 				)
 			);
-			$user_info['alerts'] = max(0, $user_info['alerts'] - max(0, $smcFunc['db_affected_rows']()));
-			updateMemberData($user_info['id'], array('alerts' => $user_info['alerts']));
+			// If changes made, update the member record as well
+			if ($smcFunc['db_affected_rows']() > 0)
+			{
+				require_once($sourcedir . '/Profile-Modify.php');
+				$user_info['alerts'] = alert_count($user_info['id'], true);
+				updateMemberData($user_info['id'], array('alerts' => $user_info['alerts']));
+			}
 		}
 	}
 

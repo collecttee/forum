@@ -211,15 +211,16 @@ body#help_popup {
 #likes li {
 	clear: both;
 	padding: 1px 0;
+	display: flex;
+	align-items: center;
 }
 #likes .avatar {
-	max-height: 45px;
-	max-width: 45px;
+	height: 5em;
+	width: 5em;
 	margin: 0 10px 0 0;
 }
-#likes .avatar, #likes li .like_profile {
-	vertical-align: middle;
-	display: inline-block;
+#likes li .like_profile {
+	flex: 1 0 auto;
 }
 #likes li .like_time {
 	padding: 4px 0;
@@ -1028,6 +1029,11 @@ a[class^="mobile_generic_menu_"] {
 	box-sizing: border-box;
 	vertical-align: middle;
 }
+html[lang="el-GR"] .button,
+html[lang="el-GR"] .quickbuttons > li > a,
+html[lang="el-GR"] .inline_mod_check {
+	text-transform: capitalize;
+}
 .pagesection .button {
 	color: #346;
 }
@@ -1494,13 +1500,12 @@ ul li.greeting {
 }
 .event_options_left {
 	box-sizing: border-box;
-	width: 49%;
-	padding-right: 1em;
+	width: 55%;
 	min-width: 238px;
 }
 .event_options_right {
 	box-sizing: border-box;
-	width: 50%;
+	width: 45%;
 	min-width: 270px;
 }
 .event_options_left div,
@@ -1514,9 +1519,18 @@ ul li.greeting {
 #event_time_input {
 	clear: left;
 }
-#event_time_input input[type="text"] {
-	width: 100px;
-	display: inline-block;
+#event_time_input > div {
+	display: flex;
+}
+#event_time_input input.date_input {
+	width: 40%;
+	margin: 2px 0.5ch 0;
+	flex: 1 1 auto;
+}
+#event_time_input input.time_input {
+	width: 13ch;
+	margin: 2px 0.5ch 0;
+	flex: 0 1 auto;
 }
 #post_event input[type="checkbox"] {
 	height: auto;
@@ -3906,6 +3920,7 @@ p.information img {
 	margin-top: -1px !important;
 }
 span.member.hidden {
+	display: inline-block;
 	font-style: italic;
 }
 
