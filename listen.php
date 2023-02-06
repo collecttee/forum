@@ -25,7 +25,7 @@ $contractAbi  = $contract->getEthabi();
 while (true){
     try {
         $block = request($client,'eth_blockNumber', []);
-        $startBlock = '0x'.dechex((hexdec($block)-1));
+        $startBlock = '0x'.dechex((hexdec($block)-20));
         $data = ['fromBlock'=>$startBlock,'toBlock'=>$block,'address'=>$contractAddress];
         $res = request($client,'eth_getLogs', [$data]);
         if (!empty($res)){
