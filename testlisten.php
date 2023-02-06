@@ -4,7 +4,7 @@ require_once(dirname(__FILE__) . '/Settings.php');
 use Web3\Contract;
 use GuzzleHttp\Client as GuzzleHttp;
 define('SMF', 1);
-define('SMF_VERSION', '2.1.2');
+define('SMF_VERSION', '2.1.3');
 define('SMF_FULL_VERSION', 'SMF ' . SMF_VERSION);
 define('SMF_SOFTWARE_YEAR', '2022');
 

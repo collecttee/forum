@@ -4,7 +4,7 @@ require_once(dirname(__FILE__) . '/Settings.php');
 use Web3\Contract;
 use GuzzleHttp\Client as GuzzleHttp;
 define('SMF', 1);
-define('SMF_VERSION', '2.1.2');
+define('SMF_VERSION', '2.1.3');
 define('SMF_FULL_VERSION', 'SMF ' . SMF_VERSION);
 define('SMF_SOFTWARE_YEAR', '2022');
 
@@ -16,7 +16,7 @@ $smcFunc = array();
 global $apiKey;
 global $targetContract;
 //$rpcUrl = 'https://goerli.infura.io/v3/'. $apiKey;
-$rpcUrl = 'https://goerli-rollup.arbitrum.io/rpc';
+$rpcUrl = 'https://arbitrum-goerli.infura.io/v3/'. $apiKey;
 $contractAddress = $targetContract;
 $client = new GuzzleHttp(array_merge(['timeout' => 60, 'verify' => false], ['base_uri' => $rpcUrl]));
 $abi = file_get_contents("user.json");
