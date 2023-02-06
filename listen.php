@@ -38,7 +38,7 @@ while (true){
                 }
             }
         }
-        sleep(4);
+        sleep(2);
     } catch (Exception $exception) {
         echo 'error:'.$exception->getMessage().PHP_EOL;
     }
