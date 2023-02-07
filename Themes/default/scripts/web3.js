@@ -47,7 +47,6 @@
             function(data){
                 $.post("./index.php?action=sign",{sign:data,address:web3.eth.defaultAccount},function(result){
                     console.log(result)
-                    result = JSON.parse(result);
                     if (result.status != 0){
                         window.location.reload();
                     }else{
