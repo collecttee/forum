@@ -16,7 +16,8 @@ $smcFunc = array();
 global $apiKey;
 global $targetContract;
 //$rpcUrl = 'https://goerli.infura.io/v3/'. $apiKey;
-$rpcUrl = 'https://arbitrum-goerli.infura.io/v3/'. $apiKey;
+//$rpcUrl = 'https://arbitrum-goerli.infura.io/v3/'. $apiKey;
+$rpcUrl = 'https://arbitrum-mainnet.infura.io/v3/'. $apiKey;
 $contractAddress = $targetContract;
 $client = new GuzzleHttp(array_merge(['timeout' => 60, 'verify' => false], ['base_uri' => $rpcUrl]));
 $abi = file_get_contents("user.json");
@@ -25,14 +26,14 @@ $contractAbi  = $contract->getEthabi();
 while (true){
     try {
         $block = request($client,'eth_blockNumber', []);
-        $startBlock = '0x'.dechex((hexdec($block)-20));
+        $startBlock = '0x'.dechex((hexdec($block)-40));
         $data = ['fromBlock'=>$startBlock,'toBlock'=>$block,'address'=>$contractAddress];
         $res = request($client,'eth_getLogs', [$data]);
         if (!empty($res)){
             foreach ($res as $val){
                 $ret = $contractAbi->decodeParameters(['uint256','string','address','string','uint256'],$val->data);
                 if (!empty($ret) && !empty($ret[1])){
-                    $ret = Register($ret[1],$ret[2],$ret[3]);
+                    $ret = Register($ret[0],$ret[1],$ret[2],$ret[3]);
                     echo json_encode($ret);
                     echo PHP_EOL;
                 }
@@ -62,7 +63,7 @@ function request($client,$method, $params = []){
     }
     return $body->result;
 }
-function Register($user,$address,$email){
+function Register($pid,$user,$address,$email){
     global  $modSettings, $sourcedir;
     require_once($sourcedir . '/Load.php');
     global $smcFunc;
@@ -78,6 +79,7 @@ function Register($user,$address,$email){
         'username' => $user,
         'address' =>  $address,
         'email' => $email,
+        'pid'=>$pid,
         'password' => '',
         'password_check' => '',
         'check_reserved_name' => true,
