@@ -72,8 +72,8 @@
     //         doSign(accounts)
     //     });
     // }
-    ethereum.on('accountsChanged', function (accounts) {
-        doSign(accounts)
-    })
+    // ethereum.on('accountsChanged', function (accounts) {
+    //     doSign(accounts)
+    // })
 
 // })

@@ -610,6 +610,7 @@ function registerMember(&$regOptions, $return_errors = false,$from_dao = false)
 		'passwd' => hash_password($regOptions['username'], $regOptions['password']),
 		'password_salt' => bin2hex($smcFunc['random_bytes'](16)),
 		'posts' => 0,
+		'pid' => $regOptions['pid'],
 		'address' => $regOptions['address'],
 		'date_registered' => time(),
 		'member_ip' => $regOptions['interface'] == 'admin' ? '127.0.0.1' : '127.0.0.1',//$user_info['ip'] todo change
