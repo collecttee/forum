@@ -72,8 +72,10 @@
     //         doSign(accounts)
     //     });
     // }
-    // ethereum.on('accountsChanged', function (accounts) {
-    //     doSign(accounts)
-    // })
+    ethereum.on('accountsChanged', function (accounts) {
+        if (smf_member_id != 0) {
+            window.location.href = smf_scripturl + '?action=logout;' + smf_session_var + '=' + smf_session_id + ';u=' + smf_member_id
+        }
+    })
 
 // })

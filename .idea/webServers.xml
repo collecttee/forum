@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="61aa945c-b07b-486a-a0ad-894703e50404" name="SMF">
-        <fileTransfer rootFolder="/data/wordpress/sites/smf2/" accessType="SFTP" host="47.98.46.3" port="22" sshConfigId="888c31b9-0fd2-42f4-b771-dcc8e3005193" sshConfig="root@47.98.46.3:22 password">
+        <fileTransfer rootFolder="/data/forum/sites/forum02" accessType="SFTP" host="8.219.49.191" port="22" sshConfigId="888c31b9-0fd2-42f4-b771-dcc8e3005193" sshConfig="root@8.219.49.191:22 password">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
