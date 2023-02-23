@@ -408,7 +408,6 @@ function ModifyCalendarSettings($return_config = false)
 
 	// We need this for the inline permissions
 	createToken('admin-mp');
-
 	// Prepare the settings...
 	prepareDBSettingContext($config_vars);
 }

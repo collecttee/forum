@@ -208,6 +208,12 @@ function AdminMain()
 						'settings' => array($txt['calendar_settings'], 'admin_forum'),
 					),
 				),
+                'managemeriter' => array(
+                    'label' => $txt['manage_calendar'],
+                    'file' => 'ManageMeriter.php',
+                    'function' => 'ManageMeriter',
+                    'icon' => 'calendar'
+                ),
 				'managesearch' => array(
 					'label' => $txt['manage_search'],
 					'file' => 'ManageSearch.php',
