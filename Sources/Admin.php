@@ -208,12 +208,6 @@ function AdminMain()
 						'settings' => array($txt['calendar_settings'], 'admin_forum'),
 					),
 				),
-                'managemeriter' => array(
-                    'label' => $txt['manage_calendar'],
-                    'file' => 'ManageMeriter.php',
-                    'function' => 'ManageMeriter',
-                    'icon' => 'calendar'
-                ),
 				'managesearch' => array(
 					'label' => $txt['manage_search'],
 					'file' => 'ManageSearch.php',
@@ -416,6 +410,12 @@ function AdminMain()
 						'test' => array($txt['mailqueue_test'], 'admin_forum'),
 					),
 				),
+                'managemeriter' => array(
+                    'label' => 'ManageMeriter',
+                    'file' => 'ManageMeriter.php',
+                    'function' => 'ManageMeriter',
+                    'icon' => ''
+                ),
 				'reports' => array(
 					'label' => $txt['generate_reports'],
 					'file' => 'Reports.php',
