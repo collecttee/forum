@@ -13,7 +13,34 @@ Edit your Merit function here.					</p>
 
     echo '
 		</div>';
-
+    echo '<div class="cat_bar">
+			<h3 class="catbg">Set Merit Function Managers</h3>
+		</div>
+		<div class="windowbg">
+<dl class="settings">
+                            <form method="post" action="', $context['post_url'], '" >                                  
+									<dt>
+										<a id="setting_reg_verification"></a> <span><label for="reg_verification">Single Issuance Limit</label></span>
+									</dt>
+									<dd>
+										<input type="text" name="limit" id="limit" value="">
+									</dd>
+				<input type="submit" value="Save" class="button">
+								</dl>	
+								<hr>
+								<dl class="settings">
+									<dt>
+										<a id="setting_reg_verification"></a> <span><label for="reg_verification">Set Merit Function Managers</label></span>
+									</dt>
+									<dd>
+										<input type="text" name="recaptcha_site_key" id="recaptcha_site_key" value="">
+									</dd>
+									<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
+				<input type="hidden" name="' . $context['admin-eh_token_var'] . '" value="' . $context['admin-eh_token'] . '">
+				<input type="submit" value="Save" class="button">
+				</form> 
+								</dl>	
+								</div>';
     // Go through each table!
     foreach ($context['tables'] as $table)
     {
