@@ -3,6 +3,12 @@ function template_main()
 {
     global $context, $txt;
 
+    if (!empty($context['saved_successful']))
+        echo '
+					<div class="infobox">', $txt['settings_saved'], '</div>';
+    if (!empty($context['not_found_user']))
+        echo '
+					<div class="errorbox">', $txt['hooks_missing'], '</div>';
     echo '
 		<div class="cat_bar">
 			<h3 class="catbg">', $context['page_title'], '</h3>
@@ -23,21 +29,26 @@ Edit your Merit function here.					</p>
 										<a id="setting_reg_verification"></a> <span><label for="reg_verification">Single Issuance Limit</label></span>
 									</dt>
 									<dd>
-										<input type="text" name="limit" id="limit" value="">
+										<input type="number" name="limit" id="limit" value="', $context['limit'], '">
 									</dd>
 				<input type="submit" value="Save" class="button">
+									<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
+				<input type="hidden" name="' . $context['admin-eh_token_var'] . '" value="' . $context['admin-eh_token'] . '">
+				</form> 
 								</dl>	
 								<hr>
 								<dl class="settings">
+								  <form method="post" action="', $context['set_url'], '" >    
 									<dt>
 										<a id="setting_reg_verification"></a> <span><label for="reg_verification">Set Merit Function Managers</label></span>
 									</dt>
 									<dd>
-										<input type="text" name="recaptcha_site_key" id="recaptcha_site_key" value="">
+										<input type="text" name="username" id="recaptcha_site_key" value="">
 									</dd>
+			
 									<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
 				<input type="hidden" name="' . $context['admin-eh_token_var'] . '" value="' . $context['admin-eh_token'] . '">
-				<input type="submit" value="Save" class="button">
+				<input type="submit" value="Add" class="button">
 				</form> 
 								</dl>	
 								</div>';
