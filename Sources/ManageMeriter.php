@@ -7,10 +7,25 @@ function ManageMeriter()
 
     // Let's get our things running...
     loadTemplate('ManageMeriter');
+
 //    loadLanguage('Reports');
     $context['page_title'] = $txt['managemeriter_title'];
     $context['post_url'] = $scripturl . '?action=admin;area=managemeriter;save=limit';
     $context['set_url'] = $scripturl . '?action=admin;area=managemeriter;save=set';
+    $context['delete_url'] = $scripturl . '?action=admin;area=managemeriter';
+    if (isset($_POST['work']) && $_POST['work'] == 'delete') {
+        checkSession();
+        $delete = $_POST['delete'];
+        $smcFunc['db_query']('', '
+		DELETE FROM {db_prefix}member_roles
+		WHERE id IN ({array_int:users}) AND role_id = {int:role_id}',
+            array(
+                'users' => $delete,
+                'role_id' => 1
+            )
+        );
+        redirectexit('action=admin;area=managemeriter');
+    }
     if (isset($_SESSION['adm-save']))
     {
         if ($_SESSION['adm-save'] === true)
@@ -29,17 +44,47 @@ function ManageMeriter()
 
         unset($_SESSION['not-found']);
     }
+    if (isset($_SESSION['exists']))
+    {
+        if ($_SESSION['exists'] === true)
+            $context['exists'] = true;
+        else
+            $context['saved_failed'] = $_SESSION['adm-save'];
+
+        unset($_SESSION['exists']);
+    }
     $request = $smcFunc['db_query']('', '
 			SELECT  id,merit_max_limit
 			FROM {db_prefix}smerit_max
 			WHERE id = {int:id}
 			LIMIT 1',
         array(
-            'id' => 1,
+            'id' => 1
         )
     );
     $result = $smcFunc['db_fetch_assoc']($request);
+    $smcFunc['db_free_result']($request);
     $context['limit'] = $result['merit_max_limit'] ?? 0;
+
+
+    // member-lists
+    $request = $smcFunc['db_query']('', '
+			SELECT  rol.id as id,mem.id_member, mem.member_name,mem.address
+			FROM {db_prefix}member_roles AS rol
+				INNER JOIN {db_prefix}members AS mem ON (rol.id_member = mem.id_member)
+			WHERE rol.role_id = {int:role_id}',
+        array(
+            'role_id' => 1
+        )
+    );
+
+    while ($row = $smcFunc['db_fetch_assoc']($request)) {
+        $context['users'][] = $row;
+    }
+
+    $smcFunc['db_free_result']($request);
+
+
     // Saving the settings?
     if (isset($_GET['save']))
     {
@@ -91,6 +136,22 @@ function ManageMeriter()
             $user_settings = $smcFunc['db_fetch_assoc']($request);
             if (empty($user_settings)){
                 $_SESSION['not-found'] = true;
+                redirectexit('action=admin;area=managemeriter');
+            }
+            $request = $smcFunc['db_query']('', '
+			SELECT  id_member
+			FROM {db_prefix}member_roles
+			WHERE id_member = {int:id_member}
+			AND role_id = {int:role_id}
+			LIMIT 1',
+                array(
+                    'id_member' => $user_settings['id_member'],
+                    'role_id' => 1
+                )
+            );
+            $exists = $smcFunc['db_fetch_assoc']($request);
+            if (!empty($exists)){
+                $_SESSION['exists'] = true;
                 redirectexit('action=admin;area=managemeriter');
             }
             $smcFunc['db_insert']('',

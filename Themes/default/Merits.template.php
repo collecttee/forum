@@ -1,4 +1,5 @@
 <?php
+
 function template_main()
 {
     global $context, $txt;
@@ -14,10 +15,10 @@ function template_main()
 					<div class="errorbox">', $txt['hooks_active'], '</div>';
     echo '
 		<div class="cat_bar">
-			<h3 class="catbg">', $context['page_title'], '</h3>
+			<h3 class="catbg">Manage Merit</h3>
 		</div>
 		<p class="information">
-Edit your Merit function here.					</p>
+The function administrator sets to add or delete the Merit source user list as the internal distributiongroup of sMerit.				</p>
 		<div id="report_buttons">';
 
     echo '
@@ -26,19 +27,6 @@ Edit your Merit function here.					</p>
 			<h3 class="catbg">Set Merit Function Managers</h3>
 		</div>
 		<div class="windowbg">
-<dl class="settings">
-                            <form method="post" action="', $context['post_url'], '" >                                  
-									<dt>
-										<a id="setting_reg_verification"></a> <span><label for="reg_verification">Single Issuance Limit</label></span>
-									</dt>
-									<dd>
-										<input type="number" name="limit" id="limit" value="', $context['limit'], '">
-									</dd>
-				<input type="submit" value="Save" class="button">
-									<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
-				</form> 
-								</dl>	
-								<hr>
 								<dl class="settings">
 								  <form method="post" action="', $context['set_url'], '" >    
 									<dt>
@@ -49,7 +37,7 @@ Edit your Merit function here.					</p>
 									</dd>
 			
 									<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
-				<input type="submit" value="Add" class="button">
+				<input type="submit" value="Add" class="button" style="float: right">
 				</form> 
 								</dl>	
 								</div>';
@@ -60,7 +48,7 @@ Edit your Merit function here.					</p>
 		</div>';
 
     // Go through each table!
-   echo '<form  action="' . $context['delete_url'] . '" method="post"><table class="table_grid" id="member_list">
+    echo '<form  action="' . $context['delete_url'] . '" method="post"><table class="table_grid" id="member_list">
 			<thead>
 				<tr class="title_bar">
 					<th scope="col" id="header_member_list_id_member" class="id_member">
@@ -78,8 +66,8 @@ Edit your Merit function here.					</p>
 				</tr>
 			</thead>
 			<tbody>';
-			foreach ( $context['users'] as $val) {
-            echo '
+    foreach ($context['users'] as $val) {
+        echo '
 				<tr class="windowbg" id="list_member_list_0">
 					<td class="id_member">
 						' . $val['id_member'] . '
@@ -94,7 +82,7 @@ Edit your Merit function here.					</p>
 						<input type="checkbox" name="delete[]" value="' . $val['id'] . '">
 					</td>
 				</tr>';
-            }
+    }
     echo '
 			</tbody>
 		</table>

@@ -5536,6 +5536,12 @@ function setupMenuContext()
 				),
 				'is_last' => !$context['right_to_left'] && empty($settings['login_main_menu']),
 			),
+			'merit' => array(
+				'title' => $txt['merit_title'],
+				'href' => $scripturl . '?action=merit',
+				'show' => $context['allow_memberlist'],
+				'is_last' => !$context['right_to_left'] && empty($settings['login_main_menu']),
+			),
 			// Theme authors: If you want the login and register buttons to appear in
 			// the main forum menu on your theme, set $settings['login_main_menu'] to
 			// true in your theme's template_init() function in index.template.php.

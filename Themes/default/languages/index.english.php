@@ -316,6 +316,7 @@ $txt['to'] = 'To';
 
 $txt['board_topics'] = 'Topics';
 $txt['members_title'] = 'Members';
+$txt['merit_title'] = 'Merit';
 $txt['members_list'] = 'Members List';
 $txt['new_posts'] = 'New Posts';
 $txt['old_posts'] = 'No New Posts';
