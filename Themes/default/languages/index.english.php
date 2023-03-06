@@ -749,7 +749,7 @@ $txt['total_time_logged_m'] = 'm';
 $txt['approve_members_waiting'] = 'Member Approvals';
 
 $txt['activate_code'] = 'Your activation code is';
-
+$txt['exists_this_user'] = 'This user already exists';
 $txt['find_members'] = 'Find Members';
 $txt['find_username'] = 'Name, username, or email address';
 $txt['find_buddies'] = 'Show Buddies Only?';

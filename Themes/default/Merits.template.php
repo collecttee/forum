@@ -6,13 +6,13 @@ function template_main()
 
     if (!empty($context['saved_successful']))
         echo '
-					<div class="infobox">', $txt['settings_saved'], '</div>';
+					<div class="infobox">', $txt['save'], '</div>';
     if (!empty($context['not_found_user']))
         echo '
-					<div class="errorbox">', $txt['hooks_missing'], '</div>';
+					<div class="errorbox">', $txt['username_no_exist'], '</div>';
     if (!empty($context['exists']))
         echo '
-					<div class="errorbox">', $txt['hooks_active'], '</div>';
+					<div class="errorbox">', $txt['exists_this_user'], '</div>';
     echo '
 		<div class="cat_bar">
 			<h3 class="catbg">Manage Merit</h3>
@@ -23,14 +23,15 @@ The function administrator sets to add or delete the Merit source user list as t
 
     echo '
 		</div>';
+    template_merit_menu('merit');
     echo '<div class="cat_bar">
-			<h3 class="catbg">Set Merit Function Managers</h3>
+			<h3 class="catbg">Set Merits Source User</h3>
 		</div>
 		<div class="windowbg">
 								<dl class="settings">
-								  <form method="post" action="', $context['set_url'], '" >    
+								  <form method="post" action="', $context['post_url'], '" >    
 									<dt>
-										<a id="setting_reg_verification"></a> <span><label for="reg_verification">Set Merit Function Managers</label></span>
+										<a id="setting_reg_verification"></a> <span><label for="reg_verification">Add Source Users</label></span>
 									</dt>
 									<dd>
 										<input type="text" name="username" id="recaptcha_site_key" value="">
@@ -90,7 +91,7 @@ The function administrator sets to add or delete the Merit source user list as t
 			<div class="additional_row">
 				<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
 				<input type="hidden" name="work" value="delete">
-				<input type="submit" name="delete_members" value="Delete Selected Members" data-confirm="Are you sure you want to delete the selected members?" class="button you_sure">
+				<input type="submit" name="delete_members" value="Delete Selected Members" style="float: right" data-confirm="Are you sure you want to delete the selected members?" class="button you_sure">
 			</div>
 		</div>
             </form>';

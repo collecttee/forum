@@ -810,5 +810,14 @@ function template_maint_warning_below()
 {
 
 }
+function template_merit_menu($page){
+	global $txt, $context, $scripturl;
+	echo '<div class="buttonlist">
+				<a class="button button_strip_view_all_members ', $page == 'merit' ? 'active' : '', '" href="', $scripturl.'?action=merit', '">Set Merits Source User</a>
+				<a class="button button_strip_mlist_search ', $page == 'smerit' ? 'active' : '', '" href="', $scripturl.'?action=smerit', '">sMerit lssue Records</a>
+				<a class="button button_strip_mlist_search ', $page == 'ax' ? 'active' : '', '" href="http://forum02.firedao.online/index.php?action=mlist;sa=search">sMerit Transfer Records</a>
+				<a class="button button_strip_mlist_search ', $page == 'ac' ? 'active' : '', '" href="http://forum02.firedao.online/index.php?action=mlist;sa=search">eMerit issue Records</a>
+		</div><br/>';
+}
 
 ?>
