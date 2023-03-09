@@ -638,6 +638,8 @@ table.table_grid {
 }
 table.table_grid td {
 	padding: 3px;
+	border: 1px solid #ddd;
+	border-top: 0;
 }
 /* Some predefined widths (mostly for tables) */
 .table_grid.half_content, .half_table {

@@ -1497,6 +1497,22 @@ function loadPermissions()
 		if (in_array('profile_view', $user_info['permissions']))
 			$user_info['permissions'][] = 'profile_view_any';
 	}
+	$request = $smcFunc['db_query']('', '
+			SELECT  id_member
+			FROM {db_prefix}member_roles
+			WHERE id_member = {int:id_member}
+			AND role_id = {int:role_id}
+			LIMIT 1',
+		array(
+			'id_member' => $user_info['id'],
+			'role_id' => 1
+		)
+	);
+	$user_settings = $smcFunc['db_fetch_assoc']($request);
+	if (!empty($user_settings)){
+		$user_info['permissions'][] = 'merit_manage';
+	}
+	$smcFunc['db_free_result']($request);
 }
 
 /**

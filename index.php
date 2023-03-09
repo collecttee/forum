@@ -371,7 +371,7 @@ function smf_main()
 		'markasread' => array('Subs-Boards.php', 'MarkRead'),
 		'mergetopics' => array('SplitTopics.php', 'MergeTopics'),
 		'mlist' => array('Memberlist.php', 'Memberlist'),
-		'merit'=>array('Merits.php','SetSourceUser'),
+		'merit'=>array('Merits.php','MeritMain'),
 		'smerit'=>array('Merits.php','smerit'),
 		'moderate' => array('ModerationCenter.php', 'ModerationMain'),
 		'modifycat' => array('ManageBoards.php', 'ModifyCat'),

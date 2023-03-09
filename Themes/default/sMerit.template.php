@@ -59,6 +59,43 @@ The function administrator sets to add or delete the Merit source user list as t
 </div>';
     echo '<div class="cat_bar">
 			<h3 class="catbg">
+				Manager Total Issue sMerit 
+			</h3>
+		</div>';
+
+    // Go through each table!
+    echo '<form  action="' . $context['delete_url'] . '" method="post"><table class="table_grid" id="member_list">
+			<thead>
+				<tr class="title_bar">
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					Username 
+					</th>		
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					Amount 
+					</th>
+				</tr>
+			</thead>
+			<tbody>';
+    foreach ($context['users_total'] as $k=> $val) {
+        echo '
+				<tr class="windowbg" id="list_member_list_0">
+					<td class="user_name">
+			        ' . $val['member_name'] . '
+					</td>
+					<td class="display_name">
+						' . $val['amount'] . '
+					</td>
+				
+				</tr>';
+    }
+    echo '
+			</tbody>
+		</table>
+       
+            </form> <br/><hr/><br/>';
+
+    echo '<div class="cat_bar">
+			<h3 class="catbg">
 				Manager Issue sMerits Records
 			</h3>
 		</div>';
@@ -102,6 +139,9 @@ The function administrator sets to add or delete the Merit source user list as t
     echo '
 			</tbody>
 		</table>
-       
+       	<div class="pagesection">
+			<div class="pagelinks floatleft">', $context['page_index'], '</div>
+        </div>
             </form>';
+
 }

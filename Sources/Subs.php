@@ -5370,6 +5370,7 @@ function setupMenuContext()
 	$context['allow_admin'] = allowedTo(array('admin_forum', 'manage_boards', 'manage_permissions', 'moderate_forum', 'manage_membergroups', 'manage_bans', 'send_mail', 'edit_news', 'manage_attachments', 'manage_smileys'));
 
 	$context['allow_memberlist'] = allowedTo('view_mlist');
+	$context['allow_merit'] = allowedTo(['admin_forum','merit_manage']);
 	$context['allow_calendar'] = allowedTo('calendar_view') && !empty($modSettings['cal_enabled']);
 	$context['allow_moderation_center'] = $context['user']['can_mod'];
 	$context['allow_pm'] = allowedTo('pm_read');
@@ -5539,7 +5540,7 @@ function setupMenuContext()
 			'merit' => array(
 				'title' => $txt['merit_title'],
 				'href' => $scripturl . '?action=merit',
-				'show' => $context['allow_memberlist'],
+				'show' => $context['allow_merit'],
 				'is_last' => !$context['right_to_left'] && empty($settings['login_main_menu']),
 			),
 			// Theme authors: If you want the login and register buttons to appear in
