@@ -13,6 +13,9 @@ function template_main()
     if (!empty($context['exists']))
         echo '
 					<div class="errorbox">', $txt['exists_this_user'], '</div>';
+    if (!empty($context['pass-max']))
+        echo '
+					<div class="errorbox">', $txt['pass_max'], '</div>';
     echo '
 		<div class="cat_bar">
 			<h3 class="catbg">Manage Merit</h3>
@@ -49,7 +52,7 @@ The function administrator sets to add or delete the Merit source user list as t
 		</div>';
 
     // Go through each table!
-    echo '<form  action="' . $context['delete_url'] . '" method="post"><table class="table_grid" id="member_list">
+    echo '	<strong class="">Current Official Pool sMerit Total	 ' . $context['pool_amount'] . '</strong><form  action="' . $context['delete_url'] . '" method="post"><table class="table_grid" id="member_list">
 			<thead>
 				<tr class="title_bar">
 					<th scope="col" id="header_member_list_id_member" class="id_member">
@@ -60,10 +63,16 @@ The function administrator sets to add or delete the Merit source user list as t
 					</th>		
 						<th scope="col" id="header_member_list_user_name" class="user_name">
 					Address 
+					</th>	<th scope="col" id="header_member_list_user_name" class="user_name">
+					smerit 
+					</th>
+						<th scope="col" id="header_member_list_user_name" class="user_name">
+					Transfer sMerit 
 					</th>
 					<th scope="col" id="header_member_list_check" class="check centercol">
 						<input type="checkbox" onclick="invertAll(this, this.form);">
 					</th>
+					
 				</tr>
 			</thead>
 			<tbody>';
@@ -78,7 +87,10 @@ The function administrator sets to add or delete the Merit source user list as t
 					</td>
 					<td class="display_name">
 						' . $val['address'] . '
+					</td><td class="display_name">
+						' . $val['smerit'] . '
 					</td>
+					<td class="user_name"><input type="number" name="amount[]"><input type="hidden" name="id_member[]" value="' . $val['id_member'] . '"></td>
 					<td class="check centercol">
 						<input type="checkbox" name="delete[]" value="' . $val['id'] . '">
 					</td>
@@ -91,6 +103,7 @@ The function administrator sets to add or delete the Merit source user list as t
 			<div class="additional_row">
 				<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
 				<input type="hidden" name="work" value="delete">
+				<input type="submit" name="transfer" value="Transfer sMerit" style="float: right" class="button">
 				<input type="submit" name="delete_members" value="Delete Selected Members" style="float: right" data-confirm="Are you sure you want to delete the selected members?" class="button you_sure">
 			</div>
 		</div>

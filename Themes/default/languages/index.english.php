@@ -750,6 +750,7 @@ $txt['approve_members_waiting'] = 'Member Approvals';
 
 $txt['activate_code'] = 'Your activation code is';
 $txt['exists_this_user'] = 'This user already exists';
+$txt['pass_max'] = 'The total number is greater than the number in the pool';
 $txt['find_members'] = 'Find Members';
 $txt['find_username'] = 'Name, username, or email address';
 $txt['find_buddies'] = 'Show Buddies Only?';

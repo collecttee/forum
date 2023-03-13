@@ -7,16 +7,86 @@ function SetSourceUser() {
     loadTemplate('Merits');
     $context['post_url'] = $scripturl . '?action=merit;save';
     $context['delete_url'] = $scripturl . '?action=merit';
+    $request = $smcFunc['db_query']('', '
+                    SELECT  smerit
+                    FROM {db_prefix}property
+                    WHERE id_member = {int:id}
+                    LIMIT 1',
+        array(
+            'id' => 0,
+        )
+    );
+    $pool = $smcFunc['db_fetch_assoc']($request);
+    $smcFunc['db_free_result']($request);
+    $context['pool_amount'] = $pool['smerit'];
     if (isset($_POST['work']) && $_POST['work'] == 'delete') {
         checkSession();
-        $delete = $_POST['delete'];
-        $smcFunc['db_query']('', '
+        if (isset($_POST['transfer']) && $_POST['transfer'] == 'Transfer sMerit') {
+            $amount = $_POST['amount'];
+            $sum = array_sum($amount);
+            $id_member = $_POST['id_member'];
+            if ($sum > $pool['smerit']) {
+                $_SESSION['pass-max'] = true;
+                redirectexit('action=merit');
+            }
+
+            $smcFunc['db_query']('', '
+                        UPDATE {db_prefix}property
+                        SET smerit = {int:smerit}
+                        WHERE id_member = {int:id}',
+                array(
+                    'smerit' =>$pool['smerit'] - $sum,
+                    'id' => 0
+                )
+            );
+            foreach ($amount as $k=> $v) {
+                if(!empty($v)){
+                    $request = $smcFunc['db_query']('', '
+                    SELECT  id_member,smerit
+                    FROM {db_prefix}property
+                    WHERE id_member = {int:id_member}
+                    LIMIT 1',
+                        array(
+                            'id_member' => $id_member[$k],
+                        )
+                    );
+                    $exists = $smcFunc['db_fetch_assoc']($request);
+                    $smcFunc['db_free_result']($request);
+                    if (!empty($exists)){
+                        $smcFunc['db_query']('', '
+                        UPDATE {db_prefix}property
+                        SET smerit = {int:smerit}
+                        WHERE id_member = {int:id}',
+                                array(
+                                    'smerit' => $exists['smerit'] + $v,
+                                    'id' => $id_member[$k]
+                            )
+                        );
+                    }else{
+                        $smcFunc['db_insert']('',
+                            '{db_prefix}property',
+                            array(
+                                'id_member' => 'int',
+                                'smerit' => 'int'
+                            ),
+                            [$id_member[$k],$v],
+                            array()
+                        );
+                    }
+                }
+            }
+            $_SESSION['adm-save'] = true;
+        }else{
+            $delete = $_POST['delete'];
+            $smcFunc['db_query']('', '
 		DELETE FROM {db_prefix}source_user
 		WHERE id IN ({array_int:users})',
-            array(
-                'users' => $delete
-            )
-        );
+                array(
+                    'users' => $delete
+                )
+            );
+        }
+
         redirectexit('action=merit');
     }
     if (isset($_SESSION['adm-save']))
@@ -46,11 +116,21 @@ function SetSourceUser() {
 
         unset($_SESSION['exists']);
     }
+    if (isset($_SESSION['pass-max']))
+    {
+        if ($_SESSION['pass-max'] === true)
+            $context['pass-max'] = true;
+        else
+            $context['saved_failed'] = $_SESSION['adm-save'];
+
+        unset($_SESSION['pass-max']);
+    }
     // member-lists
     $request = $smcFunc['db_query']('', '
-			SELECT  sou.id as id,mem.id_member, mem.member_name,mem.address
+			SELECT  sou.id as id,mem.id_member, mem.member_name,mem.address,pro.smerit as smerit
 			FROM {db_prefix}source_user AS sou
-				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member)',
+				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member)
+				INNER JOIN {db_prefix}property AS pro ON (pro.id_member = sou.id_member)',
         array(
 
         )
@@ -183,8 +263,8 @@ function smerit(){
         checkSession();
         $amount = $_POST['amount'];
         $request = $smcFunc['db_query']('', '
-			SELECT  id_member,amount
-			FROM {db_prefix}smerit
+			SELECT  id_member,smerit
+			FROM {db_prefix}property
 			WHERE id_member = {int:id}
 			LIMIT 1',
             array(
@@ -194,21 +274,21 @@ function smerit(){
         $user_settings = $smcFunc['db_fetch_assoc']($request);
         if (empty($user_settings)){
             $smcFunc['db_insert']('',
-                '{db_prefix}smerit',
+                '{db_prefix}property',
                 array(
                     'id_member' => 'int',
-                    'amount' => 'int'
+                    'smerit' => 'int'
                 ),
                 [0,$amount],
                 array()
             );
         } else {
             $smcFunc['db_query']('', '
-					UPDATE {db_prefix}smerit
-					SET amount = {int:amount}
+					UPDATE {db_prefix}property
+					SET smerit = {int:smerit}
 					WHERE id_member = {int:id}',
                 array(
-                    'amount' => $user_settings['amount'] + $amount,
+                    'smerit' => $user_settings['smerit'] + $amount,
                     'id' => 0
                 )
             );
