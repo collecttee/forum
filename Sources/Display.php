@@ -1419,6 +1419,7 @@ function prepareDisplayContext($reset = false)
 
 	// Attempt to get the next message.
 	$message = $smcFunc['db_fetch_assoc']($messages_request);
+
 	if (!$message)
 	{
 		$smcFunc['db_free_result']($messages_request);
