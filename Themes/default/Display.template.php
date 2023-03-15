@@ -688,7 +688,7 @@ function template_single_post($message)
 
 	echo '
 								', !empty($message['counter']) ? '<span class="page_number floatright">#' . $message['counter'] . '</span>' : '', '
-								<span class=" page_number floatright"><a href="', $scripturl.'?action=send&message_id='.$message['id'], '&topic_id='.$context['current_topic'], '&title='.$message['subject'], '">+Merit</a></span><div class="postinfo">
+								<span class=" page_number floatright"><a target="_blank" href="', $scripturl.'?action=send&message_id='.$message['id'], '&topic_id='.$context['current_topic'], '&title='.$message['subject'], '">+Merit</a></span><div class="postinfo">
 									<span class="messageicon" ', ($message['icon_url'] === $settings['images_url'] . '/post/xx.png' && !$message['can_modify']) ? ' style="position: absolute; z-index: -1;"' : '', '>
 										<img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' id="msg_icon_' . $message['id'] . '"' : '', '>
 									</span>

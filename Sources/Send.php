@@ -100,8 +100,9 @@ function SendMain(){
                     'id_member' => 'int',
                     'smerit' => 'int',
                     'merit' => 'int',
+                    'emerit' => 'int',
                 ),
-                [$message_ret['id_member'],$mintAmount,$amount],
+                [$message_ret['id_member'],$mintAmount,$amount,$amount],
                 array()
             );
         } else {
@@ -111,12 +112,14 @@ function SendMain(){
             $smcFunc['db_query']('', '
 			UPDATE {db_prefix}property
 			SET smerit = {int:smerit},
-			merit = {int:merit}
+			merit = {int:merit},
+			emerit = {int:emerit}
 			WHERE id_member = {int:to}',
                 array(
                     'to' => $message_ret['id_member'],
                     'smerit' => $toRet['smerit'] + $mintAmount,
-                    'merit' => $toRet['merit'] + $amount
+                    'merit' => $toRet['merit'] + $amount,
+                    'emerit' => $toRet['emerit'] + $amount
                 )
             );
 
