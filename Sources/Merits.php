@@ -221,22 +221,52 @@ function smerit(){
     }
     $context['post_url'] = $scripturl . '?action=merit;save;sa=smerit';
 
-
     $request = $smcFunc['db_query']('', '
-			SELECT COUNT(*)
+			SELECT SUM(amount)
 			FROM {db_prefix}smerit_logs',
         array(
 
+        )
+    );
+    list ($context['total_issue']) =   $smcFunc['db_fetch_row']($request);
+
+    $request = $smcFunc['db_query']('', '
+			SELECT  smerit
+			FROM {db_prefix}property
+			WHERE id_member = {int:id}
+			LIMIT 1',
+        array(
+            'id' => 0,
+        )
+    );
+    $poolAmount = $smcFunc['db_fetch_assoc']($request);
+    $context['pool_amount'] = $poolAmount['smerit'] ?? 0;
+
+    $request = $smcFunc['db_query']('', '
+			SELECT  SUM(smerit)
+			FROM {db_prefix}property
+			WHERE id_member != {int:id}',
+        array(
+            'id' => 0,
+        )
+    );
+    list ($context['user_holder']) = $smcFunc['db_fetch_row']($request);
+    $smcFunc['db_free_result']($request);
+    $request = $smcFunc['db_query']('', '
+			SELECT COUNT(*)
+			FROM {db_prefix}smerit_logs as a where a.from != {int:id}',
+        array(
+            'id' => 0
         )
     );
     list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
     $smcFunc['db_free_result']($request);
     $request = $smcFunc['db_query']('', '
 			SELECT   mem.member_name,SUM(sou.amount) AS amount
-			FROM {db_prefix}smerit_logs AS sou
-				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member)  GROUP BY mem.member_name',
+			FROM {db_prefix}smerit_logs AS sou 
+				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member) where sou.from != {int:id}  GROUP BY mem.member_name',
         array(
-
+            'id'=>0
         )
     );
     while ($row = $smcFunc['db_fetch_assoc']($request)) {
@@ -250,8 +280,9 @@ function smerit(){
     $request = $smcFunc['db_query']('', '
 			SELECT  sou.id as id,sou.amount,sou.create_at, mem.member_name
 			FROM {db_prefix}smerit_logs AS sou
-				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member) ORDER BY id DESC LIMIT {int:start}, {int:max}',
+				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member) where sou.from != {int:id} ORDER BY id DESC LIMIT {int:start}, {int:max}',
         array(
+            'id' => 0,
             'start' => $limit,
             'max' => $modSettings['defaultMaxMembers'],
         )
@@ -298,9 +329,10 @@ function smerit(){
             array(
                 'id_member' => 'int',
                 'amount' => 'int',
+                'from' => 'int',
                 'create_at' => 'int',
             ),
-            [$user_info['id'],$amount,time()],
+            [$user_info['id'],$amount,1,time()],
             array()
         );
         $_SESSION['adm-save'] = true;

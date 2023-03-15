@@ -219,7 +219,10 @@ The function administrator sets to add or delete the Merit source user list as t
 		<div class="windowbg" id="group_requests_panel">
 			<ul>
 				<li>
-					<strong class="smalltext">There are no open requests for group membership.</strong>
+					<p><strong class="smalltext">Current Official Pool sMerit:', $context['pool_amount'], '</strong></p>
+					<p><strong class="smalltext">Destroyed  sMerit:', $context['total_issue'] -  $context['user_holder'] - $context['pool_amount'], '</strong></p>
+					<p><strong class="smalltext">User holder sMerit:', $context['user_holder'], '</strong></p>
+					<p><strong class="smalltext">Total issue sMerit:', $context['total_issue'], '</strong></p>
 				</li>
 			</ul>
 		</div><!-- #group_requests_panel -->
@@ -238,6 +241,7 @@ The function administrator sets to add or delete the Merit source user list as t
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
 					<input type="submit" value="issue" class="button">
 				</form>
+				<br/>	<br/>	<br/>
 				</li>
 			</ul>
 		</div><!-- #group_requests_panel -->

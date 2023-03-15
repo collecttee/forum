@@ -19,6 +19,15 @@ function SendMain(){
             'id' => $user_info['id'],
         )
     );
+    if (isset($_SESSION['adm-save']))
+    {
+        if ($_SESSION['adm-save'] === true)
+            $context['saved_successful'] = true;
+        else
+            $context['saved_failed'] = $_SESSION['adm-save'];
+
+        unset($_SESSION['adm-save']);
+    }
     $pool = $smcFunc['db_fetch_assoc']($request);
 
     $smcFunc['db_free_result']($request);
@@ -41,7 +50,7 @@ function SendMain(){
         $msg = $_POST['msg'] ?? 0;
         $amount = $_POST['amount'] ?? 0;
         $request = $smcFunc['db_query']('', '
-			SELECT  id_member
+			SELECT  id_member,subject
 			FROM {db_prefix}messages
 			WHERE id_msg = {int:msg}
 			AND id_topic = {int:topic}
@@ -106,12 +115,23 @@ function SendMain(){
 			WHERE id_member = {int:to}',
                 array(
                     'to' => $message_ret['id_member'],
-                    'smerit' => $mintAmount,
-                    'merit' => $amount
+                    'smerit' => $toRet['smerit'] + $mintAmount,
+                    'merit' => $toRet['merit'] + $amount
                 )
             );
 
         }
+        $smcFunc['db_insert']('',
+            '{db_prefix}smerit_logs',
+            array(
+                'id_member' => 'int',
+                'amount' => 'int',
+                'from' => 'int',
+                'create_at' => 'int',
+            ),
+            [$message_ret['id_member'],$mintAmount,0,time()],
+            array()
+        );
         $smcFunc['db_query']('', '
 			UPDATE {db_prefix}property
 			SET smerit = {int:smerit}
@@ -136,6 +156,6 @@ function SendMain(){
 
 
         $_SESSION['adm-save'] = true;
-        redirectexit('action=send');
+        redirectexit("action=send&message_id={$msg}&topic_id={$topic}&title={$message_ret['subject']}");
     }
 }

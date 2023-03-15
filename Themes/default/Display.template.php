@@ -688,11 +688,12 @@ function template_single_post($message)
 
 	echo '
 								', !empty($message['counter']) ? '<span class="page_number floatright">#' . $message['counter'] . '</span>' : '', '
-								<span class=" page_number floatright"><a href="', $scripturl.'?action=send&message_id='.$message['id'], '&topic_id='.$context['current_topic'], '&title='.$context['subject'], '">+Merit</a></span><div class="postinfo">
+								<span class=" page_number floatright"><a href="', $scripturl.'?action=send&message_id='.$message['id'], '&topic_id='.$context['current_topic'], '&title='.$message['subject'], '">+Merit</a></span><div class="postinfo">
 									<span class="messageicon" ', ($message['icon_url'] === $settings['images_url'] . '/post/xx.png' && !$message['can_modify']) ? ' style="position: absolute; z-index: -1;"' : '', '>
 										<img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' id="msg_icon_' . $message['id'] . '"' : '', '>
 									</span>
 									<a href="', $message['href'], '" rel="nofollow" title="', !empty($message['counter']) ? sprintf($txt['reply_number'], $message['counter'], ' - ') : '', $message['subject'], '" class="smalltext">', $message['time'], '</a>
+                                    
 									<span class="spacer"></span>';
 
 	// Show "<< Last Edit: Time by Person >>" if this post was edited. But we need the div even if it wasn't modified!
@@ -707,6 +708,7 @@ function template_single_post($message)
 	echo '
 									</span>
 								</div>
+								<div style="width: 50%;word-break: break-all;">', $message['sender_record'], '</div>
 								<div id="msg_', $message['id'], '_quick_mod"', $ignoring ? ' style="display:none;"' : '', '></div>
 							</div><!-- .keyinfo -->';
 
