@@ -76,6 +76,8 @@ function SetSourceUser() {
                 }
             }
             $_SESSION['adm-save'] = true;
+
+
         }else{
             $delete = $_POST['delete'];
             $smcFunc['db_query']('', '
@@ -191,7 +193,9 @@ function MeritMain(){
     $meritFunction = [
         ''=>'SetSourceUser',
         'smerittransfer'=>'sMeritTransfer',
-        'smerit'=>'smerit'
+        'smerit'=>'smerit',
+        'systemsMerit'=>'systemsMerit',
+        'emerit'=>'emerit'
     ];
     call_helper($meritFunction[$sa]);
 }
@@ -337,6 +341,102 @@ function smerit(){
         );
         $_SESSION['adm-save'] = true;
         redirectexit('action=merit;sa=smerit');
+    }
+
+}
+
+function systemsMerit(){
+    global $scripturl, $context,$smcFunc,$user_info,$modSettings;
+    // Make sure they can view the memberlist.
+    isAllowedTo(['admin_forum','merit_manage']);
+
+    loadTemplate('Merits');
+    $context['sub_template'] = 'systemsMerit';
+
+    $request = $smcFunc['db_query']('', '
+			SELECT COUNT(*)
+			FROM {db_prefix}smerit_logs as a where a.from != {int:id}',
+        array(
+            'id' => 1
+        )
+    );
+    list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
+    $smcFunc['db_free_result']($request);
+    $request = $smcFunc['db_query']('', '
+			SELECT   mem.member_name,SUM(sou.amount) AS amount
+			FROM {db_prefix}smerit_logs AS sou 
+				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member) where sou.from != {int:id}  GROUP BY mem.member_name',
+        array(
+            'id'=>1
+        )
+    );
+    while ($row = $smcFunc['db_fetch_assoc']($request)) {
+        $context['users_total'][] = $row;
+    }
+    $smcFunc['db_free_result']($request);
+    $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
+    $context['page_index'] = constructPageIndex($scripturl . '?action=merit;sa=systemsMerit', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $limit = $_REQUEST['start'];
+    // member-lists
+    $request = $smcFunc['db_query']('', '
+			SELECT  sou.id as id,sou.amount,sou.create_at, mem.member_name
+			FROM {db_prefix}smerit_logs AS sou
+				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member) where sou.from != {int:id} ORDER BY id DESC LIMIT {int:start}, {int:max}',
+        array(
+            'id' => 1,
+            'start' => $limit,
+            'max' => $modSettings['defaultMaxMembers'],
+        )
+    );
+    while ($row = $smcFunc['db_fetch_assoc']($request)) {
+        $context['users'][] = $row;
+    }
+
+}
+function emerit(){
+    global $scripturl, $context,$smcFunc,$user_info,$modSettings;
+    // Make sure they can view the memberlist.
+    isAllowedTo(['admin_forum','merit_manage']);
+
+    loadTemplate('Merits');
+    $context['sub_template'] = 'emerit';
+
+    $request = $smcFunc['db_query']('', '
+			SELECT COUNT(*)
+			FROM {db_prefix}smerit_logs as a where a.from != {int:id}',
+        array(
+            'id' => 1
+        )
+    );
+    list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
+    $smcFunc['db_free_result']($request);
+    $request = $smcFunc['db_query']('', '
+			SELECT   mem.member_name,SUM(sou.amount) AS amount
+			FROM {db_prefix}emerit_logs AS sou 
+				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member)  GROUP BY mem.member_name',
+        array(
+
+        )
+    );
+    while ($row = $smcFunc['db_fetch_assoc']($request)) {
+        $context['users_total'][] = $row;
+    }
+    $smcFunc['db_free_result']($request);
+    $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
+    $context['page_index'] = constructPageIndex($scripturl . '?action=merit;sa=emerit', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $limit = $_REQUEST['start'];
+    // member-lists
+    $request = $smcFunc['db_query']('', '
+			SELECT  sou.id as id,sou.amount,sou.create_at, mem.member_name
+			FROM {db_prefix}emerit_logs AS sou
+				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member) ORDER BY id DESC LIMIT {int:start}, {int:max}',
+        array(
+            'start' => $limit,
+            'max' => $modSettings['defaultMaxMembers'],
+        )
+    );
+    while ($row = $smcFunc['db_fetch_assoc']($request)) {
+        $context['users'][] = $row;
     }
 
 }

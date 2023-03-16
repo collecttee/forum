@@ -125,16 +125,29 @@ function SendMain(){
 
         }
         $smcFunc['db_insert']('',
-            '{db_prefix}smerit_logs',
+            '{db_prefix}emerit_logs',
             array(
                 'id_member' => 'int',
                 'amount' => 'int',
-                'from' => 'int',
                 'create_at' => 'int',
             ),
-            [$message_ret['id_member'],$mintAmount,0,time()],
+            [$message_ret['id_member'],$amount,time()],
             array()
         );
+        if ($mintAmount > 0) {
+            $smcFunc['db_insert']('',
+                '{db_prefix}smerit_logs',
+                array(
+                    'id_member' => 'int',
+                    'amount' => 'int',
+                    'from' => 'int',
+                    'create_at' => 'int',
+                ),
+                [$message_ret['id_member'],$mintAmount,0,time()],
+                array()
+            );
+        }
+
         $smcFunc['db_query']('', '
 			UPDATE {db_prefix}property
 			SET smerit = {int:smerit}
