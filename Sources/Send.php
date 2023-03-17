@@ -2,6 +2,21 @@
 function SendMain(){
     global $user_info,$context,$smcFunc,$scripturl;
     loadTemplate('Send');
+    $request = $smcFunc['db_query']('', '
+			SELECT  id,merit_max_limit
+			FROM {db_prefix}smerit_max
+			WHERE id = {int:id}
+			LIMIT 1',
+        array(
+            'id' => 2
+        )
+    );
+    $result = $smcFunc['db_fetch_assoc']($request);
+    $smcFunc['db_free_result']($request);
+    $ret = $result['merit_max_limit'] ?? 0;
+    if ($ret == 1) {
+        fatal_error('Feature has been disabled');
+    }
     $title = $_GET['title'] ?? '';
     $msg = $_GET['message_id'] ?? '';
     $topic = $_GET['topic_id'] ?? '';

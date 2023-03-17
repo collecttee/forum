@@ -2308,7 +2308,7 @@ function Post2()
 
 		$smcFunc['db_insert']('insert',
 			'{db_prefix}poll_choices',
-			array('id_poll' => 'int', 'id_choice' => 'int', 'label' => 'string-255'),
+			array('id_poll' => 'int', 'id_choice' => 'int', 'label' => 'text'),
 			$pollOptions,
 			array('id_poll', 'id_choice')
 		);

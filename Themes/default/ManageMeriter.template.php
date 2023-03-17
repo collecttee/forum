@@ -26,6 +26,20 @@ Edit your Merit function here.					</p>
 			<h3 class="catbg">Set Merit Function Managers</h3>
 		</div>
 		<div class="windowbg">
+		<dl class="settings">
+                            <form method="post" action="', $context['pause_url'], '" >                                  
+									<dt>
+										<a id="setting_reg_verification"></a> <span><label for="reg_verification">Enable Merit Function</label></span>
+									</dt>
+									<dd>
+									Pause
+									<input type="checkbox" ', $context['pause'] == 1 ? "checked" : "", ' name="pause"  value="1">
+									</dd>
+				<input type="submit" value="Save" class="button">
+									<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
+				</form> 
+								</dl>
+								<hr>
 <dl class="settings">
                             <form method="post" action="', $context['post_url'], '" >                                  
 									<dt>

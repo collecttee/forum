@@ -56,7 +56,7 @@ function template_main()
 				pollOptionNum++
 				pollOptionId++
 
-				setOuterHTML(document.getElementById(\'pollMoreOptions\'), ', JavaScriptEscape('<dt><label for="options-'), ' + pollOptionId + ', JavaScriptEscape('">' . $txt['option'] . ' '), ' + pollOptionNum + ', JavaScriptEscape('</label>:</dt><dd><input type="text" name="options['), ' + pollOptionId + ', JavaScriptEscape(']" id="options-'), ' + pollOptionId + ', JavaScriptEscape('" value="" size="80" maxlength="255" tabindex="'), ' + pollTabIndex + ', JavaScriptEscape('"></dd><p id="pollMoreOptions"></p>'), ');
+				setOuterHTML(document.getElementById(\'pollMoreOptions\'), ', JavaScriptEscape('<dt><label for="options-'), ' + pollOptionId + ', JavaScriptEscape('">' . $txt['option'] . ' '), ' + pollOptionNum + ', JavaScriptEscape('</label>:</dt><dd><input type="text" name="options['), ' + pollOptionId + ', JavaScriptEscape(']" id="options-'), ' + pollOptionId + ', JavaScriptEscape('" value="" size="80"  tabindex="'), ' + pollTabIndex + ', JavaScriptEscape('"></dd><p id="pollMoreOptions"></p>'), ');
 			}';
 
 	// If we are making a calendar event we want to ensure we show the current days in a month etc... this is done here.
@@ -212,7 +212,7 @@ function template_main()
 									<label for="options-', $choice['id'], '">', $txt['option'], ' ', $choice['number'], '</label>:
 								</dt>
 								<dd>
-									<input type="text" name="options[', $choice['id'], ']" id="options-', $choice['id'], '" value="', $choice['label'], '" tabindex="', $context['tabindex']++, '" size="80" maxlength="255">
+									<input type="text" name="options[', $choice['id'], ']" id="options-', $choice['id'], '" value="', $choice['label'], '" tabindex="', $context['tabindex']++, '" size="80">
 								</dd>';
 
 		echo '

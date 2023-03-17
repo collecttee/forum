@@ -12,6 +12,7 @@ function ManageMeriter()
     $context['page_title'] = $txt['managemeriter_title'];
     $context['post_url'] = $scripturl . '?action=admin;area=managemeriter;save=limit';
     $context['set_url'] = $scripturl . '?action=admin;area=managemeriter;save=set';
+    $context['pause_url'] = $scripturl . '?action=admin;area=managemeriter;save=pause';
     $context['delete_url'] = $scripturl . '?action=admin;area=managemeriter';
     if (isset($_POST['work']) && $_POST['work'] == 'delete') {
         checkSession();
@@ -66,7 +67,18 @@ function ManageMeriter()
     $smcFunc['db_free_result']($request);
     $context['limit'] = $result['merit_max_limit'] ?? 0;
 
-
+    $request = $smcFunc['db_query']('', '
+			SELECT  id,merit_max_limit
+			FROM {db_prefix}smerit_max
+			WHERE id = {int:id}
+			LIMIT 1',
+        array(
+            'id' => 2
+        )
+    );
+    $result = $smcFunc['db_fetch_assoc']($request);
+    $smcFunc['db_free_result']($request);
+    $context['pause'] = $result['merit_max_limit'] ?? 0;
     // member-lists
     $request = $smcFunc['db_query']('', '
 			SELECT  rol.id as id,mem.id_member, mem.member_name,mem.address
@@ -164,6 +176,50 @@ function ManageMeriter()
                 [$user_settings['id_member'],1,time()],
                 array()
             );
+        }
+        if ($_GET['save'] === 'pause') {
+            if (isset($_POST['pause']) && $_POST['pause'] == 1){
+                $request = $smcFunc['db_query']('', '
+                    SELECT  id
+                    FROM {db_prefix}smerit_max
+                    WHERE id = {int:id}
+                    LIMIT 1',
+                    array(
+                        'id' => 2,
+                    )
+                );
+                $result = $smcFunc['db_fetch_assoc']($request);
+                if (empty($result)){
+                    $smcFunc['db_insert']('',
+                        '{db_prefix}smerit_max',
+                        array(
+                            'id' => 'int', 'merit_max_limit' => 'int'
+                        ),
+                        [2,1],
+                        array()
+                    );
+                }else{
+                    $smcFunc['db_query']('', '
+					UPDATE {db_prefix}smerit_max
+					SET merit_max_limit = {int:merit_max_limit}
+					WHERE id = {int:id}',
+                        array(
+                            'merit_max_limit' => 1,
+                            'id' => 2
+                        )
+                    );
+                }
+            }else{
+                $smcFunc['db_query']('', '
+					UPDATE {db_prefix}smerit_max
+					SET merit_max_limit = {int:merit_max_limit}
+					WHERE id = {int:id}',
+                    array(
+                        'merit_max_limit' => 0,
+                        'id' => 2
+                    )
+                );
+            }
         }
         $_SESSION['adm-save'] = true;
         redirectexit('action=admin;area=managemeriter');

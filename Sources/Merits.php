@@ -189,6 +189,22 @@ function SetSourceUser() {
     }
 }
 function MeritMain(){
+    global $smcFunc;
+    $request = $smcFunc['db_query']('', '
+			SELECT  id,merit_max_limit
+			FROM {db_prefix}smerit_max
+			WHERE id = {int:id}
+			LIMIT 1',
+        array(
+            'id' => 2
+        )
+    );
+    $result = $smcFunc['db_fetch_assoc']($request);
+    $smcFunc['db_free_result']($request);
+    $ret = $result['merit_max_limit'] ?? 0;
+    if ($ret == 1) {
+        fatal_error('Feature has been disabled');
+    }
     $sa = isset($_GET['sa']) ? $_GET['sa'] : '';
     $meritFunction = [
         ''=>'SetSourceUser',

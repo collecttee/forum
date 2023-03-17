@@ -34,7 +34,7 @@ function template_main()
 			pollOptionNum++
 			pollOptionId++
 
-			setOuterHTML(document.getElementById("pollMoreOptions"), \'<dt><label for="options-\' + pollOptionId + \'" ', (isset($context['poll_error']['no_question']) ? ' class="error"' : ''), '>', $txt['option'], ' \' + pollOptionNum + \'</label>:</dt><dd><input type="text" name="options[\' + (pollOptionId) + \']" id="options-\' + (pollOptionId) + \'" value="" size="80" maxlength="255"></dd><p id="pollMoreOptions"></p\');
+			setOuterHTML(document.getElementById("pollMoreOptions"), \'<dt><label for="options-\' + pollOptionId + \'" ', (isset($context['poll_error']['no_question']) ? ' class="error"' : ''), '>', $txt['option'], ' \' + pollOptionNum + \'</label>:</dt><dd><input type="text" name="options[\' + (pollOptionId) + \']" id="options-\' + (pollOptionId) + \'" value="" size="80" ></dd><p id="pollMoreOptions"></p\');
 		}
 	</script>';
 
@@ -76,7 +76,7 @@ function template_main()
 								<label for="options-', $choice['id'], '" ', (isset($context['poll_error']['poll_few']) ? ' class="error"' : ''), '>', $txt['option'], ' ', $choice['number'], '</label>:
 							</dt>
 							<dd>
-								<input type="text" name="options[', $choice['id'], ']" id="options-', $choice['id'], '" value="', $choice['label'], '" size="80" maxlength="255">';
+								<input type="text" name="options[', $choice['id'], ']" id="options-', $choice['id'], '" value="', $choice['label'], '" size="80">';
 
 		// Does this option have a vote count yet, or is it new?
 		if ($choice['votes'] != -1)

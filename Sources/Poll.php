@@ -822,7 +822,7 @@ function EditPoll2()
 			$smcFunc['db_insert']('',
 				'{db_prefix}poll_choices',
 				array(
-					'id_poll' => 'int', 'id_choice' => 'int', 'label' => 'string-255', 'votes' => 'int',
+					'id_poll' => 'int', 'id_choice' => 'int', 'label' => 'text', 'votes' => 'int',
 				),
 				array(
 					$bcinfo['id_poll'], $k, $option, 0,
