@@ -77,6 +77,7 @@ The function administrator sets to add or delete the Merit source user list as t
 			</thead>
 			<tbody>';
     foreach ($context['users'] as $val) {
+        $merit = $val['smerit'] ?? 0;
         echo '
 				<tr class="windowbg" id="list_member_list_0">
 					<td class="id_member">
@@ -88,7 +89,7 @@ The function administrator sets to add or delete the Merit source user list as t
 					<td class="display_name">
 						' . $val['address'] . '
 					</td><td class="display_name">
-						' . $val['smerit'] . '
+						' . $merit . '
 					</td>
 					<td class="user_name"><input type="number" name="amount[]"><input type="hidden" name="id_member[]" value="' . $val['id_member'] . '"></td>
 					<td class="check centercol">

@@ -20,7 +20,7 @@ function template_main()
 			<h3 class="catbg">Merit Post</h3>
 		</div>
 		<div class="windowbg">
-		You have received a total of <strong>', $context['merit_amount'], '</strong> merit. This is what determines your forum rank. You typically cannot losethis merit. You have <strong>', $context['smerit_amount'], ' </strong>sendable merit (sMerit) which you can send to other people. There is no point inhoarding sMerit: keeping it yourself does not benefit you, and we reserve the right to decay unused sMerit inthe future.
+		You have received a total of <strong>', $context['merit_amount'] ?? 0, '</strong> merit. This is what determines your forum rank. You typically cannot losethis merit. You have <strong>', $context['smerit_amount'] ?? 0, ' </strong>sendable merit (sMerit) which you can send to other people. There is no point inhoarding sMerit: keeping it yourself does not benefit you, and we reserve the right to decay unused sMerit inthe future.
         <hr/>
         <h4>Merit Post</h4>
         <form  action="' . $context['post_url'] . '" method="post">

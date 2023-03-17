@@ -132,7 +132,7 @@ function SetSourceUser() {
 			SELECT  sou.id as id,mem.id_member, mem.member_name,mem.address,pro.smerit as smerit
 			FROM {db_prefix}source_user AS sou
 				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member)
-				INNER JOIN {db_prefix}property AS pro ON (pro.id_member = sou.id_member)',
+				LEFT JOIN {db_prefix}property AS pro ON (pro.id_member = sou.id_member)',
         array(
 
         )
