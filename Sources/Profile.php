@@ -812,6 +812,18 @@ function ModifyProfile($post_errors = array())
 	// Set the page title if it's not already set...
 	if (!isset($context['page_title']))
 		$context['page_title'] = $txt['profile'] . (isset($txt[$current_area]) ? ' - ' . $txt[$current_area] : '');
+	$request = $smcFunc['db_query']('', '
+			SELECT  merit,emerit
+			FROM {db_prefix}property
+			WHERE id_member = {int:id}
+			LIMIT 1',
+		array(
+			'id' => $memID,
+		)
+	);
+	$poolAmount = $smcFunc['db_fetch_assoc']($request);
+	$context['merit'] = $poolAmount['merit'] ?? 0;
+	$context['emerit'] = $poolAmount['emerit'] ?? 0;
 }
 
 /**

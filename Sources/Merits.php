@@ -1,6 +1,6 @@
 <?php
 function SetSourceUser() {
-    global $scripturl, $context,$smcFunc;
+    global $scripturl, $context,$smcFunc,$user_info;
     // Make sure they can view the memberlist.
     isAllowedTo(['admin_forum','merit_manage']);
 
@@ -73,8 +73,20 @@ function SetSourceUser() {
                             array()
                         );
                     }
+                    $smcFunc['db_insert']('',
+                        '{db_prefix}smerit_transfer_log',
+                        array(
+                            'from' => 'int',
+                            'to' => 'int',
+                            'amount' => 'int',
+                            'create_at' => 'int'
+                        ),
+                        [$user_info['id'],$id_member[$k],$v,time()],
+                        array()
+                    );
                 }
             }
+
             $_SESSION['adm-save'] = true;
 
 
@@ -211,17 +223,45 @@ function MeritMain(){
         'smerittransfer'=>'sMeritTransfer',
         'smerit'=>'smerit',
         'systemsMerit'=>'systemsMerit',
+        'sMeritTransfer'=>'sMeritTransfer',
         'emerit'=>'emerit'
     ];
     call_helper($meritFunction[$sa]);
 }
 function sMeritTransfer(){
-    global $scripturl, $context,$smcFunc;
+    global $scripturl, $context,$smcFunc,$modSettings;
     // Make sure they can view the memberlist.
     isAllowedTo(['admin_forum','merit_manage']);
 
     loadTemplate('Merits');
     $context['sub_template'] = 'sMeritTransfer';
+
+    $request = $smcFunc['db_query']('', '
+			SELECT COUNT(*)
+			FROM {db_prefix}smerit_transfer_log',
+        array(
+
+        )
+    );
+    list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
+    $smcFunc['db_free_result']($request);
+    $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
+    $context['page_index'] = constructPageIndex($scripturl . '?action=merit;sa=sMeritTransfer', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $limit = $_REQUEST['start'];
+    // member-lists
+    $request = $smcFunc['db_query']('', '
+				SELECT   sou.id as id,mem.member_name as a,mem2.member_name as b,amount,create_at
+			FROM {db_prefix}smerit_transfer_log AS sou 
+				LEFT JOIN {db_prefix}members AS mem ON (sou.from = mem.id_member)
+				LEFT JOIN {db_prefix}members AS mem2 ON (sou.to = mem2.id_member) ORDER BY id DESC LIMIT {int:start}, {int:max}',
+        array(
+            'start' => $limit,
+            'max' => $modSettings['defaultMaxMembers'],
+        )
+    );
+    while ($row = $smcFunc['db_fetch_assoc']($request)) {
+        $context['users'][] = $row;
+    }
 }
 function smerit(){
     global $scripturl, $context,$smcFunc,$user_info,$modSettings;
@@ -238,6 +278,13 @@ function smerit(){
             $context['saved_failed'] = $_SESSION['adm-save'];
 
         unset($_SESSION['adm-save']);
+    }
+    if (isset($_SESSION['exceeded-maximum']))
+    {
+        if ($_SESSION['exceeded-maximum'] === true)
+            $context['exceeded_maximum'] = true;
+
+        unset($_SESSION['exceeded-maximum']);
     }
     $context['post_url'] = $scripturl . '?action=merit;save;sa=smerit';
 
@@ -313,6 +360,22 @@ function smerit(){
     if (isset($_GET['save'])){
         checkSession();
         $amount = $_POST['amount'];
+        $request = $smcFunc['db_query']('', '
+			SELECT  id,merit_max_limit
+			FROM {db_prefix}smerit_max
+			WHERE id = {int:id}
+			LIMIT 1',
+            array(
+                'id' => 1
+            )
+        );
+        $result = $smcFunc['db_fetch_assoc']($request);
+        $smcFunc['db_free_result']($request);
+        $ret = $result['merit_max_limit'] ?? 0;
+        if ($amount > $ret) {
+            $_SESSION['exceeded-maximum'] = true;
+            redirectexit('action=merit;sa=smerit');
+        }
         $request = $smcFunc['db_query']('', '
 			SELECT  id_member,smerit
 			FROM {db_prefix}property
@@ -425,18 +488,6 @@ function emerit(){
         )
     );
     list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
-    $smcFunc['db_free_result']($request);
-    $request = $smcFunc['db_query']('', '
-			SELECT   mem.member_name,SUM(sou.amount) AS amount
-			FROM {db_prefix}emerit_logs AS sou 
-				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member)  GROUP BY mem.member_name',
-        array(
-
-        )
-    );
-    while ($row = $smcFunc['db_fetch_assoc']($request)) {
-        $context['users_total'][] = $row;
-    }
     $smcFunc['db_free_result']($request);
     $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
     $context['page_index'] = constructPageIndex($scripturl . '?action=merit;sa=emerit', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);

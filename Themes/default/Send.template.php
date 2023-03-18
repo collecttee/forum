@@ -27,7 +27,7 @@ function template_main()
         <ul>
         <li>Poster:', $context['username'], '</li>
         <li>Post:', $context['title'], '</li>
-        <li>Poster:<input type="number" name="amount"><input type="hidden" name="topic" value="', $context['topic'], '"><input type="hidden" name="msg" value="', $context['msg'], '"></li>
+        <li>Meirt points:<input type="number" name="amount"><input type="hidden" name="topic" value="', $context['topic'], '"><input type="hidden" name="msg" value="', $context['msg'], '"></li>
         <li><input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '"><input type="submit" value="Send" class="button"></li>
         </ul>
         </form>

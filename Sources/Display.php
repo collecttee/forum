@@ -1504,11 +1504,27 @@ function prepareDisplayContext($reset = false)
             'msg' => $message['id_msg']
         )
     );
-    $record ='Merited by ';
-    while ($row = $smcFunc['db_fetch_assoc']($request)) {
-         $record.=$row['member_name']."({$row['amount']}),";
-    }
 
+    $record = '';
+    $k = 0;
+    while ($row = $smcFunc['db_fetch_assoc']($request)) {
+            if ($k == 0) {
+                $record = 'Merited by ';
+            }
+         $record.=$row['member_name']."({$row['amount']}),";
+         $k++;
+    }
+    $request = $smcFunc['db_query']('', '
+			SELECT  merit
+			FROM {db_prefix}property
+			WHERE id_member = {int:id}
+			LIMIT 1',
+        array(
+            'id' => $message['id_member'],
+        )
+    );
+    $poolAmount = $smcFunc['db_fetch_assoc']($request);
+    $merit = $poolAmount['merit'] ?? 0;
 	// Compose the memory eat- I mean message array.
 	$output = array(
 		'attachment' => loadAttachmentContext($message['id_msg'], $context['loaded_attachments']),
@@ -1539,7 +1555,8 @@ function prepareDisplayContext($reset = false)
 		'can_remove' => allowedTo('delete_any') || (allowedTo('delete_replies') && $context['user']['started']) || (allowedTo('delete_own') && $message['id_member'] == $user_info['id'] && (empty($modSettings['edit_disable_time']) || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 > time())),
 		'can_see_ip' => allowedTo('moderate_forum') || ($message['id_member'] == $user_info['id'] && !empty($user_info['id'])),
 		'css_class' => $message['approved'] ? 'windowbg' : 'approvebg',
-        'sender_record' => $record
+        'sender_record' => $record,
+        'merit' => $merit,
 	);
 
 	// Does the file contains any attachments? if so, change the icon.

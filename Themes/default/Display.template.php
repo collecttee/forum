@@ -566,12 +566,14 @@ function template_single_post($message)
 		if ((empty($modSettings['hide_post_group']) || empty($message['member']['group'])) && !empty($message['member']['post_group']))
 			echo '
 								<li class="postgroup">', $message['member']['post_group'], '</li>';
-
+        echo '
+								<li class="postcount">PID: ', $message['member']['pid'], '</li>';
 		// Show how many posts they have made.
 		if (!isset($context['disabled_fields']['posts']))
 			echo '
 								<li class="postcount">', $txt['member_postcount'], ': ', $message['member']['posts'], '</li>';
-
+        echo '
+								<li class="postcount">merit: ', $message['merit'], '</li>';
 		// Show their personal text?
 		if (!empty($modSettings['show_blurb']) && !empty($message['member']['blurb']))
 			echo '

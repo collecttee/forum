@@ -297,6 +297,15 @@ function template_summary()
 		echo '
 				<dt>', $txt['username'], ': </dt>
 				<dd>', $context['member']['username'], '</dd>';
+	echo '
+				<dt>PID:</dt>
+				<dd><a href="https://app.firedao.co/MyPassport">', $context['member']['pid'], '</a></dd>';
+	echo '
+				<dt>merit:</dt>
+				<dd>', $context['merit'], '</dd>';
+	echo '
+				<dt>emerit:</dt>
+				<dd>', $context['emerit'], '</dd>';
 
 	if (!isset($context['disabled_fields']['posts']))
 		echo '

@@ -1557,7 +1557,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 	// Used by default
 	$select_columns = '
 			COALESCE(lo.log_time, 0) AS is_online, COALESCE(a.id_attach, 0) AS id_attach, a.filename, a.attachment_type, a.width "attachment_width", a.height "attachment_height",
-			mem.signature, mem.personal_text, mem.avatar, mem.id_member, mem.member_name,
+			mem.signature, mem.personal_text, mem.avatar, mem.id_member, mem.member_name,mem.pid,
 			mem.real_name, mem.email_address, mem.date_registered, mem.website_title, mem.website_url,
 			mem.birthdate, mem.member_ip, mem.member_ip2, mem.posts, mem.last_login, mem.id_post_group, mem.lngfile, mem.id_group, mem.time_offset, mem.timezone, mem.show_online,
 			mg.online_color AS member_group_color, COALESCE(mg.group_name, {string:blank_string}) AS member_group,
@@ -1612,6 +1612,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 		$new_loaded_ids = array();
 		while ($row = $smcFunc['db_fetch_assoc']($request))
 		{
+
 			// If the image proxy is enabled, we still want the original URL when they're editing the profile...
 			$row['avatar_original'] = !empty($row['avatar']) ? $row['avatar'] : '';
 
@@ -1751,6 +1752,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'username' => $profile['member_name'],
 		'name' => $profile['real_name'],
 		'id' => $profile['id_member'],
+		'pid' => $profile['pid'],
 		'href' => $scripturl . '?action=profile;u=' . $profile['id_member'],
 		'link' => '<a href="' . $scripturl . '?action=profile;u=' . $profile['id_member'] . '" title="' . sprintf($txt['view_profile_of_username'], $profile['real_name']) . '">' . $profile['real_name'] . '</a>',
 		'email' => $profile['email_address'],
