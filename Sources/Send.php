@@ -80,6 +80,9 @@ function SendMain(){
             $_SESSION['not-found'] = true;
             redirectexit('action=send');
         }
+        if ($message_ret['id_member'] == $user_info['id']){
+            fatal_error('Do not allow gifts to yourself');
+        }
         $request = $smcFunc['db_query']('', '
 			SELECT  id_member,smerit
 			FROM {db_prefix}property
@@ -182,6 +185,18 @@ function SendMain(){
                 'create_at' => 'int',
             ),
             [$topic,$msg,$user_info['id'],$amount,time()],
+            array()
+        );
+        $smcFunc['db_insert']('',
+            '{db_prefix}smerit_transfer_log',
+            array(
+                'from' => 'int',
+                'to' => 'int',
+                'amount' => 'int',
+                'create_at' => 'int',
+                'pool' => 'int'
+            ),
+            [$user_info['id'],$message_ret['id_member'],$amount,time(),1],
             array()
         );
 

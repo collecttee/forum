@@ -79,9 +79,10 @@ function SetSourceUser() {
                             'from' => 'int',
                             'to' => 'int',
                             'amount' => 'int',
-                            'create_at' => 'int'
+                            'create_at' => 'int',
+                            'pool' => 'int'
                         ),
-                        [$user_info['id'],$id_member[$k],$v,time()],
+                        [$user_info['id'],$id_member[$k],$v,time(),0],
                         array()
                     );
                 }
@@ -224,9 +225,47 @@ function MeritMain(){
         'smerit'=>'smerit',
         'systemsMerit'=>'systemsMerit',
         'sMeritTransfer'=>'sMeritTransfer',
-        'emerit'=>'emerit'
+        'emerit'=>'emerit',
+        'usersMeritTransfer'=>'usersMeritTransfer',
     ];
     call_helper($meritFunction[$sa]);
+}
+function usersMeritTransfer(){
+    global $scripturl, $context,$smcFunc,$modSettings;
+    // Make sure they can view the memberlist.
+    isAllowedTo(['admin_forum','merit_manage']);
+
+    loadTemplate('Merits');
+    $context['sub_template'] = 'usersMeritTransfer';
+
+    $request = $smcFunc['db_query']('', '
+			SELECT COUNT(*)
+			FROM {db_prefix}smerit_transfer_log WHERE pool = {int:id}',
+        array(
+            'id' => 1
+        )
+    );
+    list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
+    $smcFunc['db_free_result']($request);
+    $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
+    $context['page_index'] = constructPageIndex($scripturl . '?action=merit;sa=sMeritTransfer', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $limit = $_REQUEST['start'];
+    $context['start'] = $_REQUEST['start'];
+    // member-lists
+    $request = $smcFunc['db_query']('', '
+				SELECT   sou.id as id,mem.member_name as a,mem2.member_name as b,amount,create_at
+			FROM {db_prefix}smerit_transfer_log AS sou 
+				LEFT JOIN {db_prefix}members AS mem ON (sou.from = mem.id_member)
+				LEFT JOIN {db_prefix}members AS mem2 ON (sou.to = mem2.id_member) WHERE pool = {int:id} ORDER BY id DESC LIMIT {int:start}, {int:max}',
+        array(
+            'id' => 1,
+            'start' => $limit,
+            'max' => $modSettings['defaultMaxMembers'],
+        )
+    );
+    while ($row = $smcFunc['db_fetch_assoc']($request)) {
+        $context['users'][] = $row;
+    }
 }
 function sMeritTransfer(){
     global $scripturl, $context,$smcFunc,$modSettings;
@@ -238,9 +277,9 @@ function sMeritTransfer(){
 
     $request = $smcFunc['db_query']('', '
 			SELECT COUNT(*)
-			FROM {db_prefix}smerit_transfer_log',
+			FROM {db_prefix}smerit_transfer_log WHERE pool = {int:id}',
         array(
-
+            'id' => 0
         )
     );
     list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
@@ -248,13 +287,15 @@ function sMeritTransfer(){
     $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
     $context['page_index'] = constructPageIndex($scripturl . '?action=merit;sa=sMeritTransfer', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
     $limit = $_REQUEST['start'];
+    $context['start'] = $_REQUEST['start'];
     // member-lists
     $request = $smcFunc['db_query']('', '
 				SELECT   sou.id as id,mem.member_name as a,mem2.member_name as b,amount,create_at
 			FROM {db_prefix}smerit_transfer_log AS sou 
 				LEFT JOIN {db_prefix}members AS mem ON (sou.from = mem.id_member)
-				LEFT JOIN {db_prefix}members AS mem2 ON (sou.to = mem2.id_member) ORDER BY id DESC LIMIT {int:start}, {int:max}',
+				LEFT JOIN {db_prefix}members AS mem2 ON (sou.to = mem2.id_member) WHERE pool = {int:id} ORDER BY id DESC LIMIT {int:start}, {int:max}',
         array(
+            'id' => 0,
             'start' => $limit,
             'max' => $modSettings['defaultMaxMembers'],
         )
@@ -343,6 +384,7 @@ function smerit(){
     $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
     $context['page_index'] = constructPageIndex($scripturl . '?action=merit;sa=smerit', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
     $limit = $_REQUEST['start'];
+    $context['start'] = $_REQUEST['start'];
     // member-lists
     $request = $smcFunc['db_query']('', '
 			SELECT  sou.id as id,sou.amount,sou.create_at, mem.member_name

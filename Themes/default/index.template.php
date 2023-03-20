@@ -818,6 +818,7 @@ function template_merit_menu($page){
 				<a class="button button_strip_view_all_members ', $page == 'merit' ? 'active' : '', '" href="', $scripturl.'?action=merit', '">Set Merits Source User</a>
 				<a class="button button_strip_mlist_search ', $page == 'smerit' ? 'active' : '', '" href="', $scripturl.'?action=merit;sa=smerit', '">sMerit manage issue Records</a>
 				<a class="button button_strip_mlist_search ', $page == 'sMeritTransfer' ? 'active' : '', '" href="', $scripturl.'?action=merit;sa=sMeritTransfer', '">sMerit Transfer Records</a>
+				<a class="button button_strip_mlist_search ', $page == 'usersMeritTransfer' ? 'active' : '', '" href="', $scripturl.'?action=merit;sa=usersMeritTransfer', '">user sMerit Transfer Records</a>
 			<a class="button button_strip_mlist_search ', $page == 'systemsMerit' ? 'active' : '', '" href="', $scripturl.'?action=merit;sa=systemsMerit', '">sMerit system issue Records</a>
 				<a class="button button_strip_mlist_search ', $page == 'emerit' ? 'active' : '', '" href="', $scripturl.'?action=merit;sa=emerit', '">eMerit Transfer Records</a>
 	
