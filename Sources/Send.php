@@ -98,7 +98,7 @@ function SendMain(){
         $mintAmount = floor($amount / 2);
         $ceil = $amount % 2;
         $request = $smcFunc['db_query']('', '
-			SELECT  id_member,smerit,merit
+			SELECT  id_member,smerit,merit,emerit
 			FROM {db_prefix}property
 			WHERE id_member = {int:to}
 			LIMIT 1',
