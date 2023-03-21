@@ -1496,10 +1496,10 @@ function prepareDisplayContext($reset = false)
 
 	require_once($sourcedir . '/Subs-Attachments.php');
     $request = $smcFunc['db_query']('', '
-			SELECT mem.member_name,sm.amount
+			SELECT mem.member_name,SUM(sm.amount) AS amount
 			FROM {db_prefix}sender_merit AS sm
 				INNER JOIN {db_prefix}members AS mem ON (sm.id_member = mem.id_member)
-			WHERE sm.id_msg = {int:msg}',
+			WHERE sm.id_msg = {int:msg} GROUP BY mem.member_name',
         array(
             'msg' => $message['id_msg']
         )

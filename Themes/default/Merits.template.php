@@ -218,7 +218,7 @@ The function administrator sets to add or delete the Merit source user list as t
 						 ID
 					</th>
 					<th scope="col" id="header_member_list_user_name" class="user_name">
-					From 
+					Operator 
 					</th>		
 						<th scope="col" id="header_member_list_user_name" class="user_name">
 					To 

@@ -298,7 +298,7 @@ function template_summary()
 				<dt>', $txt['username'], ': </dt>
 				<dd>', $context['member']['username'], '</dd>';
 	echo '
-				<dt>PID:</dt>
+				<dt><a href="https://app.firedao.co/MyPassport">PID</a>:</dt>
 				<dd><a href="https://app.firedao.co/MyPassport">', $context['member']['pid'], '</a></dd>';
 	echo '
 				<dt>merit:</dt>
