@@ -410,12 +410,6 @@ function AdminMain()
 						'test' => array($txt['mailqueue_test'], 'admin_forum'),
 					),
 				),
-                'managemeriter' => array(
-                    'label' => 'ManageMeriter',
-                    'file' => 'ManageMeriter.php',
-                    'function' => 'ManageMeriter',
-                    'icon' => ''
-                ),
 				'reports' => array(
 					'label' => $txt['generate_reports'],
 					'file' => 'Reports.php',
@@ -442,6 +436,24 @@ function AdminMain()
 					'function' => 'RepairBoards',
 					'select' => 'maintain',
 					'hidden' => true,
+				),
+			),
+		),
+		'FireDaoPoints' => array(
+			'title' => 'FireDaoPoints',
+			'permission' => array('admin_forum'),
+			'areas' => array(
+				'managemeriter' => array(
+					'label' => 'ManageMeriter',
+					'file' => 'ManageMeriter.php',
+					'function' => 'ManageMeriter',
+					'icon' => ''
+				),
+				'manageflm' => array(
+					'label' => 'FLM',
+					'file' => 'ManageFLM.php',
+					'function' => 'ManageFLM',
+					'icon' => ''
 				),
 			),
 		),
