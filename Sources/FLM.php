@@ -21,7 +21,7 @@ function SetSourceUser() {
     $context['pool_amount'] = $pool['sflm'];
     if (isset($_POST['work']) && $_POST['work'] == 'delete') {
         checkSession();
-        if (isset($_POST['transfer']) && $_POST['transfer'] == 'Transfer sMerit') {
+        if (isset($_POST['transfer']) && $_POST['transfer'] == 'Transfer sFLM') {
             $amount = $_POST['amount'];
             $sum = array_sum($amount);
             $id_member = $_POST['id_member'];
@@ -29,7 +29,6 @@ function SetSourceUser() {
                 $_SESSION['pass-max'] = true;
                 redirectexit('action=flm');
             }
-
             $smcFunc['db_query']('', '
                         UPDATE {db_prefix}property
                         SET sflm = {int:sflm}
@@ -39,6 +38,7 @@ function SetSourceUser() {
                     'id' => 0
                 )
             );
+
             foreach ($amount as $k=> $v) {
                 if(!empty($v)){
                     $request = $smcFunc['db_query']('', '
@@ -80,7 +80,8 @@ function SetSourceUser() {
                             'to' => 'int',
                             'amount' => 'int',
                             'create_at' => 'int',
-                            'pool' => 'int'
+                            'pool' => 'int',
+                            'property' => 'string',
                         ),
                         [$user_info['id'],$id_member[$k],$v,time(),0,'sflm'],
                         array()
@@ -143,7 +144,7 @@ function SetSourceUser() {
     }
     // member-lists
     $request = $smcFunc['db_query']('', '
-			SELECT  sou.id as id,mem.id_member, mem.member_name,mem.address,pro.smerit as smerit
+			SELECT  sou.id as id,mem.id_member, mem.member_name,mem.address,pro.sflm as sflm
 			FROM {db_prefix}source_user AS sou
 				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member)
 				LEFT JOIN {db_prefix}property AS pro ON (pro.id_member = sou.id_member) WHERE sou.source = {int:source}',

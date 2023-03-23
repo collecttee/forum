@@ -78,7 +78,7 @@ The function administrator sets to add or delete the Merit source user list as t
 			</thead>
 			<tbody>';
     foreach ($context['users'] as $val) {
-        $merit = $val['sFLM'] ?? 0;
+        $merit = $val['sflm'] ?? 0;
         echo '
 				<tr class="windowbg" id="list_member_list_0">
 					<td class="id_member">
