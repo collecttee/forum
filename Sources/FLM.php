@@ -2,13 +2,13 @@
 function SetSourceUser() {
     global $scripturl, $context,$smcFunc,$user_info;
     // Make sure they can view the memberlist.
-    isAllowedTo(['admin_forum','merit_manage']);
+    isAllowedTo(['admin_forum','flm_manage']);
 
-    loadTemplate('Merits');
-    $context['post_url'] = $scripturl . '?action=merit;save';
-    $context['delete_url'] = $scripturl . '?action=merit';
+    loadTemplate('FLM');
+    $context['post_url'] = $scripturl . '?action=flm;save';
+    $context['delete_url'] = $scripturl . '?action=flm';
     $request = $smcFunc['db_query']('', '
-                    SELECT  smerit
+                    SELECT  sflm
                     FROM {db_prefix}property
                     WHERE id_member = {int:id}
                     LIMIT 1',
@@ -18,31 +18,31 @@ function SetSourceUser() {
     );
     $pool = $smcFunc['db_fetch_assoc']($request);
     $smcFunc['db_free_result']($request);
-    $context['pool_amount'] = $pool['smerit'];
+    $context['pool_amount'] = $pool['sflm'];
     if (isset($_POST['work']) && $_POST['work'] == 'delete') {
         checkSession();
         if (isset($_POST['transfer']) && $_POST['transfer'] == 'Transfer sMerit') {
             $amount = $_POST['amount'];
             $sum = array_sum($amount);
             $id_member = $_POST['id_member'];
-            if ($sum > $pool['smerit']) {
+            if ($sum > $pool['sflm']) {
                 $_SESSION['pass-max'] = true;
-                redirectexit('action=merit');
+                redirectexit('action=flm');
             }
 
             $smcFunc['db_query']('', '
                         UPDATE {db_prefix}property
-                        SET smerit = {int:smerit}
+                        SET sflm = {int:sflm}
                         WHERE id_member = {int:id}',
                 array(
-                    'smerit' =>$pool['smerit'] - $sum,
+                    'sflm' =>$pool['sflm'] - $sum,
                     'id' => 0
                 )
             );
             foreach ($amount as $k=> $v) {
                 if(!empty($v)){
                     $request = $smcFunc['db_query']('', '
-                    SELECT  id_member,smerit
+                    SELECT  id_member,sflm
                     FROM {db_prefix}property
                     WHERE id_member = {int:id_member}
                     LIMIT 1',
@@ -55,10 +55,10 @@ function SetSourceUser() {
                     if (!empty($exists)){
                         $smcFunc['db_query']('', '
                         UPDATE {db_prefix}property
-                        SET smerit = {int:smerit}
+                        SET sflm = {int:sflm}
                         WHERE id_member = {int:id}',
                                 array(
-                                    'smerit' => $exists['smerit'] + $v,
+                                    'sflm' => $exists['sflm'] + $v,
                                     'id' => $id_member[$k]
                             )
                         );
@@ -67,14 +67,14 @@ function SetSourceUser() {
                             '{db_prefix}property',
                             array(
                                 'id_member' => 'int',
-                                'smerit' => 'int'
+                                'sflm' => 'int'
                             ),
                             [$id_member[$k],$v],
                             array()
                         );
                     }
                     $smcFunc['db_insert']('',
-                        '{db_prefix}smerit_transfer_log',
+                        '{db_prefix}property_transfer_log',
                         array(
                             'from' => 'int',
                             'to' => 'int',
@@ -82,7 +82,7 @@ function SetSourceUser() {
                             'create_at' => 'int',
                             'pool' => 'int'
                         ),
-                        [$user_info['id'],$id_member[$k],$v,time(),0],
+                        [$user_info['id'],$id_member[$k],$v,time(),0,'sflm'],
                         array()
                     );
                 }
@@ -97,13 +97,13 @@ function SetSourceUser() {
 		DELETE FROM {db_prefix}source_user
 		WHERE source = {int:source} AND id IN ({array_int:users})',
                 array(
-                    'users' => $delete,
-                    'source' => 0
+                    'source'=>1,
+                    'users' => $delete
                 )
             );
         }
 
-        redirectexit('action=merit');
+        redirectexit('action=flm');
     }
     if (isset($_SESSION['adm-save']))
     {
@@ -148,7 +148,7 @@ function SetSourceUser() {
 				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member)
 				LEFT JOIN {db_prefix}property AS pro ON (pro.id_member = sou.id_member) WHERE sou.source = {int:source}',
         array(
-            'source' => 0
+            'source' => 1
         )
     );
 
@@ -181,7 +181,7 @@ function SetSourceUser() {
 			WHERE source = {int:source} AND id_member = {int:id_member}
 			LIMIT 1',
             array(
-                'source' => 0,
+                'source' => 1,
                 'id_member' => $user_settings['id_member'],
             )
         );
@@ -197,18 +197,18 @@ function SetSourceUser() {
                 'source' => 'int',
                 'create_at' => 'int'
             ),
-            [$user_settings['id_member'],0,time()],
+            [$user_settings['id_member'],1,time()],
             array()
         );
         $_SESSION['adm-save'] = true;
         redirectexit('action=merit');
     }
 }
-function MeritMain(){
+function FLMMain(){
     global $smcFunc;
     $request = $smcFunc['db_query']('', '
-			SELECT  id,merit_max_limit
-			FROM {db_prefix}smerit_max
+			SELECT  id,flm_max_limit
+			FROM {db_prefix}property_max
 			WHERE id = {int:id}
 			LIMIT 1',
         array(
@@ -217,7 +217,7 @@ function MeritMain(){
     );
     $result = $smcFunc['db_fetch_assoc']($request);
     $smcFunc['db_free_result']($request);
-    $ret = $result['merit_max_limit'] ?? 0;
+    $ret = $result['flm_max_limit'] ?? 0;
     if ($ret == 1) {
         fatal_error('Feature has been disabled');
     }
@@ -225,7 +225,7 @@ function MeritMain(){
     $meritFunction = [
         ''=>'SetSourceUser',
         'smerittransfer'=>'sMeritTransfer',
-        'smerit'=>'smerit',
+        'sflm'=>'sflm',
         'systemsMerit'=>'systemsMerit',
         'sMeritTransfer'=>'sMeritTransfer',
         'emerit'=>'emerit',
@@ -236,7 +236,7 @@ function MeritMain(){
 function usersMeritTransfer(){
     global $scripturl, $context,$smcFunc,$modSettings;
     // Make sure they can view the memberlist.
-    isAllowedTo(['admin_forum','merit_manage']);
+    isAllowedTo(['admin_forum','flm_manage']);
 
     loadTemplate('Merits');
     $context['sub_template'] = 'usersMeritTransfer';
@@ -273,7 +273,7 @@ function usersMeritTransfer(){
 function sMeritTransfer(){
     global $scripturl, $context,$smcFunc,$modSettings;
     // Make sure they can view the memberlist.
-    isAllowedTo(['admin_forum','merit_manage']);
+    isAllowedTo(['admin_forum','flm_manage']);
 
     loadTemplate('Merits');
     $context['sub_template'] = 'sMeritTransfer';
@@ -307,13 +307,13 @@ function sMeritTransfer(){
         $context['users'][] = $row;
     }
 }
-function smerit(){
+function sflm(){
     global $scripturl, $context,$smcFunc,$user_info,$modSettings;
     // Make sure they can view the memberlist.
-    isAllowedTo(['admin_forum','merit_manage']);
+    isAllowedTo(['admin_forum','flm_manage']);
 
-    loadTemplate('Merits');
-    $context['sub_template'] = 'smerit';
+    loadTemplate('FLM');
+    $context['sub_template'] = 'sFLM';
     if (isset($_SESSION['adm-save']))
     {
         if ($_SESSION['adm-save'] === true)
@@ -330,19 +330,19 @@ function smerit(){
 
         unset($_SESSION['exceeded-maximum']);
     }
-    $context['post_url'] = $scripturl . '?action=merit;save;sa=smerit';
+    $context['post_url'] = $scripturl . '?action=flm;save;sa=sflm';
 
     $request = $smcFunc['db_query']('', '
 			SELECT SUM(amount)
-			FROM {db_prefix}smerit_logs',
+			FROM {db_prefix}property_logs WHERE property = {string:property}',
         array(
-
+            'property' => 'sflm'
         )
     );
     list ($context['total_issue']) =   $smcFunc['db_fetch_row']($request);
 
     $request = $smcFunc['db_query']('', '
-			SELECT  smerit
+			SELECT  sflm
 			FROM {db_prefix}property
 			WHERE id_member = {int:id}
 			LIMIT 1',
@@ -351,10 +351,10 @@ function smerit(){
         )
     );
     $poolAmount = $smcFunc['db_fetch_assoc']($request);
-    $context['pool_amount'] = $poolAmount['smerit'] ?? 0;
+    $context['pool_amount'] = $poolAmount['sflm'] ?? 0;
 
     $request = $smcFunc['db_query']('', '
-			SELECT  SUM(smerit)
+			SELECT  SUM(sflm)
 			FROM {db_prefix}property
 			WHERE id_member != {int:id}',
         array(
@@ -365,19 +365,21 @@ function smerit(){
     $smcFunc['db_free_result']($request);
     $request = $smcFunc['db_query']('', '
 			SELECT COUNT(*)
-			FROM {db_prefix}smerit_logs as a where a.from != {int:id}',
+			FROM {db_prefix}property_logs as a where a.from != {int:id} AND property = {string:property}',
         array(
-            'id' => 0
+            'id' => 0,
+            'property' => 'sflm'
         )
     );
     list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
     $smcFunc['db_free_result']($request);
     $request = $smcFunc['db_query']('', '
 			SELECT   mem.member_name,SUM(sou.amount) AS amount
-			FROM {db_prefix}smerit_logs AS sou 
-				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member) where sou.from != {int:id}  GROUP BY mem.member_name',
+			FROM {db_prefix}property_logs AS sou 
+				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member) where sou.from != {int:id} AND property = {string:property}  GROUP BY mem.member_name',
         array(
-            'id'=>0
+            'id'=>0,
+            'property' => 'sflm'
         )
     );
     while ($row = $smcFunc['db_fetch_assoc']($request)) {
@@ -385,18 +387,19 @@ function smerit(){
     }
     $smcFunc['db_free_result']($request);
     $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
-    $context['page_index'] = constructPageIndex($scripturl . '?action=merit;sa=smerit', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $context['page_index'] = constructPageIndex($scripturl . '?action=flm;sa=sflm', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
     $limit = $_REQUEST['start'];
     $context['start'] = $_REQUEST['start'];
     // member-lists
     $request = $smcFunc['db_query']('', '
 			SELECT  sou.id as id,sou.amount,sou.create_at, mem.member_name
-			FROM {db_prefix}smerit_logs AS sou
-				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member) where sou.from != {int:id} ORDER BY id DESC LIMIT {int:start}, {int:max}',
+			FROM {db_prefix}property_logs AS sou
+				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member) where sou.from != {int:id} AND property = {string:property} ORDER BY id DESC LIMIT {int:start}, {int:max}',
         array(
             'id' => 0,
             'start' => $limit,
             'max' => $modSettings['defaultMaxMembers'],
+            'property' => 'sflm'
         )
     );
     while ($row = $smcFunc['db_fetch_assoc']($request)) {
@@ -406,8 +409,8 @@ function smerit(){
         checkSession();
         $amount = $_POST['amount'];
         $request = $smcFunc['db_query']('', '
-			SELECT  id,merit_max_limit
-			FROM {db_prefix}smerit_max
+			SELECT  id,flm_max_limit
+			FROM {db_prefix}property_max
 			WHERE id = {int:id}
 			LIMIT 1',
             array(
@@ -416,13 +419,13 @@ function smerit(){
         );
         $result = $smcFunc['db_fetch_assoc']($request);
         $smcFunc['db_free_result']($request);
-        $ret = $result['merit_max_limit'] ?? 0;
+        $ret = $result['flm_max_limit'] ?? 0;
         if ($amount > $ret) {
             $_SESSION['exceeded-maximum'] = true;
-            redirectexit('action=merit;sa=smerit');
+            redirectexit('action=flm;sa=sflm');
         }
         $request = $smcFunc['db_query']('', '
-			SELECT  id_member,smerit
+			SELECT  id_member,sflm
 			FROM {db_prefix}property
 			WHERE id_member = {int:id}
 			LIMIT 1',
@@ -436,7 +439,7 @@ function smerit(){
                 '{db_prefix}property',
                 array(
                     'id_member' => 'int',
-                    'smerit' => 'int'
+                    'sflm' => 'int'
                 ),
                 [0,$amount],
                 array()
@@ -444,27 +447,28 @@ function smerit(){
         } else {
             $smcFunc['db_query']('', '
 					UPDATE {db_prefix}property
-					SET smerit = {int:smerit}
+					SET sflm = {int:sflm}
 					WHERE id_member = {int:id}',
                 array(
-                    'smerit' => $user_settings['smerit'] + $amount,
+                    'sflm' => $user_settings['sflm'] + $amount,
                     'id' => 0
                 )
             );
         }
         $smcFunc['db_insert']('',
-            '{db_prefix}smerit_logs',
+            '{db_prefix}property_logs',
             array(
                 'id_member' => 'int',
                 'amount' => 'int',
                 'from' => 'int',
                 'create_at' => 'int',
+                'property' => 'string',
             ),
-            [$user_info['id'],$amount,1,time()],
+            [$user_info['id'],$amount,1,time(),'sflm'],
             array()
         );
         $_SESSION['adm-save'] = true;
-        redirectexit('action=merit;sa=smerit');
+        redirectexit('action=flm;sa=sflm');
     }
 
 }
@@ -472,7 +476,7 @@ function smerit(){
 function systemsMerit(){
     global $scripturl, $context,$smcFunc,$user_info,$modSettings;
     // Make sure they can view the memberlist.
-    isAllowedTo(['admin_forum','merit_manage']);
+    isAllowedTo(['admin_forum','flm_manage']);
 
     loadTemplate('Merits');
     $context['sub_template'] = 'systemsMerit';
@@ -520,7 +524,7 @@ function systemsMerit(){
 function emerit(){
     global $scripturl, $context,$smcFunc,$user_info,$modSettings;
     // Make sure they can view the memberlist.
-    isAllowedTo(['admin_forum','merit_manage']);
+    isAllowedTo(['admin_forum','flm_manage']);
 
     loadTemplate('Merits');
     $context['sub_template'] = 'emerit';

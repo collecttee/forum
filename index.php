@@ -372,6 +372,7 @@ function smf_main()
 		'mergetopics' => array('SplitTopics.php', 'MergeTopics'),
 		'mlist' => array('Memberlist.php', 'Memberlist'),
 		'merit'=>array('Merits.php','MeritMain'),
+		'flm'=>array('FLM.php','FLMMain'),
 		'send'=>array('Send.php','SendMain'),
 		'moderate' => array('ModerationCenter.php', 'ModerationMain'),
 		'modifycat' => array('ManageBoards.php', 'ModifyCat'),

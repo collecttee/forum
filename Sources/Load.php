@@ -1513,6 +1513,22 @@ function loadPermissions()
 		$user_info['permissions'][] = 'merit_manage';
 	}
 	$smcFunc['db_free_result']($request);
+	$request = $smcFunc['db_query']('', '
+			SELECT  id_member
+			FROM {db_prefix}member_roles
+			WHERE id_member = {int:id_member}
+			AND role_id = {int:role_id}
+			LIMIT 1',
+		array(
+			'id_member' => $user_info['id'],
+			'role_id' => 2
+		)
+	);
+	$user_settings = $smcFunc['db_fetch_assoc']($request);
+	if (!empty($user_settings)){
+		$user_info['permissions'][] = 'flm_manage';
+	}
+	$smcFunc['db_free_result']($request);
 }
 
 /**
