@@ -225,7 +225,7 @@ function FLMMain(){
     $sa = isset($_GET['sa']) ? $_GET['sa'] : '';
     $meritFunction = [
         ''=>'SetSourceUser',
-        'smerittransfer'=>'sMeritTransfer',
+        'sflmtransfer'=>'sFLMTransfer',
         'sflm'=>'sflm',
         'systemsMerit'=>'systemsMerit',
         'sMeritTransfer'=>'sMeritTransfer',
@@ -271,35 +271,37 @@ function usersMeritTransfer(){
         $context['users'][] = $row;
     }
 }
-function sMeritTransfer(){
+function sFLMTransfer(){
     global $scripturl, $context,$smcFunc,$modSettings;
     // Make sure they can view the memberlist.
     isAllowedTo(['admin_forum','flm_manage']);
 
-    loadTemplate('Merits');
-    $context['sub_template'] = 'sMeritTransfer';
+    loadTemplate('FLM');
+    $context['sub_template'] = 'sFLMTransfer';
 
     $request = $smcFunc['db_query']('', '
 			SELECT COUNT(*)
-			FROM {db_prefix}smerit_transfer_log WHERE pool = {int:id}',
+			FROM {db_prefix}property_transfer_log WHERE pool = {int:id} AND property = {string:property}',
         array(
-            'id' => 0
+            'id' => 0,
+            'property' => 'sflm',
         )
     );
     list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
     $smcFunc['db_free_result']($request);
     $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
-    $context['page_index'] = constructPageIndex($scripturl . '?action=merit;sa=sMeritTransfer', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $context['page_index'] = constructPageIndex($scripturl . '?action=flm;sa=sflmtransfer', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
     $limit = $_REQUEST['start'];
     $context['start'] = $_REQUEST['start'];
     // member-lists
     $request = $smcFunc['db_query']('', '
 				SELECT   sou.id as id,mem.member_name as a,mem2.member_name as b,amount,create_at
-			FROM {db_prefix}smerit_transfer_log AS sou 
+			FROM {db_prefix}property_transfer_log AS sou 
 				LEFT JOIN {db_prefix}members AS mem ON (sou.from = mem.id_member)
-				LEFT JOIN {db_prefix}members AS mem2 ON (sou.to = mem2.id_member) WHERE pool = {int:id} ORDER BY id DESC LIMIT {int:start}, {int:max}',
+				LEFT JOIN {db_prefix}members AS mem2 ON (sou.to = mem2.id_member) WHERE pool = {int:id} AND property = {string:property} ORDER BY id DESC LIMIT {int:start}, {int:max}',
         array(
             'id' => 0,
+            'property' => 'sflm',
             'start' => $limit,
             'max' => $modSettings['defaultMaxMembers'],
         )
