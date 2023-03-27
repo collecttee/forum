@@ -19,7 +19,7 @@ function template_main()
 
     echo '
 		<div class="cat_bar">
-			<h3 class="catbg">Manage Merit</h3>
+			<h3 class="catbg">Manage FLM</h3>
 		</div>
 		<p class="information">
 The function administrator sets to add or delete the Merit source user list as the internal distributiongroup of sFLM.				</p>
@@ -125,7 +125,7 @@ function template_usersFLMTransfer(){
 					<div class="errorbox">', $txt['exists_this_user'], '</div>';
     echo '
 		<div class="cat_bar">
-			<h3 class="catbg">Manage Merit</h3>
+			<h3 class="catbg">Manage FLM</h3>
 		</div>
 		<p class="information">
 The function administrator sets to add or delete the Merit source user list as the internal distributiongroup of sFLM.				</p>
@@ -200,7 +200,7 @@ function template_sFLMTransfer(){
 					<div class="errorbox">', $txt['exists_this_user'], '</div>';
     echo '
 		<div class="cat_bar">
-			<h3 class="catbg">Manage Merit</h3>
+			<h3 class="catbg">Manage FLM</h3>
 		</div>
 		<p class="information">
 The function administrator sets to add or delete the Merit source user list as the internal distributiongroup of sFLM.				</p>
@@ -279,7 +279,7 @@ function template_sFLM()
 					<div class="errorbox">', $txt['exceeded_maximum'], '</div>';
     echo '
 		<div class="cat_bar">
-			<h3 class="catbg">Manage Merit</h3>
+			<h3 class="catbg">Manage FLM</h3>
 		</div>
 		<p class="information">
 The function administrator sets to add or delete the Merit source user list as the internal distributiongroup of sFLM.				</p>
@@ -429,7 +429,7 @@ function template_systemsFLM()
 					<div class="errorbox">', $txt['exists_this_user'], '</div>';
     echo '
 		<div class="cat_bar">
-			<h3 class="catbg">Manage Merit</h3>
+			<h3 class="catbg">Manage FLM</h3>
 		</div>
 		<p class="information">
 The function administrator sets to add or delete the Merit source user list as the internal distributiongroup of sFLM.				</p>
@@ -502,7 +502,7 @@ function template_emerit()
 					<div class="errorbox">', $txt['exists_this_user'], '</div>';
     echo '
 		<div class="cat_bar">
-			<h3 class="catbg">Manage Merit</h3>
+			<h3 class="catbg">Manage FLM</h3>
 		</div>
 		<p class="information">
 The function administrator sets to add or delete the Merit source user list as the internal distributiongroup of sFLM.				</p>

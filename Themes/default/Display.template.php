@@ -573,7 +573,7 @@ function template_single_post($message)
 			echo '
 								<li class="postcount">', $txt['member_postcount'], ': ', $message['member']['posts'], '</li>';
         echo '
-								<li class="postcount">merit: ', $message['merit'], '</li>';
+								<li class="postcount">merit: ', $message['merit'], '</li><li class="postcount">FLM: ', $message['flm'], '</li>';
 		// Show their personal text?
 		if (!empty($modSettings['show_blurb']) && !empty($message['member']['blurb']))
 			echo '
@@ -711,6 +711,7 @@ function template_single_post($message)
 									</span>
 								</div>
 								<div style="width: 50%;word-break: break-all;">', $message['sender_record'], '</div>
+								<div style="width: 50%;word-break: break-all;">', $message['sflmRecord'], '</div>
 								<div id="msg_', $message['id'], '_quick_mod"', $ignoring ? ' style="display:none;"' : '', '></div>
 							</div><!-- .keyinfo -->';
 

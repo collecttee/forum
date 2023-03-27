@@ -813,7 +813,7 @@ function ModifyProfile($post_errors = array())
 	if (!isset($context['page_title']))
 		$context['page_title'] = $txt['profile'] . (isset($txt[$current_area]) ? ' - ' . $txt[$current_area] : '');
 	$request = $smcFunc['db_query']('', '
-			SELECT  merit,emerit
+			SELECT  merit,emerit,flm
 			FROM {db_prefix}property
 			WHERE id_member = {int:id}
 			LIMIT 1',
@@ -824,6 +824,7 @@ function ModifyProfile($post_errors = array())
 	$poolAmount = $smcFunc['db_fetch_assoc']($request);
 	$context['merit'] = $poolAmount['merit'] ?? 0;
 	$context['emerit'] = $poolAmount['emerit'] ?? 0;
+	$context['flm'] = $poolAmount['flm'] ?? 0;
 }
 
 /**

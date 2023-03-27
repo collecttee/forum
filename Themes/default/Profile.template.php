@@ -305,7 +305,9 @@ function template_summary()
 				<dd>', $context['merit'], '</dd>';
 	echo '
 				<dt>emerit:</dt>
-				<dd>', $context['emerit'], '</dd>';
+				<dd>', $context['emerit'], '</dd>';echo '
+				<dt>FLM:</dt>
+				<dd>', $context['flm'], '</dd>';
 
 	if (!isset($context['disabled_fields']['posts']))
 		echo '

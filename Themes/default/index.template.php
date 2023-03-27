@@ -830,8 +830,7 @@ function template_flm_menu($page){
 				<a class="button button_strip_view_all_members ', $page == 'flm' ? 'active' : '', '" href="', $scripturl.'?action=flm', '">Set FLM Source User</a>
 				<a class="button button_strip_mlist_search ', $page == 'sFLM' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=sflm', '">sFlm manage issue Records</a>
 				<a class="button button_strip_mlist_search ', $page == 'sFLMTransfer' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=sflmtransfer', '">sflm Transfer Records</a>
-				<a class="button button_strip_mlist_search ', $page == 'usersMeritTransfer' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=usersMeritTransfer', '">user sflm Transfer Records</a>
-			<a class="button button_strip_mlist_search ', $page == 'systemsMerit' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=systemsMerit', '">sflm system issue Records</a>
+				<a class="button button_strip_mlist_search ', $page == 'usersFLMTransfer' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=usersflmTransfer', '">user sflm Transfer Records</a>
 		</div><br/>';
 }
 ?>

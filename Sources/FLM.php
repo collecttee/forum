@@ -174,7 +174,7 @@ function SetSourceUser() {
         $user_settings = $smcFunc['db_fetch_assoc']($request);
         if (empty($user_settings)){
             $_SESSION['not-found'] = true;
-            redirectexit('action=merit');
+            redirectexit('action=flm');
         }
         $request = $smcFunc['db_query']('', '
 			SELECT  id_member
@@ -189,7 +189,7 @@ function SetSourceUser() {
         $exists = $smcFunc['db_fetch_assoc']($request);
         if (!empty($exists)){
             $_SESSION['exists'] = true;
-            redirectexit('action=merit');
+            redirectexit('action=flm');
         }
         $smcFunc['db_insert']('',
             '{db_prefix}source_user',
@@ -202,7 +202,7 @@ function SetSourceUser() {
             array()
         );
         $_SESSION['adm-save'] = true;
-        redirectexit('action=merit');
+        redirectexit('action=flm');
     }
 }
 function FLMMain(){
@@ -230,40 +230,42 @@ function FLMMain(){
         'systemsMerit'=>'systemsMerit',
         'sMeritTransfer'=>'sMeritTransfer',
         'emerit'=>'emerit',
-        'usersMeritTransfer'=>'usersMeritTransfer',
+        'usersflmTransfer'=>'usersflmTransfer',
     ];
     call_helper($meritFunction[$sa]);
 }
-function usersMeritTransfer(){
+function usersflmTransfer(){
     global $scripturl, $context,$smcFunc,$modSettings;
     // Make sure they can view the memberlist.
     isAllowedTo(['admin_forum','flm_manage']);
 
-    loadTemplate('Merits');
-    $context['sub_template'] = 'usersMeritTransfer';
+    loadTemplate('FLM');
+    $context['sub_template'] = 'usersFLMTransfer';
 
     $request = $smcFunc['db_query']('', '
 			SELECT COUNT(*)
-			FROM {db_prefix}smerit_transfer_log WHERE pool = {int:id}',
+			FROM {db_prefix}property_transfer_log WHERE pool = {int:id} AND property = {string:property}',
         array(
-            'id' => 1
+            'id' => 1,
+            'property' => 'sflm'
         )
     );
     list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
     $smcFunc['db_free_result']($request);
     $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
-    $context['page_index'] = constructPageIndex($scripturl . '?action=merit;sa=sMeritTransfer', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $context['page_index'] = constructPageIndex($scripturl . '?action=flm;sa=usersflmTransfer', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
     $limit = $_REQUEST['start'];
     $context['start'] = $_REQUEST['start'];
     // member-lists
     $request = $smcFunc['db_query']('', '
 				SELECT   sou.id as id,mem.member_name as a,mem2.member_name as b,amount,create_at
-			FROM {db_prefix}smerit_transfer_log AS sou 
+			FROM {db_prefix}property_transfer_log AS sou 
 				LEFT JOIN {db_prefix}members AS mem ON (sou.from = mem.id_member)
-				LEFT JOIN {db_prefix}members AS mem2 ON (sou.to = mem2.id_member) WHERE pool = {int:id} ORDER BY id DESC LIMIT {int:start}, {int:max}',
+				LEFT JOIN {db_prefix}members AS mem2 ON (sou.to = mem2.id_member) WHERE pool = {int:id} AND property = {string:property} ORDER BY id DESC LIMIT {int:start}, {int:max}',
         array(
             'id' => 1,
             'start' => $limit,
+            'property' => 'sflm',
             'max' => $modSettings['defaultMaxMembers'],
         )
     );
@@ -506,7 +508,7 @@ function systemsMerit(){
     }
     $smcFunc['db_free_result']($request);
     $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
-    $context['page_index'] = constructPageIndex($scripturl . '?action=merit;sa=systemsMerit', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $context['page_index'] = constructPageIndex($scripturl . '?action=flm;sa=systemsMerit', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
     $limit = $_REQUEST['start'];
     // member-lists
     $request = $smcFunc['db_query']('', '
@@ -542,7 +544,7 @@ function emerit(){
     list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
     $smcFunc['db_free_result']($request);
     $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
-    $context['page_index'] = constructPageIndex($scripturl . '?action=merit;sa=emerit', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $context['page_index'] = constructPageIndex($scripturl . '?action=flm;sa=emerit', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
     $limit = $_REQUEST['start'];
     // member-lists
     $request = $smcFunc['db_query']('', '

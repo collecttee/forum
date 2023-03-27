@@ -330,9 +330,7 @@ function SendFLM(){
         } else {
             $smcFunc['db_query']('', '
 			UPDATE {db_prefix}property
-			SET smerit = {int:smerit},
-			merit = {int:merit},
-			emerit = {int:emerit}
+			SET flm = {int:flm}
 			WHERE id_member = {int:to}',
                 array(
                     'to' => $message_ret['id_member'],
@@ -352,15 +350,16 @@ function SendFLM(){
             )
         );
         $smcFunc['db_insert']('',
-            '{db_prefix}sender_merit',
+            '{db_prefix}sender_property',
             array(
                 'id_topic' => 'int',
                 'id_msg' => 'int',
                 'id_member' => 'int',
                 'amount' => 'int',
                 'create_at' => 'int',
+                'property'=>'string'
             ),
-            [$topic,$msg,$user_info['id'],$amount,time()],
+            [$topic,$msg,$user_info['id'],$amount,time(),'sflm'],
             array()
         );
         $smcFunc['db_insert']('',

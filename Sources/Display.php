@@ -1514,8 +1514,31 @@ function prepareDisplayContext($reset = false)
          $record.=$row['member_name']."({$row['amount']}),";
          $k++;
     }
+
+
     $request = $smcFunc['db_query']('', '
-			SELECT  merit
+			SELECT mem.member_name,SUM(sm.amount) AS amount
+			FROM {db_prefix}sender_property AS sm
+				INNER JOIN {db_prefix}members AS mem ON (sm.id_member = mem.id_member)
+			WHERE sm.id_msg = {int:msg} AND property = {string:property} GROUP BY mem.member_name',
+        array(
+            'msg' => $message['id_msg'],
+            'property' =>'sflm'
+        )
+    );
+
+    $sflmRecord = '';
+    $s = 0;
+    while ($row = $smcFunc['db_fetch_assoc']($request)) {
+        if ($s == 0) {
+            $sflmRecord = 'FLM by ';
+        }
+        $sflmRecord.=$row['member_name']."({$row['amount']}),";
+        $s++;
+    }
+
+    $request = $smcFunc['db_query']('', '
+			SELECT  merit,flm
 			FROM {db_prefix}property
 			WHERE id_member = {int:id}
 			LIMIT 1',
@@ -1525,6 +1548,7 @@ function prepareDisplayContext($reset = false)
     );
     $poolAmount = $smcFunc['db_fetch_assoc']($request);
     $merit = $poolAmount['merit'] ?? 0;
+    $flm= $poolAmount['flm'] ?? 0;
 	// Compose the memory eat- I mean message array.
 	$output = array(
 		'attachment' => loadAttachmentContext($message['id_msg'], $context['loaded_attachments']),
@@ -1557,6 +1581,8 @@ function prepareDisplayContext($reset = false)
 		'css_class' => $message['approved'] ? 'windowbg' : 'approvebg',
         'sender_record' => $record,
         'merit' => $merit,
+        'flm' => $flm,
+        'sflmRecord' => $sflmRecord,
 	);
 
 	// Does the file contains any attachments? if so, change the icon.
