@@ -831,6 +831,7 @@ function template_flm_menu($page){
 				<a class="button button_strip_mlist_search ', $page == 'sFLM' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=sflm', '">sFlm manage issue Records</a>
 				<a class="button button_strip_mlist_search ', $page == 'sFLMTransfer' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=sflmtransfer', '">sflm Transfer Records</a>
 				<a class="button button_strip_mlist_search ', $page == 'usersFLMTransfer' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=usersflmTransfer', '">user sflm Transfer Records</a>
+				<a class="button button_strip_mlist_search ', $page == 'flmexchange' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=flmexchange', '">FLM Change Center</a>
 		</div><br/>';
 }
 ?>

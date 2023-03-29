@@ -414,7 +414,7 @@ The function administrator sets to add or delete the Merit source user list as t
             </form>';
 
 }
-function template_systemsFLM()
+function template_flmexchange()
 {
     global $context, $txt;
 
@@ -429,7 +429,7 @@ function template_systemsFLM()
 					<div class="errorbox">', $txt['exists_this_user'], '</div>';
     echo '
 		<div class="cat_bar">
-			<h3 class="catbg">Manage FLM</h3>
+			<h3 class="catbg">FLM Change Center</h3>
 		</div>
 		<p class="information">
 The function administrator sets to add or delete the Merit source user list as the internal distributiongroup of sFLM.				</p>
@@ -437,8 +437,21 @@ The function administrator sets to add or delete the Merit source user list as t
 
     echo '
 		</div>';
-    template_flm_menu('systemsFLM');
-
+    template_flm_menu('flmexchange');
+    echo '<div class="cat_bar">
+			<h3 class="catbg">Set FLMS Source User</h3>
+		</div>
+		<div class="windowbg">
+								<dl class="settings">
+								  <form method="post" action="', $context['post_url'], '" >    
+									<h1>Single Min: <input type="number" name="min" id="recaptcha_site_key" value=""></h1>
+									<br>
+									<h1>Single Max: <input type="number" name="max" id="recaptcha_site_key" value=""></h1>
+									<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
+				<input type="submit" value="Modify" class="button">
+				</form> 
+								</dl>	
+								</div>';
 
     // Go through each table!
     echo '<form  method="post"><table class="table_grid" id="member_list">

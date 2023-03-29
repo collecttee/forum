@@ -227,7 +227,7 @@ function FLMMain(){
         ''=>'SetSourceUser',
         'sflmtransfer'=>'sFLMTransfer',
         'sflm'=>'sflm',
-        'systemsMerit'=>'systemsMerit',
+        'flmexchange'=>'flmexchange',
         'sMeritTransfer'=>'sMeritTransfer',
         'emerit'=>'emerit',
         'usersflmTransfer'=>'usersflmTransfer',
@@ -478,13 +478,13 @@ function sflm(){
 
 }
 
-function systemsMerit(){
+function flmexchange(){
     global $scripturl, $context,$smcFunc,$user_info,$modSettings;
     // Make sure they can view the memberlist.
     isAllowedTo(['admin_forum','flm_manage']);
 
-    loadTemplate('Merits');
-    $context['sub_template'] = 'systemsMerit';
+    loadTemplate('FLM');
+    $context['sub_template'] = 'flmexchange';
 
     $request = $smcFunc['db_query']('', '
 			SELECT COUNT(*)

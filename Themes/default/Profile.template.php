@@ -756,193 +756,78 @@ function template_flmExChangeCenter()
 		<form method="post" action="', $context['post_url'], '" >
 				<dl class="settings">
 				<h1>Single exchange limit 1000~5000</h1>
-				<h3>Your FLM amount:45125</h3>
+				<h3>Your FLM amount:', $context['flm'], '</h3>
 				<h3> please enter the amount you want to exchange: <input type="number" name="amount" width="80px"></h3>
 				</dl>
-				
+					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
 				<input type="submit" name="new_save"  value="Apply" class="button"></form></div>';
-
-	echo '
-			<div class="roundframe">';
-
-	// Any bits at the start?
-	if (!empty($context['profile_prehtml']))
-		echo '
-				<div>', $context['profile_prehtml'], '</div>';
-
-	if (!empty($context['profile_fields']))
-		echo '
-				<dl class="settings">';
-
-	// Start the big old loop 'of love.
-	$lastItem = 'hr';
-	foreach ($context['profile_fields'] as $key => $field)
-	{
-		// We add a little hack to be sure we never get more than one hr in a row!
-		if ($lastItem == 'hr' && $field['type'] == 'hr')
-			continue;
-
-		$lastItem = $field['type'];
-		if ($field['type'] == 'hr')
-			echo '
-				</dl>
-				<hr>
-				<dl class="settings">';
-
-		elseif ($field['type'] == 'callback')
-		{
-			if (isset($field['callback_func']) && function_exists('template_profile_' . $field['callback_func']))
-			{
-				$callback_func = 'template_profile_' . $field['callback_func'];
-				$callback_func();
-			}
+	echo '<div class="cat_bar">
+			<h3 class="catbg">
+				Members List
+			</h3>
+		</div>';
+	echo '<form  method="post"><table class="table_grid" id="member_list">
+			<thead>
+				<tr class="title_bar">
+					<th scope="col" id="header_member_list_id_member" class="id_member">
+						 ID
+					</th>
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					Amounts 
+					</th>		
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					state 
+					</th>
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					complete 
+					</th>
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					Time 
+					</th>
+				</tr>
+			</thead>
+			<tbody>';
+	foreach ($context['users'] as $k=> $val) {
+		$id = $k+$context['start'] + 1;
+		switch ($val['state']) {
+			case '1':
+				$state = 'Pass';
+				break;
+			case '2':
+				$state = 'Reject';
+				break;
+			default:
+				$state = 'Unaudited';
+				break;
 		}
-		else
-		{
-			echo '
-					<dt>
-						<strong', !empty($field['is_error']) ? ' class="error"' : '', '>', $field['type'] !== 'label' ? '<label for="' . $key . '">' : '', $field['label'], $field['type'] !== 'label' ? '</label>' : '', '</strong>';
-
-			// Does it have any subtext to show?
-			if (!empty($field['subtext']))
-				echo '
-						<br>
-						<span class="smalltext">', $field['subtext'], '</span>';
-
-			echo '
-					</dt>
-					<dd>';
-
-			// Want to put something infront of the box?
-			if (!empty($field['preinput']))
-				echo '
-						', $field['preinput'];
-
-			// What type of data are we showing?
-			if ($field['type'] == 'label')
-				echo '
-						', $field['value'];
-
-			// Maybe it's a text box - very likely!
-			elseif (in_array($field['type'], array('int', 'float', 'text', 'password', 'color', 'date', 'datetime', 'datetime-local', 'email', 'month', 'number', 'time', 'url')))
-			{
-				if ($field['type'] == 'int' || $field['type'] == 'float')
-					$type = 'number';
-				else
-					$type = $field['type'];
-				$step = $field['type'] == 'float' ? ' step="0.1"' : '';
-
-				echo '
-						<input type="', $type, '" name="', $key, '" id="', $key, '" size="', empty($field['size']) ? 30 : $field['size'], '"', isset($field['min']) ? ' min="' . $field['min'] . '"' : '', isset($field['max']) ? ' max="' . $field['max'] . '"' : '', ' value="', $field['value'], '" ', $field['input_attr'], ' ', $step, '>';
-			}
-			// You "checking" me out? ;)
-			elseif ($field['type'] == 'check')
-				echo '
-						<input type="hidden" name="', $key, '" value="0">
-						<input type="checkbox" name="', $key, '" id="', $key, '"', !empty($field['value']) ? ' checked' : '', ' value="1" ', $field['input_attr'], '>';
-
-			// Always fun - select boxes!
-			elseif ($field['type'] == 'select')
-			{
-				echo '
-						<select name="', $key, '" id="', $key, '">';
-
-				if (isset($field['options']))
-				{
-					// Is this some code to generate the options?
-					if (!is_array($field['options']))
-						$field['options'] = $field['options']();
-
-					// Assuming we now have some!
-					if (is_array($field['options']))
-						foreach ($field['options'] as $value => $name)
-							echo '
-							<option value="' . $value . '"', (!empty($field['disabled_options']) && is_array($field['disabled_options']) && in_array($value, $field['disabled_options'], true) ? ' disabled' : ($value == $field['value'] ? ' selected' : '')), '>', $name, '</option>';
-				}
-
-				echo '
-						</select>';
-			}
-
-			// Something to end with?
-			if (!empty($field['postinput']))
-				echo '
-						', $field['postinput'];
-
-			echo '
-					</dd>';
-		}
+		$comp = $val['complete'] == 0 ? 'No' : 'Yes';
+		echo '
+				<tr class="windowbg" id="list_member_list_0">
+					<td class="id_member">
+						' . $id . '
+					</td>
+					<td class="user_name">
+			        ' . $val['amount'] . '
+					</td>
+					<td class="user_name">
+			        ' .$state . '
+					</td>
+					<td class="display_name">
+						' . $comp . '
+					</td>
+					<td class="check centercol">
+					' . date('Y-m-d H:i:s',$val['create_at']) . '
+					</td>
+				</tr>';
 	}
-
-	if (!empty($context['profile_fields']))
-		echo '
-				</dl>';
-
-	// Are there any custom profile fields - if so print them!
-	if (!empty($context['custom_fields']))
-	{
-		if ($lastItem != 'hr')
-			echo '
-				<hr>';
-
-		echo '
-				<dl class="settings">';
-
-		foreach ($context['custom_fields'] as $field)
-			echo '
-					<dt>
-						<strong>', $field['name'], '</strong><br>
-						<span class="smalltext">', $field['desc'], '</span>
-					</dt>
-					<dd>
-						', $field['input_html'], '
-					</dd>';
-
-		echo '
-				</dl>';
-	}
-
-	// Any closing HTML?
-	if (!empty($context['profile_posthtml']))
-		echo '
-				<div>', $context['profile_posthtml'], '</div>';
-
-	// Only show the password box if it's actually needed.
-	if ($context['require_password'])
-		echo '
-				<dl class="settings">
-					<dt>
-						<strong', isset($context['modify_error']['bad_password']) || isset($context['modify_error']['no_password']) ? ' class="error"' : '', '><label for="oldpasswrd">', $txt['current_password'], '</label></strong><br>
-						<span class="smalltext">', $txt['required_security_reasons'], '</span>
-					</dt>
-					<dd>
-						<input type="password" name="oldpasswrd" id="oldpasswrd" size="20">
-					</dd>
-				</dl>';
-
-	// The button shouldn't say "Change profile" unless we're changing the profile...
-	if (!empty($context['submit_button_text']))
-		echo '
-				<input type="submit" name="save" value="', $context['submit_button_text'], '" class="button floatright">';
-	else
-		echo '
-				<input type="submit" name="save" value="', $txt['change_profile'], '" class="button floatright">';
-
-	if (!empty($context['token_check']))
-		echo '
-				<input type="hidden" name="', $context[$context['token_check'] . '_token_var'], '" value="', $context[$context['token_check'] . '_token'], '">';
-
 	echo '
-				<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
-				<input type="hidden" name="u" value="', $context['id_member'], '">
-				<input type="hidden" name="sa" value="', $context['menu_item_selected'], '">
-			</div><!-- .roundframe -->
-		</form>';
+			</tbody>
+		</table>
+       	<div class="pagesection">
+			<div class="pagelinks floatleft">', $context['page_index'], '</div>
+        </div>
+            </form>';
 
-	// Any final spellchecking stuff?
-	if (!empty($context['show_spellchecking']))
-		echo '
-		<form name="spell_form" id="spell_form" method="post" accept-charset="', $context['character_set'], '" target="spellWindow" action="', $scripturl, '?action=spellcheck"><input type="hidden" name="spellstring" value=""></form>';
 }
 
 /**
