@@ -733,11 +733,6 @@ function template_flmExChangeCenter()
 	$url = $context['require_password'] && !empty($modSettings['force_ssl']) ? strtr($url, array('http://' => 'https://')) : $url;
 
 	echo '
-		<form action="', $url, '" method="post" accept-charset="', $context['character_set'], '" name="creator" id="creator" enctype="multipart/form-data"', ($context['menu_item_selected'] == 'account' ? ' autocomplete="off"' : ''), '>
-			<div style="height:0;overflow:hidden;">
-				<input type="text" id="autocompleteFakeName">
-				<input type="password" id="autocompleteFakePassword">
-			</div>
 			<div class="cat_bar">
 				<h3 class="catbg profile_hd">';
 
@@ -757,7 +752,6 @@ function template_flmExChangeCenter()
 	if ($context['page_desc'])
 		echo '
 			<p class="information">', $context['page_desc'], '</p>';
-	if ($context['initialize_password'] == 0)
 		echo '<div class="roundframe"> 
 		<form method="post" action="', $context['post_url'], '" >
 				<dl class="settings">
@@ -765,8 +759,8 @@ function template_flmExChangeCenter()
 				<h3>Your FLM amount:45125</h3>
 				<h3> please enter the amount you want to exchange: <input type="number" name="amount" width="80px"></h3>
 				</dl>
-				</form>
-				<input type="submit" name="new_save"  value="Apply" class="button"></div>';
+				
+				<input type="submit" name="new_save"  value="Apply" class="button"></form></div>';
 
 	echo '
 			<div class="roundframe">';
