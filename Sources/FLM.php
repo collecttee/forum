@@ -485,38 +485,81 @@ function flmexchange(){
 
     loadTemplate('FLM');
     $context['sub_template'] = 'flmexchange';
+    $context['post_url'] = $scripturl . '?action=flm;sa=flmexchange;save';
+    $request = $smcFunc['db_query']('', '
+                    SELECT  min,max
+                    FROM {db_prefix}exchange_limit
+                    WHERE property = {string:property}
+                    LIMIT 1',
+        array(
+            'property' => 'flm',
+        )
+    );
+    $pool = $smcFunc['db_fetch_assoc']($request);
+    $context['min'] = $pool['min'] ?? 0;
+    $context['max'] = $pool['max']  ?? 0;
+    if (isset($_SESSION['adm-save']))
+    {
+        if ($_SESSION['adm-save'] === true)
+            $context['saved_successful'] = true;
+        else
+            $context['saved_failed'] = $_SESSION['adm-save'];
+
+        unset($_SESSION['adm-save']);
+    }
+    if (isset($_GET['save']))
+    {
+        checkSession();
+        $min = $_POST['min'];
+        $max = $_POST['max'];
+        if (empty($pool)){
+            $smcFunc['db_insert']('',
+                '{db_prefix}exchange_limit',
+                array(
+                    'min' => 'int',
+                    'max' => 'int',
+                    'property' => 'string',
+                ),
+                [$min,$max,'flm'],
+                array()
+            );
+        }else{
+            $smcFunc['db_query']('', '
+                UPDATE {db_prefix}exchange_limit
+                SET min = {int:min},
+                max = {int:max}
+                WHERE property = {string:property}',
+                array(
+                    'min' => $min,
+                    'max' => $max,
+                    'property' => 'flm'
+                )
+            );
+        }
+        $_SESSION['adm-save'] = true;
+        redirectexit('action=flm;sa=flmexchange;');
+
+    }
 
     $request = $smcFunc['db_query']('', '
 			SELECT COUNT(*)
-			FROM {db_prefix}smerit_logs as a where a.from != {int:id}',
+			FROM {db_prefix}apply_withdraw WHERE type = {string:type}',
         array(
-            'id' => 1
+            'type' => 'flm',
         )
     );
     list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
     $smcFunc['db_free_result']($request);
-    $request = $smcFunc['db_query']('', '
-			SELECT   mem.member_name,SUM(sou.amount) AS amount
-			FROM {db_prefix}smerit_logs AS sou 
-				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member) where sou.from != {int:id}  GROUP BY mem.member_name',
-        array(
-            'id'=>1
-        )
-    );
-    while ($row = $smcFunc['db_fetch_assoc']($request)) {
-        $context['users_total'][] = $row;
-    }
-    $smcFunc['db_free_result']($request);
     $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
-    $context['page_index'] = constructPageIndex($scripturl . '?action=flm;sa=systemsMerit', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $context['page_index'] = constructPageIndex($scripturl . '?action=flm;sa=flmexchange', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
     $limit = $_REQUEST['start'];
+    $context['start'] = $_REQUEST['start'];
     // member-lists
     $request = $smcFunc['db_query']('', '
-			SELECT  sou.id as id,sou.amount,sou.create_at, mem.member_name
-			FROM {db_prefix}smerit_logs AS sou
-				INNER JOIN {db_prefix}members AS mem ON (sou.id_member = mem.id_member) where sou.from != {int:id} ORDER BY id DESC LIMIT {int:start}, {int:max}',
+				SELECT   a.*,mem.member_name
+			FROM {db_prefix}apply_withdraw as a LEFT JOIN {db_prefix}members AS mem ON (a.id_member = mem.id_member)  WHERE type = {string:type} ORDER BY id DESC LIMIT {int:start}, {int:max}',
         array(
-            'id' => 1,
+            'type' => 'flm',
             'start' => $limit,
             'max' => $modSettings['defaultMaxMembers'],
         )

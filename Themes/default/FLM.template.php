@@ -439,14 +439,14 @@ The function administrator sets to add or delete the Merit source user list as t
 		</div>';
     template_flm_menu('flmexchange');
     echo '<div class="cat_bar">
-			<h3 class="catbg">Set FLMS Source User</h3>
+			<h3 class="catbg">Set FLM Exchange Limit</h3>
 		</div>
 		<div class="windowbg">
 								<dl class="settings">
 								  <form method="post" action="', $context['post_url'], '" >    
-									<h1>Single Min: <input type="number" name="min" id="recaptcha_site_key" value=""></h1>
+									<h1>Single Min: <input type="number" name="min" id="recaptcha_site_key" value="', $context['min'], '"></h1>
 									<br>
-									<h1>Single Max: <input type="number" name="max" id="recaptcha_site_key" value=""></h1>
+									<h1>Single Max: <input type="number" name="max" id="recaptcha_site_key" value="', $context['max'], '"></h1>
 									<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
 				<input type="submit" value="Modify" class="button">
 				</form> 
@@ -465,6 +465,12 @@ The function administrator sets to add or delete the Merit source user list as t
 					</th>		
 					<th scope="col" id="header_member_list_user_name" class="user_name">
 					Amount 
+					</th>	
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					state 
+					</th>	
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					complete 
 					</th>
 					<th scope="col" id="header_member_list_user_name" class="user_name">
 					Time 
@@ -474,6 +480,18 @@ The function administrator sets to add or delete the Merit source user list as t
 			<tbody>';
     foreach ($context['users'] as $k=> $val) {
         $id = $k+$context['start'] + 1;
+        switch ($val['state']) {
+            case '1':
+                $state = 'Pass';
+                break;
+            case '2':
+                $state = 'Reject';
+                break;
+            default:
+                $state = 'Unaudited';
+                break;
+        }
+        $comp = $val['complete'] == 0 ? 'No' : 'Yes';
         echo '
 				<tr class="windowbg" id="list_member_list_0">
 					<td class="id_member">
@@ -485,6 +503,23 @@ The function administrator sets to add or delete the Merit source user list as t
 					<td class="display_name">
 						' . $val['amount'] . '
 					</td>
+					<td class="display_name">';
+        if ($val['state'] == 0){
+            echo 'Pass<input type="checkbox" name="pass[]" value="' . $val['id'] . '"> reject<input type="checkbox" name="reject[]" value="' . $val['id'] . '">';
+        }else{
+            echo $state;
+        }
+
+
+        echo '
+					</td>
+						<td class="display_name">';
+        if ($val['complete'] == 0){
+            echo 'complete<input type="checkbox" name="complete[]" value="' . $val['id'] . '">';
+        } else{
+            echo $comp;
+        }
+        echo '</td>
 					<td class="check centercol">
 					' . date('Y-m-d H:i:s',$val['create_at']) . '
 					</td>
