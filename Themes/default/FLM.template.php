@@ -454,7 +454,7 @@ The function administrator sets to add or delete the Merit source user list as t
 								</div>';
 
     // Go through each table!
-    echo '<form  method="post"><table class="table_grid" id="member_list">
+    echo '<form  method="post" action="', $context['modify_url'], '"><table class="table_grid" id="member_list">
 			<thead>
 				<tr class="title_bar">
 					<th scope="col" id="header_member_list_id_member" class="id_member">
@@ -535,9 +535,8 @@ The function administrator sets to add or delete the Merit source user list as t
           <div class="flow_auto">
 			<div class="additional_row">
 				<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
-				<input type="hidden" name="work" value="delete">
-				<input type="submit" name="transfer" value="Transfer sFLM" style="float: right" class="button">
-				<input type="submit" name="delete_members" value="Delete Selected Members" style="float: right" data-confirm="Are you sure you want to delete the selected members?" class="button you_sure">
+				<input type="submit" name="do_state" value="Modify State" style="float: right" class="button">
+				<input type="submit" name="do_complete" value="Modify complete" style="float: right"  class="button you_sure">
 			</div>
 		</div>
             </form>';

@@ -486,6 +486,7 @@ function flmexchange(){
     loadTemplate('FLM');
     $context['sub_template'] = 'flmexchange';
     $context['post_url'] = $scripturl . '?action=flm;sa=flmexchange;save';
+    $context['modify_url'] = $scripturl . '?action=flm;sa=flmexchange;modify';
     $request = $smcFunc['db_query']('', '
                     SELECT  min,max
                     FROM {db_prefix}exchange_limit
@@ -506,6 +507,15 @@ function flmexchange(){
             $context['saved_failed'] = $_SESSION['adm-save'];
 
         unset($_SESSION['adm-save']);
+    }
+    if (isset($_GET['modify']))
+    {
+        checkSession();
+        if (isset($_POST['do_state'])){
+            $pass = $_POST['pass'];
+            $reject = $_POST['reject'];
+        }
+
     }
     if (isset($_GET['save']))
     {
