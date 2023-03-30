@@ -493,9 +493,18 @@ The function administrator sets to add or delete the Merit source user list as t
     echo '
 			</tbody>
 		</table>
+		
        	<div class="pagesection">
 			<div class="pagelinks floatleft">', $context['page_index'], '</div>
         </div>
+          <div class="flow_auto">
+			<div class="additional_row">
+				<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
+				<input type="hidden" name="work" value="delete">
+				<input type="submit" name="transfer" value="Transfer sFLM" style="float: right" class="button">
+				<input type="submit" name="delete_members" value="Delete Selected Members" style="float: right" data-confirm="Are you sure you want to delete the selected members?" class="button you_sure">
+			</div>
+		</div>
             </form>';
 
 }
