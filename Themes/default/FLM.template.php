@@ -453,15 +453,136 @@ The function administrator sets to add or delete the Merit source user list as t
 								</dl>	
 								</div>';
 
+    template_apply_menu('all');
     // Go through each table!
-    echo '<form  method="post" action="', $context['modify_url'], '"><table class="table_grid" id="member_list">
+    echo '<div class="cat_bar">
+			<h3 class="catbg">All List</h3>
+		</div><form  method="post" action="', $context['modify_url'], '"><table class="table_grid" id="member_list">
 			<thead>
 				<tr class="title_bar">
 					<th scope="col" id="header_member_list_id_member" class="id_member">
 						 ID
 					</th>
+						<th scope="col" id="header_member_list_id_member" class="id_member">
+						 PID
+					</th>
 					<th scope="col" id="header_member_list_user_name" class="user_name">
 					Username 
+					</th>		
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					Address 
+					</th>		
+					
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					Amount 
+					</th>	
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					state 
+					</th>	
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					complete 
+					</th>
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					Time 
+					</th>
+				</tr>
+			</thead>
+			<tbody>';
+    foreach ($context['users'] as $k=> $val) {
+        $id = $k+$context['start'] + 1;
+        switch ($val['state']) {
+            case '1':
+                $state = 'Pass';
+                break;
+            case '2':
+                $state = 'Reject';
+                break;
+            default:
+                $state = 'Not Reviewed';
+                break;
+        }
+        $comp = $val['complete'] == 0 ? 'No' : 'Yes';
+        echo '
+				<tr class="windowbg" id="list_member_list_0">
+					<td class="id_member">
+						' . $id . '
+					</td>
+						<td class="id_member">
+						' . $val['pid'] . '
+					</td>
+					<td class="user_name">
+			        ' . $val['member_name'] . '
+					</td>
+						<td class="user_name">
+			        ' . $val['address'] . '
+					</td>
+					<td class="display_name">
+						' . $val['amount'] . '
+					</td>
+					<td class="display_name">
+                     ' . $state . '
+					</td>
+						<td class="display_name">
+						   ' . $comp . '
+                         </td>
+					<td class="check centercol">
+					' . date('Y-m-d H:i:s',$val['create_at']) . '
+					</td>
+				</tr>';
+    }
+    echo '
+			</tbody>
+		</table>
+		
+       	<div class="pagesection">
+			<div class="pagelinks floatleft">', $context['page_index'], '</div>
+        </div>
+        
+            </form>';
+
+}
+function template_notReview()
+{
+    global $context, $txt;
+
+    if (!empty($context['saved_successful']))
+        echo '
+					<div class="infobox">', $txt['save'], '</div>';
+    if (!empty($context['not_found_user']))
+        echo '
+					<div class="errorbox">', $txt['username_no_exist'], '</div>';
+    if (!empty($context['exists']))
+        echo '
+					<div class="errorbox">', $txt['exists_this_user'], '</div>';
+    echo '
+		<div class="cat_bar">
+			<h3 class="catbg">FLM Change Center</h3>
+		</div>
+		<p class="information">
+The function administrator sets to add or delete the Merit source user list as the internal distributiongroup of sFLM.				</p>
+		<div id="report_buttons">';
+
+    echo '
+		</div>';
+
+    template_apply_menu('not');
+    // Go through each table!
+    echo '<div class="cat_bar">
+			<h3 class="catbg">Not Reviewed List</h3>
+		</div><form  method="post" action="', $context['modify_url'], '"><table class="table_grid" id="member_list">
+			<thead>
+				<tr class="title_bar">
+					<th scope="col" id="header_member_list_id_member" class="id_member">
+						 ID
+					</th>
+					<th scope="col" id="header_member_list_id_member" class="id_member">
+						 PID
+					</th>
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					Username 
+					</th>		
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					Address 
 					</th>		
 					<th scope="col" id="header_member_list_user_name" class="user_name">
 					Amount 
@@ -498,7 +619,13 @@ The function administrator sets to add or delete the Merit source user list as t
 						' . $id . '
 					</td>
 					<td class="user_name">
+			        ' . $val['pid'] . '
+					</td>
+					<td class="user_name">
 			        ' . $val['member_name'] . '
+					</td>
+						<td class="user_name">
+			        ' . $val['address'] . '
 					</td>
 					<td class="display_name">
 						' . $val['amount'] . '
@@ -536,7 +663,6 @@ The function administrator sets to add or delete the Merit source user list as t
 			<div class="additional_row">
 				<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
 				<input type="submit" name="do_state" value="Modify State" style="float: right" class="button">
-				<input type="submit" name="do_complete" value="Modify complete" style="float: right"  class="button you_sure">
 			</div>
 		</div>
             </form>';

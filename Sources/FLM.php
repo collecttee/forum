@@ -228,7 +228,7 @@ function FLMMain(){
         'sflmtransfer'=>'sFLMTransfer',
         'sflm'=>'sflm',
         'flmexchange'=>'flmexchange',
-        'sMeritTransfer'=>'sMeritTransfer',
+        'not'=>'notReview',
         'emerit'=>'emerit',
         'usersflmTransfer'=>'usersflmTransfer',
     ];
@@ -547,7 +547,7 @@ function flmexchange(){
             );
         }
         $_SESSION['adm-save'] = true;
-        redirectexit('action=flm;sa=flmexchange;');
+        redirectexit('action=flm;sa=flmexchange');
 
     }
 
@@ -566,10 +566,92 @@ function flmexchange(){
     $context['start'] = $_REQUEST['start'];
     // member-lists
     $request = $smcFunc['db_query']('', '
-				SELECT   a.*,mem.member_name
+				SELECT   a.*,mem.member_name,mem.pid,mem.address
 			FROM {db_prefix}apply_withdraw as a LEFT JOIN {db_prefix}members AS mem ON (a.id_member = mem.id_member)  WHERE type = {string:type} ORDER BY id DESC LIMIT {int:start}, {int:max}',
         array(
             'type' => 'flm',
+            'start' => $limit,
+            'max' => $modSettings['defaultMaxMembers'],
+        )
+    );
+    while ($row = $smcFunc['db_fetch_assoc']($request)) {
+        $context['users'][] = $row;
+    }
+
+}
+function notReview(){
+    global $scripturl, $context,$smcFunc,$user_info,$modSettings;
+    // Make sure they can view the memberlist.
+    isAllowedTo(['admin_forum','flm_manage']);
+
+    loadTemplate('FLM');
+    $context['sub_template'] = 'notReview';
+    $context['modify_url'] = $scripturl . '?action=flm;sa=not;modify';
+    if (isset($_SESSION['adm-save']))
+    {
+        if ($_SESSION['adm-save'] === true)
+            $context['saved_successful'] = true;
+        else
+            $context['saved_failed'] = $_SESSION['adm-save'];
+
+        unset($_SESSION['adm-save']);
+    }
+    if (isset($_GET['modify']))
+    {
+        checkSession();
+        if (isset($_POST['do_state'])){
+            $pass = $_POST['pass'];
+            $reject = $_POST['reject'];
+            if (!empty($pass)){
+                $smcFunc['db_query']('', '
+					UPDATE {db_prefix}apply_withdraw
+					SET state = {int:state}
+					WHERE id IN ({array_int:users})',
+                    array(
+                        'state' => 1,
+                        'id' => $pass
+                    )
+                );
+            }
+            if (!empty($reject)){
+
+                $smcFunc['db_query']('', '
+					UPDATE {db_prefix}apply_withdraw
+					SET state = {int:state}
+					WHERE id IN ({array_int:id})',
+                    array(
+                        'state' => 2,
+                        'id' => $reject
+                    )
+                );
+            }
+        }
+        $_SESSION['adm-save'] = true;
+        redirectexit('action=flm;sa=not');
+
+    }
+
+    $request = $smcFunc['db_query']('', '
+			SELECT COUNT(*)
+			FROM {db_prefix}apply_withdraw WHERE type = {string:type} AND state = {int:state}',
+        array(
+            'type' => 'flm',
+            'state'=>0,
+        )
+    );
+    list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
+    $smcFunc['db_free_result']($request);
+    $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
+    $context['page_index'] = constructPageIndex($scripturl . '?action=flm;sa=flmexchange', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $limit = $_REQUEST['start'];
+    $context['start'] = $_REQUEST['start'];
+    // member-lists
+    $request = $smcFunc['db_query']('', '
+				SELECT   a.*,mem.member_name,mem.pid,mem.address
+			FROM {db_prefix}apply_withdraw as a LEFT JOIN {db_prefix}members AS mem ON (a.id_member = mem.id_member)  WHERE type = {string:type} AND state = {int:state} ORDER BY id DESC LIMIT {int:start}, {int:max}',
+        array(
+            'type' => 'flm',
+            'state'=>0,
             'start' => $limit,
             'max' => $modSettings['defaultMaxMembers'],
         )
