@@ -839,9 +839,8 @@ function template_apply_menu($page){
 	echo '<div class="buttonlist">
 				<a class="button button_strip_view_all_members ', $page == 'all' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=flmexchange', '">All list</a>
 				<a class="button button_strip_mlist_search ', $page == 'not' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=not', '">Not Review</a>
-				<a class="button button_strip_mlist_search ', $page == 'sFLMTransfer' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=sflmtransfer', '">sflm Transfer Records</a>
-				<a class="button button_strip_mlist_search ', $page == 'usersFLMTransfer' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=usersflmTransfer', '">user sflm Transfer Records</a>
-				<a class="button button_strip_mlist_search ', $page == 'flmexchange' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=flmexchange', '">FLM Change Center</a>
+				<a class="button button_strip_mlist_search ', $page == 'reviewed' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=reviewed', '">Reviewed</a>
+				<a class="button button_strip_mlist_search ', $page == 'complete' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=complete', '">complete</a>
 		</div><br/>';
 }
 ?>
