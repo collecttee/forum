@@ -694,7 +694,8 @@ The function administrator sets to add or delete the Merit source user list as t
 
     template_apply_menu('reviewed');
     // Go through each table!
-    echo '<a href="', $context['download_url'], '">Export Data</a><div class="cat_bar">
+    echo '<a class="button" style="float: right" href="', $context['download_url'], '" >Export Data</a> <br/><br/>
+<div class="cat_bar">
 			<h3 class="catbg"> Reviewed List</h3>
 		</div><form  method="post" action="', $context['modify_url'], '"><table class="table_grid" id="member_list">
 			<thead>

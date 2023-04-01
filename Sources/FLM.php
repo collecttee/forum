@@ -665,9 +665,6 @@ function notReview(){
 }
 function reviewed(){
     global $boarddir,$scripturl, $context,$smcFunc,$user_info,$modSettings;
-
-
-
     // Make sure they can view the memberlist.
     isAllowedTo(['admin_forum','flm_manage']);
 
@@ -686,8 +683,36 @@ function reviewed(){
     }
     if (isset($_GET['download']))
     {
+        $exportData = [];
         require_once($boarddir . '/Export.php');
-        downLoad(1,1);
+        $request = $smcFunc['db_query']('', '
+				SELECT   a.*,mem.member_name,mem.pid,mem.address
+			FROM {db_prefix}apply_withdraw as a LEFT JOIN {db_prefix}members AS mem ON (a.id_member = mem.id_member)  WHERE type = {string:type} AND state != {int:state} ORDER BY id DESC',
+            array(
+                'type' => 'flm',
+                'state'=>0,
+            )
+        );
+        while ($row = $smcFunc['db_fetch_assoc']($request)) {
+            switch ($row['state']) {
+                case '1':
+                    $state = 'Pass';
+                    break;
+                case '2':
+                    $state = 'Reject';
+                    break;
+                default:
+                    $state = 'Unaudited';
+                    break;
+            }
+            $row['state'] = $state;
+            $row['complete'] = $row['complete'] == 0 ? 'No' : 'Yes';
+            $exportData[] = $row;
+        }
+
+        downLoad('reviewed.xlsx',$exportData);
+
+
     }
     if (isset($_GET['modify']))
     {
