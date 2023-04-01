@@ -504,6 +504,22 @@ function ModifyProfile($post_errors = array())
 				),
 			),
 		),
+		'point' => array(
+			'title' => 'Point',
+			'areas' => array(
+				'flm' => array(
+					'label' => 'FLM',
+					'file' => 'Point.php',
+					'function' => 'flm',
+					'icon' => 'packages',
+					// 'token' => 'profile-ex%u', // This is not checked here. We do it in the function itself - but if it was checked, this is what it'd be.
+					'permission' => array(
+						'own' => array('profile_view_own'),
+						'any' => array('moderate_forum'),
+					),
+				),
+			),
+		),
 	);
 
 	// Let them modify profile areas easily.

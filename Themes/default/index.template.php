@@ -843,4 +843,12 @@ function template_apply_menu($page){
 				<a class="button button_strip_mlist_search ', $page == 'complete' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=complete', '">complete</a>
 		</div><br/>';
 }
+function template_flm_transfer($page){
+	global $txt, $context, $scripturl;
+	echo '<div class="buttonlist">
+				<a class="button button_strip_view_all_members ', $page == 'all' ? 'active' : '', '" href="', $scripturl.'?action=profile;area=flm', '">Transfer FLM</a>
+				<a class="button button_strip_mlist_search ', $page == 'reward' ? 'active' : '', '" href="', $scripturl.'?action=profile;area=flm;sa=reward', '">User Rewards</a>
+				<a class="button button_strip_mlist_search ', $page == 'internal' ? 'active' : '', '" href="', $scripturl.'?action=profile;area=flm;sa=internal', '">Internal Transfer</a>
+		</div>';
+}
 ?>

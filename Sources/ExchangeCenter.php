@@ -14,6 +14,18 @@ function flmExChangeCenter(){
     $userProperty = $smcFunc['db_fetch_assoc']($request);
     $flmAmount = $userProperty['flm'];
     $context['flm']=$flmAmount;
+    $request = $smcFunc['db_query']('', '
+                    SELECT  min,max
+                    FROM {db_prefix}exchange_limit
+                    WHERE property = {string:property}
+                    LIMIT 1',
+        array(
+            'property' => 'flm',
+        )
+    );
+    $pool = $smcFunc['db_fetch_assoc']($request);
+    $context['min'] = $pool['min'] ?? 0;
+    $context['max'] = $pool['max']  ?? 0;
     if (isset($_SESSION['adm-save']))
     {
         if ($_SESSION['adm-save'] === true)
