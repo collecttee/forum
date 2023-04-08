@@ -25,7 +25,9 @@ function SetSourceUser() {
         if (isset($_POST['transfer']) && $_POST['transfer'] == 'Transfer sFLM') {
             $amount = $_POST['amount'];
             foreach ($amount as $v) {
-                greaterThan($v,0);
+                if (!empty($v)){
+                    greaterThan($v,0);
+                }
             }
             $sum = array_sum($amount);
             $id_member = $_POST['id_member'];
