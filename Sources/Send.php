@@ -64,6 +64,7 @@ function SendMerit(){
         $topic= $_POST['topic'] ?? 0;
         $msg = $_POST['msg'] ?? 0;
         $amount = $_POST['amount'] ?? 0;
+        greaterThan($amount,0);
         $request = $smcFunc['db_query']('', '
 			SELECT  id_member,subject
 			FROM {db_prefix}messages
@@ -201,8 +202,8 @@ function SendMerit(){
         );
 
 
-        $_SESSION['adm-save'] = true;
-        redirectexit("action=send&message_id={$msg}&topic_id={$topic}&title={$message_ret['subject']}");
+//        $_SESSION['adm-save'] = true;
+        redirectexit("topic=".$topic);
     }
 }
 function SendFLM(){
@@ -272,6 +273,7 @@ function SendFLM(){
         $topic= $_POST['topic'] ?? 0;
         $msg = $_POST['msg'] ?? 0;
         $amount = $_POST['amount'] ?? 0;
+        greaterThan($amount,0);
         $request = $smcFunc['db_query']('', '
 			SELECT  id_member,subject
 			FROM {db_prefix}messages
@@ -377,8 +379,8 @@ function SendFLM(){
         );
 
 
-        $_SESSION['adm-save'] = true;
-        redirectexit("action=send&sa=flm&message_id={$msg}&topic_id={$topic}&title={$message_ret['subject']}");
+//        $_SESSION['adm-save'] = true;
+        redirectexit("topic=".$topic);
     }
 }
 function SendMain(){

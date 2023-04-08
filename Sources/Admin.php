@@ -455,12 +455,12 @@ function AdminMain()
 					'function' => 'ManageFLM',
 					'icon' => ''
 				),
-				'managefireseed' => array(
-					'label' => 'FireSeed',
-					'file' => 'ManageFireSeed.php',
-					'function' => 'ManageFireSeed',
-					'icon' => ''
-				),
+//				'managefireseed' => array(
+//					'label' => 'FireSeed',
+//					'file' => 'ManageFireSeed.php',
+//					'function' => 'ManageFireSeed',
+//					'icon' => ''
+//				),
 			),
 		),
 	);

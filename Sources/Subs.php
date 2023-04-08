@@ -8434,4 +8434,10 @@ function tokenTxtReplace($stringSubject = '')
 	return str_replace($toFind, $replaceWith, $stringSubject);
 }
 
+function greaterThan($number,$limit){
+	if ($number <= $limit) {
+		fatal_error("Quantity must be greater than ". $limit);
+	}
+}
+
 ?>

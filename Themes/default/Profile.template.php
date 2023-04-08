@@ -301,10 +301,10 @@ function template_summary()
 				<dt><a href="https://app.firedao.co/MyPassport">PID</a>:</dt>
 				<dd><a href="https://app.firedao.co/MyPassport">', $context['member']['pid'], '</a></dd>';
 	echo '
-				<dt>merit:</dt>
+				<dt>Merit:</dt>
 				<dd>', $context['merit'], '</dd>';
 	echo '
-				<dt>emerit:</dt>
+				<dt>eMerit:</dt>
 				<dd>', $context['emerit'], '</dd>';echo '
 				<dt>FLM:</dt>
 				<dd>', $context['flm'], '</dd>';

@@ -24,6 +24,9 @@ function SetSourceUser() {
         checkSession();
         if (isset($_POST['transfer']) && $_POST['transfer'] == 'Transfer sFLM') {
             $amount = $_POST['amount'];
+            foreach ($amount as $v) {
+                greaterThan($v,0);
+            }
             $sum = array_sum($amount);
             $id_member = $_POST['id_member'];
             if ($sum > $pool['sflm']) {
@@ -415,6 +418,7 @@ function sflm(){
     if (isset($_GET['save'])){
         checkSession();
         $amount = $_POST['amount'];
+        greaterThan($amount,0);
         $request = $smcFunc['db_query']('', '
 			SELECT  id,flm_max_limit
 			FROM {db_prefix}property_max

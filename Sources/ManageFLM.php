@@ -103,6 +103,7 @@ function ManageFLM()
         checkSession();
         if ($_GET['save'] === 'limit'){
             $limit = $_POST['limit'];
+            greaterThan($limit,0);
             $request = $smcFunc['db_query']('', '
 			SELECT  id
 			FROM {db_prefix}property_max
