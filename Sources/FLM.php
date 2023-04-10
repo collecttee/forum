@@ -630,6 +630,35 @@ function notReview(){
                         'id' => $reject
                     )
                 );
+                $request = $smcFunc['db_query']('', '
+				SELECT * FROM {db_prefix}apply_withdraw WHERE id IN ({array_int:id})',
+                    array(
+                        'id' => $reject,
+                    )
+                );
+                while ($row = $smcFunc['db_fetch_assoc']($request)) {
+                    $request = $smcFunc['db_query']('', '
+                        SELECT  flm
+                        FROM {db_prefix}property
+                        WHERE id_member = {int:id_member}
+                        LIMIT 1',
+                            array(
+                                'id_member' => $row['id_member'],
+                            )
+                        );
+                    $userProperty = $smcFunc['db_fetch_assoc']($request);
+                    $flmAmount = $userProperty['flm'];
+                    $smcFunc['db_query']('', '
+					UPDATE {db_prefix}property
+					SET flm = {int:flm}
+					WHERE id_member = {int:id}',
+                        array(
+                            'flm' => $flmAmount + $row['amount'],
+                            'id' => $row['id_member']
+                        )
+                    );
+                }
+
             }
         }
         $_SESSION['adm-save'] = true;
