@@ -6,6 +6,7 @@ function downLoad($file,$data) {
     $writer = SimpleExcelWriter::streamDownload($file);
         foreach ($data as $k => $val) {
             $writer->addRow([
+                'ID' => $k+1,
                 'PID' => $val['pid'],
                 'Username' => $val['member_name'],
                 'Address' => $val['address'],

@@ -771,6 +771,8 @@ function template_flmExChangeCenter()
 				<tr class="title_bar">
 					<th scope="col" id="header_member_list_id_member" class="id_member">
 						 ID
+					</th><th scope="col" id="header_member_list_id_member" class="id_member">
+						 Address
 					</th>
 					<th scope="col" id="header_member_list_user_name" class="user_name">
 					Amounts 
@@ -805,6 +807,9 @@ function template_flmExChangeCenter()
 				<tr class="windowbg" id="list_member_list_0">
 					<td class="id_member">
 						' . $id . '
+					</td>
+					<td class="user_name">
+			        ' . $val['address'] . '
 					</td>
 					<td class="user_name">
 			        ' . $val['amount'] . '

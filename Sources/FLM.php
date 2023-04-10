@@ -25,7 +25,9 @@ function SetSourceUser() {
         if (isset($_POST['transfer']) && $_POST['transfer'] == 'Transfer sFLM') {
             $amount = $_POST['amount'];
             foreach ($amount as $v) {
-                greaterThan($v,0);
+                if (!empty($v)){
+                    greaterThan($v,0);
+                }
             }
             $sum = array_sum($amount);
             $id_member = $_POST['id_member'];
@@ -720,10 +722,11 @@ function reviewed(){
         require_once($boarddir . '/Export.php');
         $request = $smcFunc['db_query']('', '
 				SELECT   a.*,mem.member_name,mem.pid,mem.address
-			FROM {db_prefix}apply_withdraw as a LEFT JOIN {db_prefix}members AS mem ON (a.id_member = mem.id_member)  WHERE type = {string:type} AND state != {int:state} ORDER BY id DESC',
+			FROM {db_prefix}apply_withdraw as a LEFT JOIN {db_prefix}members AS mem ON (a.id_member = mem.id_member)  WHERE type = {string:type} AND state = {int:state} AND complete = {int:complete} ORDER BY id DESC',
             array(
                 'type' => 'flm',
-                'state'=>0,
+                'state'=>1,
+                'complete'=>0,
             )
         );
         while ($row = $smcFunc['db_fetch_assoc']($request)) {
@@ -771,10 +774,11 @@ function reviewed(){
 
     $request = $smcFunc['db_query']('', '
 			SELECT COUNT(*)
-			FROM {db_prefix}apply_withdraw WHERE type = {string:type} AND state != {int:state}',
+			FROM {db_prefix}apply_withdraw WHERE type = {string:type} AND state = {int:state} AND complete = {int:complete}',
         array(
             'type' => 'flm',
-            'state'=>0,
+            'state'=>1,
+            'complete'=>0,
         )
     );
     list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
@@ -786,10 +790,11 @@ function reviewed(){
     // member-lists
     $request = $smcFunc['db_query']('', '
 				SELECT   a.*,mem.member_name,mem.pid,mem.address
-			FROM {db_prefix}apply_withdraw as a LEFT JOIN {db_prefix}members AS mem ON (a.id_member = mem.id_member)  WHERE type = {string:type} AND state != {int:state} ORDER BY id DESC LIMIT {int:start}, {int:max}',
+			FROM {db_prefix}apply_withdraw as a LEFT JOIN {db_prefix}members AS mem ON (a.id_member = mem.id_member)  WHERE type = {string:type} AND state = {int:state} AND complete = {int:complete} ORDER BY id DESC LIMIT {int:start}, {int:max}',
         array(
             'type' => 'flm',
-            'state'=>0,
+            'state'=>1,
+            'complete'=>0,
             'start' => $limit,
             'max' => $modSettings['defaultMaxMembers'],
         )

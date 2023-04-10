@@ -83,8 +83,8 @@ function flmExChangeCenter(){
     $context['start'] = $_REQUEST['start'];
     // member-lists
     $request = $smcFunc['db_query']('', '
-				SELECT   *
-			FROM {db_prefix}apply_withdraw  WHERE type = {string:type} AND id_member = {int:id} ORDER BY id DESC LIMIT {int:start}, {int:max}',
+				SELECT   a.*,mem.address
+			FROM {db_prefix}apply_withdraw as a LEFT JOIN {db_prefix}members AS mem ON (a.id_member = mem.id_member)  WHERE type = {string:type} AND a.id_member = {int:id} ORDER BY id DESC LIMIT {int:start}, {int:max}',
         array(
             'id' => $user_info['id'],
             'type' => 'flm',
