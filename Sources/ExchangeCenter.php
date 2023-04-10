@@ -39,6 +39,7 @@ function flmExChangeCenter(){
     {
 //        checkSession();
         $amount = $_POST['amount'];
+        greaterThan($amount,0);
         if ($flmAmount < $amount) {
             fatal_error('Insufficient FLM quantity');
         }

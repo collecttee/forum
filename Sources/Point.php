@@ -44,6 +44,7 @@ function flmtransfer(){
     if (isset($_GET['save'])){
         checkSession();
         $amount = $_POST['amount'];
+        greaterThan($amount,0);
         if ($flmAmount < $amount) {
             fatal_error('Insufficient FLM quantity');
         }

@@ -763,7 +763,7 @@ function template_flmExChangeCenter()
 				<input type="submit" name="new_save"  value="Apply" class="button"></form></div>';
 	echo '<div class="cat_bar">
 			<h3 class="catbg">
-				Members List
+				Apply Records
 			</h3>
 		</div>';
 	echo '<form  method="post"><table class="table_grid" id="member_list">
