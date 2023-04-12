@@ -256,7 +256,7 @@ function usersMeritTransfer(){
     list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
     $smcFunc['db_free_result']($request);
     $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
-    $context['page_index'] = constructPageIndex($scripturl . '?action=merit;sa=sMeritTransfer', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $context['page_index'] = constructPageIndex($scripturl . '?action=merit;sa=usersMeritTransfer', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
     $limit = $_REQUEST['start'];
     $context['start'] = $_REQUEST['start'];
     // member-lists
