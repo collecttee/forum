@@ -8,3 +8,5 @@ npm-debug.log
 yarn-error.log
 .idea/
 Settings.php
+attachments/
+custom_avatar/
