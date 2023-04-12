@@ -49,6 +49,9 @@ function flmtransfer(){
             fatal_error('Insufficient FLM quantity');
         }
         $username = $_POST['username'];
+        if ($user_info['username'] == $username) {
+            fatal_error('Cannot transfer to oneself');
+        }
         $request = $smcFunc['db_query']('', '
 			SELECT  address, id_member,  member_name
 			FROM {db_prefix}members
