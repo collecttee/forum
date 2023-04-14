@@ -300,6 +300,9 @@
 	.custom_fields_above_member {
 		display: none;
 	}
+	.keyinfo .record{
+		width: 100%;
+	}
 	.user_info li.title,
 	.user_info li.membergroup {
 		display: inline-block;

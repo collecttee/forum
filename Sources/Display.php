@@ -1505,14 +1505,9 @@ function prepareDisplayContext($reset = false)
         )
     );
 
-    $record = '';
-    $k = 0;
+    $record = [];
     while ($row = $smcFunc['db_fetch_assoc']($request)) {
-            if ($k == 0) {
-                $record = 'Merited by ';
-            }
-         $record.=$row['member_name']."({$row['amount']}),";
-         $k++;
+         $record[] = $row;
     }
 
 

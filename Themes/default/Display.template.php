@@ -706,11 +706,16 @@ function template_single_post($message)
 	if (!empty($modSettings['show_modify']) && !empty($message['modified']['name']))
 		echo
 										$message['modified']['last_edit_text'];
-
+    if (!empty($message['sender_record'])){
+        $meritRecord = 'Merited by';
+        foreach ($message['sender_record'] as $row){
+            $meritRecord.=$row['member_name']."({$row['amount']}),";
+        }
+    }
 	echo '
 									</span>
 								</div>
-								<div style="width: 50%;word-break: break-all;">', $message['sender_record'], '</div>
+								<div class="record">', $message['sender_record'], '</div>
 								<div style="width: 50%;word-break: break-all;">', $message['sflmRecord'], '</div>
 								<div id="msg_', $message['id'], '_quick_mod"', $ignoring ? ' style="display:none;"' : '', '></div>
 							</div><!-- .keyinfo -->';
