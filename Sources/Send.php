@@ -203,7 +203,7 @@ function SendMerit(){
 
 
 //        $_SESSION['adm-save'] = true;
-        redirectexit("topic=".$topic);
+        redirectexit("topic=".$topic.".msg{$msg}#msg{$msg}");
     }
 }
 function SendFLM(){
@@ -380,7 +380,7 @@ function SendFLM(){
 
 
 //        $_SESSION['adm-save'] = true;
-        redirectexit("topic=".$topic);
+        redirectexit("topic=".$topic.".msg{$msg}#msg{$msg}");
     }
 }
 function SendMain(){
