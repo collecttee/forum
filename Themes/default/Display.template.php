@@ -573,7 +573,7 @@ function template_single_post($message)
 			echo '
 								<li class="postcount">', $txt['member_postcount'], ': ', $message['member']['posts'], '</li>';
         echo '
-								<li class="postcount">merit: ', $message['merit'], '</li><li class="postcount">FLM: ', $message['flm'], '</li>';
+								<li class="postcount">Merit: ', $message['merit'], '</li><li class="postcount">FLM: ', $message['flm'], '</li>';
 		// Show their personal text?
 		if (!empty($modSettings['show_blurb']) && !empty($message['member']['blurb']))
 			echo '
