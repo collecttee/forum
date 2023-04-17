@@ -1496,7 +1496,7 @@ function prepareDisplayContext($reset = false)
 
 	require_once($sourcedir . '/Subs-Attachments.php');
     $request = $smcFunc['db_query']('', '
-			SELECT mem.member_name,sm.amount AS amount
+			SELECT mem.member_name,sm.amount AS amount,mem.id_member
 			FROM {db_prefix}sender_merit AS sm
 				INNER JOIN {db_prefix}members AS mem ON (sm.id_member = mem.id_member)
 			WHERE sm.id_msg = {int:msg}',
@@ -1505,14 +1505,20 @@ function prepareDisplayContext($reset = false)
         )
     );
 
-    $record = [];
+    $record = '';
+    $k = 0;
     while ($row = $smcFunc['db_fetch_assoc']($request)) {
-         $record[] = $row;
+        if ($k == 0) {
+            $record = '<span style="color: #687bff;float: left">Merited by &nbsp</span>';
+        }
+        $link  = $scripturl . '?action=profile;u=' . $row['id_member'];
+        $record.="<a href='{$link}'>{$row['member_name']}</a><span style='color:#687bff;'>({$row['amount']})</span>,";
+        $k++;
     }
 
 
     $request = $smcFunc['db_query']('', '
-			SELECT mem.member_name,sm.amount AS amount
+			SELECT mem.member_name,sm.amount AS amount,mem.id_member
 			FROM {db_prefix}sender_property AS sm
 				INNER JOIN {db_prefix}members AS mem ON (sm.id_member = mem.id_member)
 			WHERE sm.id_msg = {int:msg} AND property = {string:property}',
@@ -1526,9 +1532,10 @@ function prepareDisplayContext($reset = false)
     $s = 0;
     while ($row = $smcFunc['db_fetch_assoc']($request)) {
         if ($s == 0) {
-            $sflmRecord = 'FLM by ';
+            $sflmRecord = '<span style="color: #884d00;float: left">FLM by &nbsp</span>';
         }
-        $sflmRecord.=$row['member_name']."({$row['amount']}),";
+        $link  = $scripturl . '?action=profile;u=' . $row['id_member'];
+        $sflmRecord.="<a href='{$link}'>{$row['member_name']}</a><span style='color:#884d00;'>({$row['amount']})</span>,";
         $s++;
     }
 

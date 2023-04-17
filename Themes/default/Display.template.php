@@ -530,6 +530,7 @@ function template_single_post($message)
 	// Begin display of user info
 	echo '
 							</h4>
+							
 							<ul class="user_info">';
 
 	// Show the member's custom title, if they have one.
@@ -538,6 +539,7 @@ function template_single_post($message)
 								<li class="title">', $message['member']['title'], '</li>';
 
 	// Show the member's primary group (like 'Administrator') if they have one.
+	echo '<li class="pid">', $message['member']['pid'], '</li>';
 	if (!empty($message['member']['group']))
 		echo '
 								<li class="membergroup">', $message['member']['group'], '</li>';
@@ -710,16 +712,8 @@ function template_single_post($message)
 	echo '
 									</span>
 								</div>
-								<div class="record">';
-	                if (!empty($message['sender_record'])){
-                        echo 'Merited by ';
-                        foreach ($message['sender_record'] as $row){
-                            $meritRecord.=$row['member_name']."({$row['amount']}),";
-                            echo "";
-                        }
-                    }
-echo'</div>
-								<div style="width: 50%;word-break: break-all;">', $message['sflmRecord'], '</div>
+								<div class="record">', $message['sender_record'], '</div>
+								<div class="record">', $message['sflmRecord'], '</div>
 								<div id="msg_', $message['id'], '_quick_mod"', $ignoring ? ' style="display:none;"' : '', '></div>
 							</div><!-- .keyinfo -->';
 
