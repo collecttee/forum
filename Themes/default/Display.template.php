@@ -502,7 +502,7 @@ function template_single_post($message)
 								</ul>
 							</div>';
 	}
-
+echo '<a href="', $message['member']['href'], '">', $message['member']['avatar']['image'], '</a>';
 	echo '
 							<h4>';
 

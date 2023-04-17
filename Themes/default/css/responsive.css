@@ -312,6 +312,9 @@
 		font-weight: 500;
 		color: #c06002;
 	}
+	.user_info li.mobile_avatar {
+		display: inline-block;
+	}
 	.user_info li.pid {
 		display: inline-block;
 		font-weight: 500;
