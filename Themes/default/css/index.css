@@ -3362,6 +3362,9 @@ div#pollmoderation {
 .user_info > li {
 	margin: 3px 0 0 0;
 }
+.user_info li.pid,li.user_post,li.merit,li.flm {
+	display: none;
+}
 .poster li.membergroup {
 	font-weight: bold;
 }

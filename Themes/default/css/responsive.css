@@ -304,16 +304,38 @@
 		width: 100%;
 		margin: 0;
 		overflow-wrap: break-word;
+		font-weight: 500;
 	}
 	.user_info li.title,
 	.user_info li.membergroup {
 		display: inline-block;
-		font-weight: normal;
+		font-weight: 500;
+		color: #c06002;
 	}
 	.user_info li.pid {
 		display: inline-block;
-		font-weight: normal;
+		font-weight: 500;
 		border: 1px solid #c06002;
+		border-radius: 5px;
+		padding: 0 6px;
+		color: #c06002;
+	}
+	.user_info li.user_post {
+		display: inline-block;
+		font-weight: 500;
+		color: #687bff;
+	}
+	.user_info li.merit {
+		display: inline-block;
+		font-weight: 500;
+		color: #687bff;
+		margin: 3px;
+	}
+	.user_info li.flm {
+		display: inline-block;
+		font-weight: 500;
+		color: #687bff;
+		margin: 3px;
 	}
 
 	.user_info li.membergroup::before {

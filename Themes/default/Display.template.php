@@ -539,10 +539,14 @@ function template_single_post($message)
 								<li class="title">', $message['member']['title'], '</li>';
 
 	// Show the member's primary group (like 'Administrator') if they have one.
-	echo '<li class="pid">', $message['member']['pid'], '</li>';
+	echo '<li class="pid">PID:', $message['member']['pid'], '</li>';
 	if (!empty($message['member']['group']))
 		echo '
 								<li class="membergroup">', $message['member']['group'], '</li>';
+
+	echo '<br/><li class="user_post">Posts:', $message['member']['posts'], '</li>';
+	echo '<li class="merit">Merit:', $message['merit'], '</li>';
+	echo '<li class="flm">FLM:', $message['flm'], '</li>';
 
 	// Show the user's avatar.
 	if (!empty($modSettings['show_user_images']) && empty($options['show_no_avatars']) && !empty($message['member']['avatar']['image']))
