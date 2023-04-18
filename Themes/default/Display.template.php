@@ -696,7 +696,7 @@ echo '<a class="mobile_avatar" style="position:absolute;left:0;top:0" href="', $
 
 	echo '
 								', !empty($message['counter']) ? '<span class="page_number floatright">#' . $message['counter'] . '</span>' : '', '
-								<span class=" page_number floatright"><a target="_blank" href="', $scripturl.'?action=send&message_id='.$message['id'], '&topic_id='.$context['current_topic'], '&title='.$message['subject'], '">+Merit</a></span><span class=" page_number floatright"><a target="_blank" href="', $scripturl.'?action=send&sa=flm&message_id='.$message['id'], '&topic_id='.$context['current_topic'], '&title='.$message['subject'], '">+FLM</a></span><div class="postinfo">
+								<div class="postinfo">
 									<span class="messageicon" ', ($message['icon_url'] === $settings['images_url'] . '/post/xx.png' && !$message['can_modify']) ? ' style="position: absolute; z-index: -1;"' : '', '>
 										<img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' id="msg_icon_' . $message['id'] . '"' : '', '>
 									</span>
@@ -715,6 +715,7 @@ echo '<a class="mobile_avatar" style="position:absolute;left:0;top:0" href="', $
 
 	echo '
 									</span>
+									<a style="color: #687bff" target="_blank" href="', $scripturl.'?action=send&message_id='.$message['id'], '&topic_id='.$context['current_topic'], '&title='.$message['subject'], '">+Merit</a><a style="color: #884d00;margin-left: 8px" target="_blank" href="', $scripturl.'?action=send&sa=flm&message_id='.$message['id'], '&topic_id='.$context['current_topic'], '&title='.$message['subject'], '">+FLM</a>
 								</div>
 								<div class="record">', $message['sender_record'], '</div>
 								<div class="record">', $message['sflmRecord'], '</div>

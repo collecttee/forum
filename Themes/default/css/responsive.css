@@ -279,10 +279,15 @@
 	}
 	.keyinfo .postinfo {
 		font-weight: normal;
+		margin-left: 75px;
+		margin-top: -15px;
 	}
 	.keyinfo .postinfo .smalltext,
 	.keyinfo .page_number {
 		opacity: 0.6;
+	}
+	.keyinfo .page_number{
+		margin-top: -60px;
 	}
 	.keyinfo .postinfo a.smalltext:hover {
 		opacity: 1;

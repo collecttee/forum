@@ -3336,6 +3336,9 @@ div#pollmoderation {
 .mobile_avatar{
 	display: none;
 }
+.keyinfo .record {
+	overflow-wrap: break-word;
+}
 /* poster details and list of items */
 .poster {
 	float: left;
