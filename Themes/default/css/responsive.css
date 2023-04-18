@@ -278,8 +278,8 @@
 		clear: both;
 	}
 	.keyinfo .postinfo {
-		font-weight: normal;
-		margin-left: 75px;
+		font-weight: 500;
+		margin-left: 80px;
 		margin-top: -15px;
 	}
 	.keyinfo .postinfo .smalltext,
