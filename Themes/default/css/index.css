@@ -3333,6 +3333,9 @@ div#pollmoderation {
 	display: block;
 	clear: both;
 }
+.mobile_avatar{
+	display: none;
+}
 /* poster details and list of items */
 .poster {
 	float: left;

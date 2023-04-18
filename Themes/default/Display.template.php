@@ -485,7 +485,7 @@ function template_single_post($message)
 
 	// Show information about the poster of this message.
 	echo '
-						<div class="poster">';
+						<div  class="poster mobile_position">';
 
 	// Are there any custom fields above the member name?
 	if (!empty($message['custom_fields']['above_member']))
@@ -502,9 +502,9 @@ function template_single_post($message)
 								</ul>
 							</div>';
 	}
-echo '<a href="', $message['member']['href'], '">', $message['member']['avatar']['image'], '</a>';
+echo '<a class="mobile_avatar" style="position:absolute;left:0;top:0" href="', $message['member']['href'], '">', $message['member']['avatar']['image'], '</a>';
 	echo '
-							<h4>';
+							<h4 class="mobile_title">';
 
 	// Show online and offline buttons?
 	if (!empty($modSettings['onlineEnable']) && !$message['member']['is_guest'])

@@ -292,6 +292,7 @@
 	}
 	.poster h4 {
 		display: inline-block;
+		margin-left: 15px;
 	}
 	.user_info {
 		display: inline;
@@ -312,8 +313,11 @@
 		font-weight: 500;
 		color: #c06002;
 	}
-	.user_info li.mobile_avatar {
-		display: inline-block;
+	.mobile_avatar {
+		display: inline;
+	}
+	.mobile_position {
+		position:relative;padding-left: 65px;
 	}
 	.user_info li.pid {
 		display: inline-block;
@@ -327,6 +331,7 @@
 		display: inline-block;
 		font-weight: 500;
 		color: #687bff;
+		margin-left: 15px;
 	}
 	.user_info li.merit {
 		display: inline-block;
