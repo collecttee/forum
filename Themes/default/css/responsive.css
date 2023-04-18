@@ -321,6 +321,11 @@
 	.mobile_avatar {
 		display: inline;
 	}
+	.mobile_avatar .avatar{
+		display: inline;
+		width: 65px;
+		height: 65px;
+	}
 	.mobile_position {
 		position:relative;padding-left: 65px;
 	}
