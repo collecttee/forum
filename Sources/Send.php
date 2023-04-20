@@ -384,10 +384,14 @@ function SendFLM(){
     }
 }
 function SendMain(){
+    global $user_info;
     $sa = isset($_GET['sa']) ? $_GET['sa'] : '';
     $meritFunction = [
         ''=>'SendMerit',
         'flm'=>'SendFLM',
     ];
+    if (empty($user_info['id'])){
+        fatal_error('Please log in first');
+    }
     call_helper($meritFunction[$sa]);
 }
