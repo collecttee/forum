@@ -1295,9 +1295,6 @@ ul li.greeting {
 .navigate_section ul li .board_moderators a {
 	padding: 4px 0;
 }
-.board_moderators{
-	display: none;
-}
 
 .navigate_section a:hover span {
 	text-decoration: underline;
