@@ -18,6 +18,14 @@
             }
         });
     }
+    function copyText(ele){
+        // console.log(ele)
+        // ele.select();
+        // ele.setSelectionRange(0, 99999);
+        let value = ele.getAttribute("data-value")
+        navigator.clipboard.writeText(value);
+        alert('Successfully copied link');
+    }
     function connectMeatMask(){
         ethereum.enable()
             .catch(function(reason) {

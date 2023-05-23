@@ -695,7 +695,7 @@ echo '<a class="mobile_avatar" style="position:absolute;left:0;top:0" href="', $
 								</div>';
 
 	echo '
-								', !empty($message['counter']) ? '<span class="page_number floatright">#' . $message['counter'] . '</span>' : '', '
+								', !empty($message['counter']) ? '<span class="page_number floatright" onclick="copyText(this)" style="cursor:pointer" data-value="' . $message['href'] . '">#' . $message['counter'] . '</span>' : '', '
 								<div class="postinfo">
 									<span class="messageicon" ', ($message['icon_url'] === $settings['images_url'] . '/post/xx.png' && !$message['can_modify']) ? ' style="position: absolute; z-index: -1;"' : '', '>
 										<img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' id="msg_icon_' . $message['id'] . '"' : '', '>
