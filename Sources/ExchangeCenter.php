@@ -43,6 +43,9 @@ function flmExChangeCenter(){
         if ($flmAmount < $amount) {
             fatal_error('Insufficient FLM quantity');
         }
+        if ($amount < $context['min'] || $amount > $context['max']) {
+            fatal_error("The number of applications does not meet the requirements.Min:{$context['min']},Max:{$context['max']}");
+        }
 
         $smcFunc['db_insert']('',
             '{db_prefix}apply_withdraw',
