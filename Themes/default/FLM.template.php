@@ -489,7 +489,7 @@ The function administrator sets to add or delete the Merit source user list as t
 			</thead>
 			<tbody>';
     foreach ($context['users'] as $k=> $val) {
-        $id = $k+$context['start'] + 1;
+//        $id = $k+$context['start'] + 1;
         switch ($val['state']) {
             case '1':
                 $state = 'Pass';
@@ -505,7 +505,7 @@ The function administrator sets to add or delete the Merit source user list as t
         echo '
 				<tr class="windowbg" id="list_member_list_0">
 					<td class="id_member">
-						' . $id . '
+						' . $val['id'] .  '
 					</td>
 						<td class="id_member">
 						' . $val['pid'] . '
