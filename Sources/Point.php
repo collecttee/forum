@@ -76,15 +76,27 @@ function flmtransfer(){
             )
         );
         $toProperty = $smcFunc['db_fetch_assoc']($request);
-        $smcFunc['db_query']('', '
+        if (empty($toProperty)){
+            $smcFunc['db_insert']('',
+                '{db_prefix}property',
+                array(
+                    'id_member' => 'int',
+                    'flm' => 'int'
+                ),
+                [$user_settings['id_member'],$amount],
+                array()
+            );
+        }else{
+            $smcFunc['db_query']('', '
 					UPDATE {db_prefix}property
 					SET flm = {int:flm}
 					WHERE id_member = {int:id}',
-            array(
-                'flm' => $toProperty['flm'] + $amount,
-                'id' => $user_settings['id_member']
-            )
-        );
+                array(
+                    'flm' => $toProperty['flm'] + $amount,
+                    'id' => $user_settings['id_member']
+                )
+            );
+        }
         $smcFunc['db_query']('', '
 					UPDATE {db_prefix}property
 					SET flm = {int:flm}
