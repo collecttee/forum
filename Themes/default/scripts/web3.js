@@ -22,9 +22,19 @@
         // console.log(ele)
         // ele.select();
         // ele.setSelectionRange(0, 99999);
-        let value = ele.getAttribute("data-value")
-        navigator.clipboard.writeText(value);
-        alert('Successfully copied link');
+        // let value = ele.getAttribute("data-value")
+        // navigator.clipboard.writeText(value);
+        // alert('Successfully copied link');
+        new ClipboardJS(ele, {
+            text: function(trigger) {
+                return  ele.getAttribute("data-value")
+            }
+        }).on('success', function(e) {
+            alert("Successfully copied link");
+            e.clearSelection();
+        }).on('error', function(e) {
+            alert('Error!');
+        });
     }
     function connectMeatMask(){
         ethereum.enable()

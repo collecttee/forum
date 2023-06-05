@@ -1379,6 +1379,7 @@ function Display()
 
 	// quotedText.js
 	loadJavaScriptFile('quotedText.js', array('defer' => true, 'minimize' => true), 'smf_quotedText');
+	loadJavaScriptFile('https://cdn.staticfile.org/clipboard.js/2.0.4/clipboard.min.js', array('external' => true, 'seed' => false), 'clipboard');
 
 	// Mentions
 	if (!empty($modSettings['enable_mentions']) && allowedTo('mention'))
