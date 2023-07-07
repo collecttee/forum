@@ -834,6 +834,117 @@ function template_flmExChangeCenter()
             </form>';
 
 }
+function template_xpExChangeCenter()
+{
+	global $context, $scripturl, $txt, $modSettings;
+
+	// The main header!
+	// because some browsers ignore autocomplete=off and fill username in display name and/ or email field, fake them out.
+	$url = !empty($context['profile_custom_submit_url']) ? $context['profile_custom_submit_url'] : $scripturl . '?action=profile;area=' . $context['menu_item_selected'] . ';u=' . $context['id_member'];
+	$url = $context['require_password'] && !empty($modSettings['force_ssl']) ? strtr($url, array('http://' => 'https://')) : $url;
+
+	echo '
+			<div class="cat_bar">
+				<h3 class="catbg profile_hd">';
+
+	// Don't say "Profile" if this isn't the profile...
+	if (!empty($context['profile_header_text']))
+		echo '
+					', $context['profile_header_text'];
+	else
+		echo '
+					', $txt['profile'];
+
+	echo '
+				</h3>
+			</div>';
+
+	// Have we some description?
+	if ($context['page_desc'])
+		echo '
+			<p class="information">', $context['page_desc'], '</p>';
+	echo '<div class="roundframe"> 
+		<form method="post" action="', $context['post_url'], '" >
+				<dl class="settings">
+				<h1>Single exchange limit ', $context['min'], '~', $context['max'], '</h1>
+				<h3>Your FLM amount:', $context['flm'], '</h3>
+				<h3> please enter the amount you want to exchange: <input type="number" name="amount" width="80px"></h3>
+				</dl>
+					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
+				<input type="submit" name="new_save"  value="Apply" class="button"></form></div>';
+	echo '<div class="cat_bar">
+			<h3 class="catbg">
+				Apply Records
+			</h3>
+		</div>';
+	echo '<form  method="post"><table class="table_grid" id="member_list">
+			<thead>
+				<tr class="title_bar">
+					<th scope="col" id="header_member_list_id_member" class="id_member">
+						 ID
+					</th><th scope="col" id="header_member_list_id_member" class="id_member">
+						 Address
+					</th>
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					Amounts 
+					</th>		
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					state 
+					</th>
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					complete 
+					</th>
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					Time 
+					</th>
+				</tr>
+			</thead>
+			<tbody>';
+	foreach ($context['users'] as $k=> $val) {
+		$id = $k+$context['start'] + 1;
+		switch ($val['state']) {
+			case '1':
+				$state = 'Pass';
+				break;
+			case '2':
+				$state = 'Reject';
+				break;
+			default:
+				$state = 'Unaudited';
+				break;
+		}
+		$comp = $val['complete'] == 0 ? 'No' : 'Yes';
+		echo '
+				<tr class="windowbg" id="list_member_list_0">
+					<td class="id_member">
+						' . $id . '
+					</td>
+					<td class="user_name">
+			        ' . $val['address'] . '
+					</td>
+					<td class="user_name">
+			        ' . $val['amount'] . '
+					</td>
+					<td class="user_name">
+			        ' .$state . '
+					</td>
+					<td class="display_name">
+						' . $comp . '
+					</td>
+					<td class="check centercol">
+					' . date('Y-m-d H:i:s',$val['create_at']) . '
+					</td>
+				</tr>';
+	}
+	echo '
+			</tbody>
+		</table>
+       	<div class="pagesection">
+			<div class="pagelinks floatleft">', $context['page_index'], '</div>
+        </div>
+            </form>';
+
+}
 function template_reward()
 {
 	global $context, $scripturl, $txt, $modSettings;

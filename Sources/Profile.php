@@ -502,6 +502,17 @@ function ModifyProfile($post_errors = array())
 						'any' => array('moderate_forum'),
 					),
 				),
+				'xpchange' => array(
+					'label' => 'ZealyXP Change Center',
+					'file' => 'ExchangeCenter.php',
+					'function' => 'xpExChangeCenter',
+					'icon' => 'packages',
+					// 'token' => 'profile-ex%u', // This is not checked here. We do it in the function itself - but if it was checked, this is what it'd be.
+					'permission' => array(
+						'own' => array('profile_view_own'),
+						'any' => array('moderate_forum'),
+					),
+				),
 			),
 		),
 		'point' => array(

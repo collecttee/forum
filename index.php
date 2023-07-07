@@ -373,6 +373,7 @@ function smf_main()
 		'mlist' => array('Memberlist.php', 'Memberlist'),
 		'merit'=>array('Merits.php','MeritMain'),
 		'flm'=>array('FLM.php','FLMMain'),
+		'zealy'=>array('Zealy.php','zealyMain'),
 		'send'=>array('Send.php','SendMain'),
 		'moderate' => array('ModerationCenter.php', 'ModerationMain'),
 		'modifycat' => array('ManageBoards.php', 'ModifyCat'),
