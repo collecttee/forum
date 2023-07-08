@@ -427,31 +427,7 @@ function template_xpexchange()
     if (!empty($context['exists']))
         echo '
 					<div class="errorbox">', $txt['exists_this_user'], '</div>';
-    echo '
-		<div class="cat_bar">
-			<h3 class="catbg">FLM Change Center</h3>
-		</div>
-		<p class="information">
-The function administrator sets to add or delete the Merit source user list as the internal distributiongroup of sFLM.				</p>
-		<div id="report_buttons">';
 
-    echo '
-		</div>';
-    template_flm_menu('flmexchange');
-    echo '<div class="cat_bar">
-			<h3 class="catbg">Set FLM Exchange Limit</h3>
-		</div>
-		<div class="windowbg">
-								<dl class="settings">
-								  <form method="post" action="', $context['post_url'], '" >    
-									<h1>Single Min: <input type="number" name="min" id="recaptcha_site_key" value="', $context['min'], '"></h1>
-									<br>
-									<h1>Single Max: <input type="number" name="max" id="recaptcha_site_key" value="', $context['max'], '"></h1>
-									<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
-				<input type="submit" value="Modify" class="button">
-				</form> 
-								</dl>	
-								</div>';
 
     template_apply_menu('all');
     // Go through each table!
@@ -474,7 +450,10 @@ The function administrator sets to add or delete the Merit source user list as t
 					</th>		
 					
 					<th scope="col" id="header_member_list_user_name" class="user_name">
-					Amount 
+					XP Amount 
+					</th>	
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					FLM Amount 
 					</th>	
 					<th scope="col" id="header_member_list_user_name" class="user_name">
 					state 
@@ -518,6 +497,9 @@ The function administrator sets to add or delete the Merit source user list as t
 					</td>
 					<td class="display_name">
 						' . $val['amount'] . '
+					</td>
+					<td class="display_name">
+						' . $val['real_amount'] . '
 					</td>
 					<td class="display_name">
                      ' . $state . '

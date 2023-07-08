@@ -867,7 +867,9 @@ function template_xpExChangeCenter()
 		<form method="post" action="', $context['post_url'], '" >
 				<dl class="settings">
 				<h1>Single exchange limit ', $context['min'], '~', $context['max'], '</h1>
-				<h3>Your FLM amount:', $context['flm'], '</h3>
+				<h3>Your XP amount:', $context['xpAmount'], '</h3>
+				<h3>Your Exchanged XP  amount:', $context['apply_amount'], '</h3>
+				<h3>Zealy XP : FLM  = ', $context['radio'], ' : 1</h3>
 				<h3> please enter the amount you want to exchange: <input type="number" name="amount" width="80px"></h3>
 				</dl>
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
@@ -886,7 +888,10 @@ function template_xpExChangeCenter()
 						 Address
 					</th>
 					<th scope="col" id="header_member_list_user_name" class="user_name">
-					Amounts 
+					XP Amounts 
+					</th>	
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					FLM Amounts 
 					</th>		
 					<th scope="col" id="header_member_list_user_name" class="user_name">
 					state 
@@ -924,6 +929,9 @@ function template_xpExChangeCenter()
 					</td>
 					<td class="user_name">
 			        ' . $val['amount'] . '
+					</td>
+					<td class="user_name">
+			        ' . $val['real_amount'] . '
 					</td>
 					<td class="user_name">
 			        ' .$state . '

@@ -116,6 +116,29 @@ function xpExChangeCenter(){
     $smcFunc['db_free_result']($request);
     $context['min'] = $result['min'] ?? 0;
     $context['max'] = $result['max'] ?? 0;
+    $context['radio'] = $result['radio'] ?? 0;
+    $request = $smcFunc['db_query']('', '
+			SELECT  SUM(amount) as amount
+			FROM {db_prefix}apply_withdraw
+			WHERE id_member = {int:id_member} AND type = {string:type} AND state != {int:state}
+			LIMIT 1',
+        array(
+            'id_member' => $user_info['id'],
+            'type' => 'xp',
+            'state' => 2
+        )
+    );
+    $result = $smcFunc['db_fetch_assoc']($request);
+    $smcFunc['db_free_result']($request);
+    $context['apply_amount'] = $result['amount'] ?? 0;
+    $ret  = curlGet('https://api.zealy.io/communities/yasuo-4166/users?',['ethAddress'=>$user_info['address']],['x-api-key:ba8f9dfPa_GVK5XOCsPiqSrN9P_']);
+    $xpAmount = 0;
+    $ret = json_decode($ret,1);
+    if (isset($ret['xp'])) {
+        $xpAmount = 100;
+//        $xpAmount = $ret['xp'];
+    }
+    $context['xpAmount'] = $xpAmount;
     if (isset($_SESSION['adm-save']))
     {
         if ($_SESSION['adm-save'] === true)
@@ -130,11 +153,15 @@ function xpExChangeCenter(){
 //        checkSession();
         $amount = $_POST['amount'];
         greaterThan($amount,0);
-        if ($flmAmount < $amount) {
-            fatal_error('Insufficient FLM quantity');
+
+        if ($xpAmount < $amount) {
+            fatal_error('Insufficient XP quantity');
         }
         if ($amount < $context['min'] || $amount > $context['max']) {
             fatal_error("The number of applications does not meet the requirements.Min:{$context['min']},Max:{$context['max']}");
+        }
+        if ($amount % $context['radio'] !=0 ) {
+            fatal_error('Please enter an integer multiple of '.$context['radio']);
         }
 
         $smcFunc['db_insert']('',
@@ -143,36 +170,28 @@ function xpExChangeCenter(){
                 'id_member' => 'int',
                 'amount' => 'int',
                 'type' => 'string',
-                'create_at' => 'int'
+                'create_at' => 'int',
+                'real_amount' => 'int'
             ),
-            [$user_info['id'],$amount,'flm',time()],
+            [$user_info['id'],$amount,'xp',time(),$amount / $context['radio']],
             array()
-        );
-        $smcFunc['db_query']('', '
-					UPDATE {db_prefix}property
-					SET flm = {int:flm}
-					WHERE id_member = {int:id}',
-            array(
-                'flm' => $flmAmount - $amount,
-                'id' => $user_info['id']
-            )
         );
 
         $_SESSION['adm-save'] = true;
-        redirectexit('action=profile;area=flmchange;u='.$user_info['id']);
+        redirectexit('action=profile;area=xpchange;u='.$user_info['id']);
     }
     $request = $smcFunc['db_query']('', '
 			SELECT COUNT(*)
 			FROM {db_prefix}apply_withdraw WHERE type = {string:type} AND id_member = {int:id}',
         array(
             'id' => $user_info['id'],
-            'type' => 'flm',
+            'type' => 'xp',
         )
     );
     list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
     $smcFunc['db_free_result']($request);
     $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
-    $context['page_index'] = constructPageIndex($scripturl . '?action=flm;sa=sflmtransfer', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $context['page_index'] = constructPageIndex($scripturl . '?action=profile;area=xpchange;u='.$user_info['id'], $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
     $limit = $_REQUEST['start'];
     $context['start'] = $_REQUEST['start'];
     // member-lists
@@ -181,7 +200,7 @@ function xpExChangeCenter(){
 			FROM {db_prefix}apply_withdraw as a LEFT JOIN {db_prefix}members AS mem ON (a.id_member = mem.id_member)  WHERE type = {string:type} AND a.id_member = {int:id} ORDER BY id DESC LIMIT {int:start}, {int:max}',
         array(
             'id' => $user_info['id'],
-            'type' => 'flm',
+            'type' => 'xp',
             'start' => $limit,
             'max' => $modSettings['defaultMaxMembers'],
         )

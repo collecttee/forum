@@ -8446,5 +8446,18 @@ function greaterThan($number,$limit){
 		fatal_error("Quantity must be greater than ". $limit);
 	}
 }
+function curlGet($url,$params,$header){
+	$ch = curl_init();
+	$url .= http_build_query($params);
+	curl_setopt($ch, CURLOPT_URL, $url);
+	if ($header){
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+	}
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+	$output = curl_exec($ch);
+	curl_close($ch);
+	return $output;
+}
 
 ?>

@@ -340,13 +340,13 @@ function xpexchange(){
 			SELECT COUNT(*)
 			FROM {db_prefix}apply_withdraw WHERE type = {string:type}',
         array(
-            'type' => 'flm',
+            'type' => 'xp',
         )
     );
     list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
     $smcFunc['db_free_result']($request);
     $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
-    $context['page_index'] = constructPageIndex($scripturl . '?action=flm;sa=flmexchange', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $context['page_index'] = constructPageIndex($scripturl . '?action=zealy', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
     $limit = $_REQUEST['start'];
     $context['start'] = $_REQUEST['start'];
     // member-lists
@@ -354,7 +354,7 @@ function xpexchange(){
 				SELECT   a.*,mem.member_name,mem.pid,mem.address
 			FROM {db_prefix}apply_withdraw as a LEFT JOIN {db_prefix}members AS mem ON (a.id_member = mem.id_member)  WHERE type = {string:type} ORDER BY id DESC LIMIT {int:start}, {int:max}',
         array(
-            'type' => 'flm',
+            'type' => 'xp',
             'start' => $limit,
             'max' => $modSettings['defaultMaxMembers'],
         )
