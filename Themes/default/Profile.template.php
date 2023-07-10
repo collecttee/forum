@@ -305,9 +305,13 @@ function template_summary()
 				<dd>', $context['merit'], '</dd>';
 	echo '
 				<dt>eMerit:</dt>
-				<dd>', $context['emerit'], '</dd>';echo '
+				<dd>', $context['emerit'], '</dd>';
+	echo '
 				<dt>FLM:</dt>
 				<dd>', $context['flm'], '</dd>';
+	echo '
+				<dt>ZealyXP:</dt>
+				<dd>', $context['xp_amount'], '</dd>';
 
 	if (!isset($context['disabled_fields']['posts']))
 		echo '
@@ -1170,6 +1174,66 @@ function template_flm()
 					</td>
 					<td class="check centercol">
 					' . date('Y-m-d H:i:s',$val['create_at']) . '
+					</td>
+				</tr>';
+	}
+	echo '
+			</tbody>
+		</table>
+       	<div class="pagesection">
+			<div class="pagelinks floatleft">', $context['page_index'], '</div>
+        </div>
+            </form>';
+
+}
+function template_zealy()
+{
+	global $context, $scripturl, $txt, $modSettings;
+
+	echo '<div class="cat_bar">
+			<h3 class="catbg">
+				Zealy XP Leaderboard
+			</h3>
+		</div>';
+	echo '<form  method="post"><table class="table_grid" id="member_list">
+			<thead>
+				<tr class="title_bar">
+					<th scope="col" id="header_member_list_id_member" class="id_member">
+						 NO.
+					</th>
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					 PID 
+					</th>		
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					Zealy Name
+					</th>
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					Zealy XP 
+					</th>
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					Address 
+					</th>
+				</tr>
+			</thead>
+			<tbody>';
+	foreach ($context['users'] as $k=> $val) {
+		$id = $k+$context['start'] + 1;
+		echo '
+				<tr class="windowbg" id="list_member_list_0">
+					<td class="id_member">
+						' . $id . '
+					</td>
+					<td class="user_name">
+			        ' . $val['pid'] . '
+					</td>
+					<td class="user_name">
+			     ' . $val['name'] . '
+					</td>
+					<td class="display_name">
+				   ' . $val['xp'] . '
+					</td>
+					<td class="check centercol">
+					' . $val['addresses']['arbitrum'] . '
 					</td>
 				</tr>';
 	}

@@ -843,6 +843,15 @@ function template_apply_menu($page){
 				<a class="button button_strip_mlist_search ', $page == 'complete' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=complete', '">complete</a>
 		</div><br/>';
 }
+function template_xp_menu($page){
+	global $txt, $context, $scripturl;
+	echo '<div class="buttonlist">
+				<a class="button button_strip_view_all_members ', $page == 'all' ? 'active' : '', '" href="', $scripturl.'?action=zealy', '">All list</a>
+				<a class="button button_strip_mlist_search ', $page == 'not' ? 'active' : '', '" href="', $scripturl.'?action=zealy;sa=not', '">Not Review</a>
+				<a class="button button_strip_mlist_search ', $page == 'reviewed' ? 'active' : '', '" href="', $scripturl.'?action=zealy;sa=reviewed', '">Reviewed</a>
+				<a class="button button_strip_mlist_search ', $page == 'complete' ? 'active' : '', '" href="', $scripturl.'?action=zealy;sa=complete', '">complete</a>
+		</div><br/>';
+}
 function template_flm_transfer($page){
 	global $txt, $context, $scripturl;
 	echo '<div class="buttonlist">

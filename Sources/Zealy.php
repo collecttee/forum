@@ -293,48 +293,6 @@ function xpexchange(){
 
         unset($_SESSION['adm-save']);
     }
-    if (isset($_GET['modify']))
-    {
-        checkSession();
-        if (isset($_POST['do_state'])){
-            $pass = $_POST['pass'];
-            $reject = $_POST['reject'];
-        }
-
-    }
-    if (isset($_GET['save']))
-    {
-        checkSession();
-        $min = $_POST['min'];
-        $max = $_POST['max'];
-        if (empty($pool)){
-            $smcFunc['db_insert']('',
-                '{db_prefix}exchange_limit',
-                array(
-                    'min' => 'int',
-                    'max' => 'int',
-                    'property' => 'string',
-                ),
-                [$min,$max,'flm'],
-                array()
-            );
-        }else{
-            $smcFunc['db_query']('', '
-                UPDATE {db_prefix}exchange_limit
-                SET min = {int:min},
-                max = {int:max}
-                WHERE property = {string:property}',
-                array(
-                    'min' => $min,
-                    'max' => $max,
-                    'property' => 'flm'
-                )
-            );
-        }
-        $_SESSION['adm-save'] = true;
-        redirectexit('action=flm;sa=flmexchange');
-
-    }
 
     $request = $smcFunc['db_query']('', '
 			SELECT COUNT(*)
@@ -369,9 +327,9 @@ function notReview(){
     // Make sure they can view the memberlist.
     isAllowedTo(['admin_forum','xp_manage']);
 
-    loadTemplate('FLM');
+    loadTemplate('ZealyXP');
     $context['sub_template'] = 'notReview';
-    $context['modify_url'] = $scripturl . '?action=flm;sa=not;modify';
+    $context['modify_url'] = $scripturl . '?action=zealy;sa=not;modify';
     if (isset($_SESSION['adm-save']))
     {
         if ($_SESSION['adm-save'] === true)
@@ -409,39 +367,10 @@ function notReview(){
                         'id' => $reject
                     )
                 );
-                $request = $smcFunc['db_query']('', '
-				SELECT * FROM {db_prefix}apply_withdraw WHERE id IN ({array_int:id})',
-                    array(
-                        'id' => $reject,
-                    )
-                );
-                while ($row = $smcFunc['db_fetch_assoc']($request)) {
-                    $request = $smcFunc['db_query']('', '
-                        SELECT  flm
-                        FROM {db_prefix}property
-                        WHERE id_member = {int:id_member}
-                        LIMIT 1',
-                            array(
-                                'id_member' => $row['id_member'],
-                            )
-                        );
-                    $userProperty = $smcFunc['db_fetch_assoc']($request);
-                    $flmAmount = $userProperty['flm'];
-                    $smcFunc['db_query']('', '
-					UPDATE {db_prefix}property
-					SET flm = {int:flm}
-					WHERE id_member = {int:id}',
-                        array(
-                            'flm' => $flmAmount + $row['amount'],
-                            'id' => $row['id_member']
-                        )
-                    );
-                }
-
             }
         }
         $_SESSION['adm-save'] = true;
-        redirectexit('action=flm;sa=not');
+        redirectexit('action=zealy;sa=not');
 
     }
 
@@ -449,14 +378,14 @@ function notReview(){
 			SELECT COUNT(*)
 			FROM {db_prefix}apply_withdraw WHERE type = {string:type} AND state = {int:state}',
         array(
-            'type' => 'flm',
+            'type' => 'xp',
             'state'=>0,
         )
     );
     list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
     $smcFunc['db_free_result']($request);
     $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
-    $context['page_index'] = constructPageIndex($scripturl . '?action=flm;sa=flmexchange', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $context['page_index'] = constructPageIndex($scripturl . '?action=zealy;sa=not', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
     $limit = $_REQUEST['start'];
     $context['start'] = $_REQUEST['start'];
     // member-lists
@@ -464,7 +393,7 @@ function notReview(){
 				SELECT   a.*,mem.member_name,mem.pid,mem.address
 			FROM {db_prefix}apply_withdraw as a LEFT JOIN {db_prefix}members AS mem ON (a.id_member = mem.id_member)  WHERE type = {string:type} AND state = {int:state} ORDER BY id DESC LIMIT {int:start}, {int:max}',
         array(
-            'type' => 'flm',
+            'type' => 'xp',
             'state'=>0,
             'start' => $limit,
             'max' => $modSettings['defaultMaxMembers'],
@@ -480,10 +409,10 @@ function reviewed(){
     // Make sure they can view the memberlist.
     isAllowedTo(['admin_forum','xp_manage']);
 
-    loadTemplate('FLM');
+    loadTemplate('ZealyXP');
     $context['sub_template'] = 'reviewed';
-    $context['modify_url'] = $scripturl . '?action=flm;sa=reviewed;modify';
-    $context['download_url'] = $scripturl . '?action=flm;sa=reviewed;download';
+    $context['modify_url'] = $scripturl . '?action=zealy;sa=reviewed;modify';
+    $context['download_url'] = $scripturl . '?action=zealy;sa=reviewed;download';
     if (isset($_SESSION['adm-save']))
     {
         if ($_SESSION['adm-save'] === true)
@@ -501,7 +430,7 @@ function reviewed(){
 				SELECT   a.*,mem.member_name,mem.pid,mem.address
 			FROM {db_prefix}apply_withdraw as a LEFT JOIN {db_prefix}members AS mem ON (a.id_member = mem.id_member)  WHERE type = {string:type} AND state = {int:state} AND complete = {int:complete} ORDER BY id DESC',
             array(
-                'type' => 'flm',
+                'type' => 'xp',
                 'state'=>1,
                 'complete'=>0,
             )
@@ -523,7 +452,7 @@ function reviewed(){
             $exportData[] = $row;
         }
 
-        downLoad('reviewed.xlsx',$exportData);
+        downLoadXP('reviewed.xlsx',$exportData);
 
 
     }
@@ -545,7 +474,7 @@ function reviewed(){
             }
         }
         $_SESSION['adm-save'] = true;
-        redirectexit('action=flm;sa=reviewed');
+        redirectexit('action=zealy;sa=reviewed');
 
     }
 
@@ -553,7 +482,7 @@ function reviewed(){
 			SELECT COUNT(*)
 			FROM {db_prefix}apply_withdraw WHERE type = {string:type} AND state = {int:state} AND complete = {int:complete}',
         array(
-            'type' => 'flm',
+            'type' => 'xp',
             'state'=>1,
             'complete'=>0,
         )
@@ -561,7 +490,7 @@ function reviewed(){
     list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
     $smcFunc['db_free_result']($request);
     $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
-    $context['page_index'] = constructPageIndex($scripturl . '?action=flm;sa=flmexchange', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $context['page_index'] = constructPageIndex($scripturl . '?action=zealy;sa=reviewed', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
     $limit = $_REQUEST['start'];
     $context['start'] = $_REQUEST['start'];
     // member-lists
@@ -569,7 +498,7 @@ function reviewed(){
 				SELECT   a.*,mem.member_name,mem.pid,mem.address
 			FROM {db_prefix}apply_withdraw as a LEFT JOIN {db_prefix}members AS mem ON (a.id_member = mem.id_member)  WHERE type = {string:type} AND state = {int:state} AND complete = {int:complete} ORDER BY id DESC LIMIT {int:start}, {int:max}',
         array(
-            'type' => 'flm',
+            'type' => 'xp',
             'state'=>1,
             'complete'=>0,
             'start' => $limit,
@@ -586,9 +515,9 @@ function complete(){
     // Make sure they can view the memberlist.
     isAllowedTo(['admin_forum','xp_manage']);
 
-    loadTemplate('FLM');
+    loadTemplate('ZealyXP');
     $context['sub_template'] = 'complete';
-    $context['modify_url'] = $scripturl . '?action=flm;sa=complete;modify';
+    $context['modify_url'] = $scripturl . '?action=zealy;sa=complete;modify';
     if (isset($_SESSION['adm-save']))
     {
         if ($_SESSION['adm-save'] === true)
@@ -616,7 +545,7 @@ function complete(){
             }
         }
         $_SESSION['adm-save'] = true;
-        redirectexit('action=flm;sa=reviewed');
+        redirectexit('action=zealy;sa=complete');
 
     }
 
@@ -624,14 +553,14 @@ function complete(){
 			SELECT COUNT(*)
 			FROM {db_prefix}apply_withdraw WHERE type = {string:type} AND complete = {int:complete}',
         array(
-            'type' => 'flm',
+            'type' => 'xp',
             'complete'=>1,
         )
     );
     list ($context['num_members']) = $smcFunc['db_fetch_row']($request);
     $smcFunc['db_free_result']($request);
     $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
-    $context['page_index'] = constructPageIndex($scripturl . '?action=flm;sa=flmexchange', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    $context['page_index'] = constructPageIndex($scripturl . '?action=zealy;sa=complete', $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
     $limit = $_REQUEST['start'];
     $context['start'] = $_REQUEST['start'];
     // member-lists
@@ -639,7 +568,7 @@ function complete(){
 				SELECT   a.*,mem.member_name,mem.pid,mem.address
 			FROM {db_prefix}apply_withdraw as a LEFT JOIN {db_prefix}members AS mem ON (a.id_member = mem.id_member)  WHERE type = {string:type} AND complete = {int:complete} ORDER BY id DESC LIMIT {int:start}, {int:max}',
         array(
-            'type' => 'flm',
+            'type' => 'xp',
             'complete'=>1,
             'start' => $limit,
             'max' => $modSettings['defaultMaxMembers'],

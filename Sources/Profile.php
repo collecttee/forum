@@ -25,7 +25,7 @@ if (!defined('SMF'))
  */
 function ModifyProfile($post_errors = array())
 {
-	global $txt, $scripturl, $user_info, $context, $sourcedir, $user_profile, $cur_profile;
+	global $txt, $scripturl, $user_info, $context, $sourcedir, $user_profile, $cur_profile,$zealySubdomain, $zealyUserApiKey;
 	global $modSettings, $memberContext, $profile_vars, $post_errors, $smcFunc;
 
 	// Don't reload this as we may have processed error strings.
@@ -529,6 +529,17 @@ function ModifyProfile($post_errors = array())
 						'any' => array('moderate_forum'),
 					),
 				),
+				'zealy' => array(
+					'label' => 'Zealy XP',
+					'file' => 'Point.php',
+					'function' => 'zealy',
+					'icon' => 'packages',
+					// 'token' => 'profile-ex%u', // This is not checked here. We do it in the function itself - but if it was checked, this is what it'd be.
+					'permission' => array(
+						'own' => array('profile_view_own'),
+						'any' => array('moderate_forum'),
+					),
+				),
 			),
 		),
 	);
@@ -868,6 +879,13 @@ function ModifyProfile($post_errors = array())
 	$context['merit'] = $poolAmount['merit'] ?? 0;
 	$context['emerit'] = $poolAmount['emerit'] ?? 0;
 	$context['flm'] = $poolAmount['flm'] ?? 0;
+	$ret  = curlGet("https://api.zealy.io/communities/{$zealySubdomain}/users?",['ethAddress'=>$user_info['address']],["x-api-key:{$zealyUserApiKey}"]);
+	$xpAmount = 0;
+	$ret = json_decode($ret,1);
+	if (isset($ret['xp'])) {
+        $xpAmount = $ret['xp'];
+	}
+	$context['xp_amount'] = $xpAmount;
 }
 
 /**

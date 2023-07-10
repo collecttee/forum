@@ -101,7 +101,7 @@ function flmExChangeCenter(){
     }
 }
 function xpExChangeCenter(){
-    global $scripturl, $context,$smcFunc,$user_info,$modSettings;
+    global $scripturl, $context,$smcFunc,$user_info,$modSettings,$zealySubdomain, $zealyUserApiKey;
     $context['post_url'] = $scripturl . '?action=profile;area=xpchange;save';
     $request = $smcFunc['db_query']('', '
 			SELECT  id,pause,min,max,radio
@@ -131,7 +131,7 @@ function xpExChangeCenter(){
     $result = $smcFunc['db_fetch_assoc']($request);
     $smcFunc['db_free_result']($request);
     $context['apply_amount'] = $result['amount'] ?? 0;
-    $ret  = curlGet('https://api.zealy.io/communities/yasuo-4166/users?',['ethAddress'=>$user_info['address']],['x-api-key:ba8f9dfPa_GVK5XOCsPiqSrN9P_']);
+    $ret  = curlGet("https://api.zealy.io/communities/{$zealySubdomain}/users?",['ethAddress'=>$user_info['address']],["x-api-key:{$zealyUserApiKey}"]);
     $xpAmount = 0;
     $ret = json_decode($ret,1);
     if (isset($ret['xp'])) {

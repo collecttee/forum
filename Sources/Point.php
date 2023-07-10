@@ -229,5 +229,41 @@ function internal(){
         $context['users'][] = $row;
     }
 }
+function zealy(){
+    global $scripturl, $context,$smcFunc,$user_info,$modSettings,$zealySubdomain, $zealyLeaderboardApiKey;
+    $context['sub_template'] = 'zealy';
+    $_REQUEST['start'] =  $_REQUEST['start']  ?? 0;
+    $limit = $_REQUEST['start'];
+    $context['start'] = $_REQUEST['start'];
+    $page = $limit / $modSettings['defaultMaxMembers'];
+    $ret  = curlGet("https://api.zealy.io/communities/{$zealySubdomain}/leaderboard?limit={$modSettings['defaultMaxMembers']}&page={$page}",[],["x-api-key:{$zealyLeaderboardApiKey}"]);
+    $ret = json_decode($ret,1);
+    if (isset($ret['totalPages'])) {
+        $context['num_members'] = $ret['totalPages'] * $modSettings['defaultMaxMembers'];
+        $context['page_index'] = constructPageIndex($scripturl . '?action=profile;area=zealy;u='.$user_info['id'], $_REQUEST['start'], $context['num_members'], $modSettings['defaultMaxMembers']);
+    }
+    if (!empty($ret['leaderboard'])){
+        foreach ($ret['leaderboard'] as $row) {
+            $PID = 0;
+            if (isset($row['addresses']['arbitrum'])){
+                $request = $smcFunc['db_query']('', '
+                    SELECT pid
+                    FROM {db_prefix}members
+                    WHERE address = {string:address}
+                    LIMIT 1',
+                    array(
+                        'address' => $row['addresses']['arbitrum'],
+                    )
+                );
+                $user= $smcFunc['db_fetch_assoc']($request);
+                $PID = $user['pid'];
+            }
+            $row['pid'] = $PID;
+            $context['users'][] = $row;
+        }
+    }
 
+
+
+}
 

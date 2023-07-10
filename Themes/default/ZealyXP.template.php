@@ -429,7 +429,7 @@ function template_xpexchange()
 					<div class="errorbox">', $txt['exists_this_user'], '</div>';
 
 
-    template_apply_menu('all');
+    template_xp_menu('all');
     // Go through each table!
     echo '<div class="cat_bar">
 			<h3 class="catbg">All List</h3>
@@ -527,27 +527,8 @@ function template_notReview()
 {
     global $context, $txt;
 
-    if (!empty($context['saved_successful']))
-        echo '
-					<div class="infobox">', $txt['save'], '</div>';
-    if (!empty($context['not_found_user']))
-        echo '
-					<div class="errorbox">', $txt['username_no_exist'], '</div>';
-    if (!empty($context['exists']))
-        echo '
-					<div class="errorbox">', $txt['exists_this_user'], '</div>';
-    echo '
-		<div class="cat_bar">
-			<h3 class="catbg">FLM Change Center</h3>
-		</div>
-		<p class="information">
-The function administrator sets to add or delete the Merit source user list as the internal distributiongroup of sFLM.				</p>
-		<div id="report_buttons">';
 
-    echo '
-		</div>';
-
-    template_apply_menu('not');
+    template_xp_menu('not');
     // Go through each table!
     echo '<div class="cat_bar">
 			<h3 class="catbg">Not Reviewed List</h3>
@@ -567,7 +548,10 @@ The function administrator sets to add or delete the Merit source user list as t
 					Address 
 					</th>		
 					<th scope="col" id="header_member_list_user_name" class="user_name">
-					Amount 
+					XP Amount 
+					</th>	
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					FLM Amount 
 					</th>	
 					<th scope="col" id="header_member_list_user_name" class="user_name">
 					state 
@@ -611,6 +595,9 @@ The function administrator sets to add or delete the Merit source user list as t
 					</td>
 					<td class="display_name">
 						' . $val['amount'] . '
+					</td>
+					<td class="display_name">
+						' . $val['real_amount'] . '
 					</td>
 					<td class="display_name">';
         if ($val['state'] == 0){
@@ -654,27 +641,9 @@ function template_reviewed()
 {
     global $context, $txt;
 
-    if (!empty($context['saved_successful']))
-        echo '
-					<div class="infobox">', $txt['save'], '</div>';
-    if (!empty($context['not_found_user']))
-        echo '
-					<div class="errorbox">', $txt['username_no_exist'], '</div>';
-    if (!empty($context['exists']))
-        echo '
-					<div class="errorbox">', $txt['exists_this_user'], '</div>';
-    echo '
-		<div class="cat_bar">
-			<h3 class="catbg">FLM Change Center</h3>
-		</div>
-		<p class="information">
-The function administrator sets to add or delete the Merit source user list as the internal distributiongroup of sFLM.				</p>
-		<div id="report_buttons">';
 
-    echo '
-		</div>';
 
-    template_apply_menu('reviewed');
+    template_xp_menu('reviewed');
     // Go through each table!
     echo '<a class="button" style="float: right" href="', $context['download_url'], '" >Export Data</a> <br/><br/>
 <div class="cat_bar">
@@ -695,7 +664,10 @@ The function administrator sets to add or delete the Merit source user list as t
 					Address 
 					</th>		
 					<th scope="col" id="header_member_list_user_name" class="user_name">
-					Amount 
+					XP Amount 
+					</th>	
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					FLM Amount 
 					</th>	
 					<th scope="col" id="header_member_list_user_name" class="user_name">
 					state 
@@ -741,6 +713,9 @@ The function administrator sets to add or delete the Merit source user list as t
 						' . $val['amount'] . '
 					</td>
 					<td class="display_name">
+						' . $val['real_amount'] . '
+					</td>
+					<td class="display_name">
                         ' . $state. '
 					</td>
 						<td class="display_name">';
@@ -775,27 +750,8 @@ function template_complete()
 {
     global $context, $txt;
 
-    if (!empty($context['saved_successful']))
-        echo '
-					<div class="infobox">', $txt['save'], '</div>';
-    if (!empty($context['not_found_user']))
-        echo '
-					<div class="errorbox">', $txt['username_no_exist'], '</div>';
-    if (!empty($context['exists']))
-        echo '
-					<div class="errorbox">', $txt['exists_this_user'], '</div>';
-    echo '
-		<div class="cat_bar">
-			<h3 class="catbg">FLM Change Center</h3>
-		</div>
-		<p class="information">
-The function administrator sets to add or delete the Merit source user list as the internal distributiongroup of sFLM.				</p>
-		<div id="report_buttons">';
 
-    echo '
-		</div>';
-
-    template_apply_menu('complete');
+    template_xp_menu('complete');
 
     // Go through each table!
     echo '<div class="cat_bar">
@@ -816,7 +772,10 @@ The function administrator sets to add or delete the Merit source user list as t
 					Address 
 					</th>		
 					<th scope="col" id="header_member_list_user_name" class="user_name">
-					Amount 
+					XP Amount 
+					</th>	
+					<th scope="col" id="header_member_list_user_name" class="user_name">
+					FLM Amount 
 					</th>	
 					<th scope="col" id="header_member_list_user_name" class="user_name">
 					Time 
@@ -842,6 +801,9 @@ The function administrator sets to add or delete the Merit source user list as t
 					</td>
 					<td class="display_name">
 						' . $val['amount'] . '
+					</td>
+					<td class="display_name">
+						' . $val['real_amount'] . '
 					</td>
 					<td class="check centercol">
 					' . date('Y-m-d H:i:s',$val['create_at']) . '
