@@ -43,7 +43,7 @@ Edit your Zealy XP function here.					</p>
 <dl class="settings">
                             <form method="post" action="', $context['post_url'], '" >                                  
 									<dt>
-										<a id="setting_reg_verification"></a> <span><label for="reg_verification">Single Issuance Limit</label></span>
+										<a id="setting_reg_verification"></a> <span><label for="reg_verification">Single Exchange Limit</label></span>
 									</dt>
 									<dd>
 										Min<input type="number" name="min" id="min" value="', $context['limit'], '">
@@ -71,7 +71,7 @@ Edit your Zealy XP function here.					</p>
 								<dl class="settings">
 								  <form method="post" action="', $context['set_url'], '" >    
 									<dt>
-										<a id="setting_reg_verification"></a> <span><label for="reg_verification">Set FLM Function Managers</label></span>
+										<a id="setting_reg_verification"></a> <span><label for="reg_verification">Set Zealy XP Function Managers</label></span>
 									</dt>
 									<dd>
 										<input type="text" name="username" id="recaptcha_site_key" value="">
