@@ -154,7 +154,7 @@ function xpExChangeCenter(){
         $amount = $_POST['amount'];
         greaterThan($amount,0);
 
-        if ($xpAmount < $amount) {
+        if ($xpAmount - $context['apply_amount'] < $amount) {
             fatal_error('Insufficient XP quantity');
         }
         if ($amount < $context['min'] || $amount > $context['max']) {
