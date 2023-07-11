@@ -1233,7 +1233,7 @@ function template_zealy()
 				   ' . $val['xp'] . '
 					</td>
 					<td class="check centercol">
-					' . $val['addresses']['arbitrum'] . '
+					' . $val['address'] . '
 					</td>
 				</tr>';
 	}

@@ -245,14 +245,14 @@ function zealy(){
     if (!empty($ret['leaderboard'])){
         foreach ($ret['leaderboard'] as $row) {
             $PID = 0;
-            if (isset($row['addresses']['arbitrum'])){
+            if (isset($row['address'])){
                 $request = $smcFunc['db_query']('', '
                     SELECT pid
                     FROM {db_prefix}members
                     WHERE address = {string:address}
                     LIMIT 1',
                     array(
-                        'address' => $row['addresses']['arbitrum'],
+                        'address' => $row['address'],
                     )
                 );
                 $user= $smcFunc['db_fetch_assoc']($request);
