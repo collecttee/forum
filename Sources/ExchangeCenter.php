@@ -135,8 +135,8 @@ function xpExChangeCenter(){
     $xpAmount = 0;
     $ret = json_decode($ret,1);
     if (isset($ret['xp'])) {
-        $xpAmount = 100;
-//        $xpAmount = $ret['xp'];
+//        $xpAmount = 100;
+        $xpAmount = $ret['xp'];
     }
     $context['xpAmount'] = $xpAmount;
     if (isset($_SESSION['adm-save']))
