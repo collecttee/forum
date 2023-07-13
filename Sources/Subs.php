@@ -8460,8 +8460,19 @@ function curlGet($url,$params,$header){
 	return $output;
 }
 function getUserXP(){
-	global $user_info,$zealySubdomain, $zealyUserApiKey,$zealyLeaderboardApiKey;
-	$ret  = curlGet("https://api.zealy.io/communities/{$zealySubdomain}/leaderboard?limit=1000&page=0",[],["x-api-key:{$zealyLeaderboardApiKey}"]);
+	global $user_info,$zealySubdomain, $zealyUserApiKey,$zealyLeaderboardApiKey,$smcFunc;
+	$request = $smcFunc['db_query']('', '
+			SELECT  xp
+			FROM {db_prefix}user_xp
+			WHERE address = {string:address}
+			LIMIT 1',
+		array(
+			'address' => $user_info['address']
+		)
+	);
+	$result = $smcFunc['db_fetch_assoc']($request);
+	$xpAmount = $result['xp'] ?? 0 ;
+	/*$ret  = curlGet("https://api.zealy.io/communities/{$zealySubdomain}/leaderboard?limit=1000&page=0",[],["x-api-key:{$zealyLeaderboardApiKey}"]);
 	$ret = json_decode($ret,1);
 	$xpAmount = 0;
 	$find = false;
@@ -8493,7 +8504,7 @@ function getUserXP(){
 				}
 			}
 		}
-	}
+	}*/
 	return $xpAmount;
 }
 
