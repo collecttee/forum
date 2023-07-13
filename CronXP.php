@@ -57,7 +57,7 @@ function updateXp($address,$xp){
 					SET xp = {int:xp},update_time = {int:time}
 					WHERE address = {string:address}',
             array(
-                'update_time' => time(),
+                'time' => time(),
                 'address' => $address,
                 'xp' => $xp
             )
