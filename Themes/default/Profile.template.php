@@ -886,21 +886,21 @@ function template_xpExChangeCenter()
 	echo '<form  method="post"><table class="table_grid" id="member_list">
 			<thead>
 				<tr class="title_bar">
-					<th scope="col" id="header_member_list_id_member" class="id_member">
+					<th scope="col" id="header_member_list_user_name" class="user_name">
 						 ID
-					</th><th scope="col" id="header_member_list_id_member" class="id_member">
+					</th><th scope="col" id="header_member_list_user_name" class="user_name">
 						 Address
 					</th>
-					<th scope="col" id="header_member_list_user_name" class="user_name">
+					<th scope="col" id="header_member_list_id_member" class="id_member">
 					XP Amounts 
 					</th>	
-					<th scope="col" id="header_member_list_user_name" class="user_name">
+					<th scope="col" id="header_member_list_id_member" class="id_member">
 					FLM Amounts 
 					</th>		
-					<th scope="col" id="header_member_list_user_name" class="user_name">
+					<th scope="col" id="header_member_list_id_member" class="id_member">
 					state 
 					</th>
-					<th scope="col" id="header_member_list_user_name" class="user_name">
+					<th scope="col" id="header_member_list_id_member" class="id_member">
 					complete 
 					</th>
 					<th scope="col" id="header_member_list_user_name" class="user_name">
@@ -925,25 +925,25 @@ function template_xpExChangeCenter()
 		$comp = $val['complete'] == 0 ? 'No' : 'Yes';
 		echo '
 				<tr class="windowbg" id="list_member_list_0">
-					<td class="id_member">
+					<td class="user_name">
 						' . $id . '
 					</td>
 					<td class="user_name">
 			        ' . $val['address'] . '
 					</td>
-					<td class="user_name">
+					<td class="display_name">
 			        ' . $val['amount'] . '
 					</td>
-					<td class="user_name">
+					<td class="display_name">
 			        ' . $val['real_amount'] . '
 					</td>
-					<td class="user_name">
+					<td class="display_name">
 			        ' .$state . '
 					</td>
 					<td class="display_name">
 						' . $comp . '
 					</td>
-					<td class="check centercol">
+					<td class="user_name">
 					' . date('Y-m-d H:i:s',$val['create_at']) . '
 					</td>
 				</tr>';
