@@ -484,7 +484,7 @@ function template_xpexchange()
         echo '
 				<tr class="windowbg" id="list_member_list_0">
 					<td class="id_member">
-						' . $val['id'] .  '
+						' . $val['order_id'] .  '
 					</td>
 						<td class="id_member">
 						' . $val['pid'] . '
