@@ -492,7 +492,7 @@ function ModifyProfile($post_errors = array())
 			'title' => 'Exchange Center',
 			'areas' => array(
 				'flmchange' => array(
-					'label' => 'FLM EXchange Center',
+					'label' => 'FLM Exchange Center',
 					'file' => 'ExchangeCenter.php',
 					'function' => 'flmExChangeCenter',
 					'icon' => 'packages',
@@ -503,7 +503,7 @@ function ModifyProfile($post_errors = array())
 					),
 				),
 				'xpchange' => array(
-					'label' => 'ZealyXP EXchange Center',
+					'label' => 'ZealyXP Exchange Center',
 					'file' => 'ExchangeCenter.php',
 					'function' => 'xpExChangeCenter',
 					'icon' => 'packages',
