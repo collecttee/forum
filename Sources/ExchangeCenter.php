@@ -46,16 +46,24 @@ function flmExChangeCenter(){
         if ($amount < $context['min'] || $amount > $context['max']) {
             fatal_error("The number of applications does not meet the requirements.Min:{$context['min']},Max:{$context['max']}");
         }
-
+        $request = $smcFunc['db_query']('', '
+			SELECT COUNT(*)
+			FROM {db_prefix}apply_withdraw WHERE type = {string:type}',
+            array(
+                'type' => 'flm',
+            )
+        );
+        list ($count) = $smcFunc['db_fetch_row']($request);
         $smcFunc['db_insert']('',
             '{db_prefix}apply_withdraw',
             array(
                 'id_member' => 'int',
                 'amount' => 'int',
                 'type' => 'string',
-                'create_at' => 'int'
+                'create_at' => 'int',
+                'order_id' => 'int'
             ),
-            [$user_info['id'],$amount,'flm',time()],
+            [$user_info['id'],$amount,'flm',time(),$count + 1],
             array()
         );
         $smcFunc['db_query']('', '
@@ -164,7 +172,14 @@ function xpExChangeCenter(){
         if ($amount % $context['radio'] !=0 ) {
             fatal_error('Please enter an integer multiple of '.$context['radio']);
         }
-
+        $request = $smcFunc['db_query']('', '
+			SELECT COUNT(*)
+			FROM {db_prefix}apply_withdraw WHERE type = {string:type}',
+            array(
+                'type' => 'xp',
+            )
+        );
+        list ($count) = $smcFunc['db_fetch_row']($request);
         $smcFunc['db_insert']('',
             '{db_prefix}apply_withdraw',
             array(
@@ -172,9 +187,10 @@ function xpExChangeCenter(){
                 'amount' => 'int',
                 'type' => 'string',
                 'create_at' => 'int',
-                'real_amount' => 'int'
+                'real_amount' => 'int',
+                'order_id' => 'int'
             ),
-            [$user_info['id'],$amount,'xp',time(),$amount / $context['radio']],
+            [$user_info['id'],$amount,'xp',time(),$amount / $context['radio'],$count + 1],
             array()
         );
 
