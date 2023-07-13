@@ -101,7 +101,7 @@ function flmExChangeCenter(){
     }
 }
 function xpExChangeCenter(){
-    global $scripturl, $context,$smcFunc,$user_info,$modSettings,$zealySubdomain, $zealyUserApiKey;
+    global $scripturl, $context,$smcFunc,$user_info,$modSettings;
     $context['post_url'] = $scripturl . '?action=profile;area=xpchange;save';
     $request = $smcFunc['db_query']('', '
 			SELECT  id,pause,min,max,radio
@@ -131,13 +131,14 @@ function xpExChangeCenter(){
     $result = $smcFunc['db_fetch_assoc']($request);
     $smcFunc['db_free_result']($request);
     $context['apply_amount'] = $result['amount'] ?? 0;
-    $ret  = curlGet("https://api.zealy.io/communities/{$zealySubdomain}/users?",['ethAddress'=>$user_info['address']],["x-api-key:{$zealyUserApiKey}"]);
-    $xpAmount = 0;
-    $ret = json_decode($ret,1);
-    if (isset($ret['xp'])) {
-//        $xpAmount = 100;
-        $xpAmount = $ret['xp'];
-    }
+//    $ret  = curlGet("https://api.zealy.io/communities/{$zealySubdomain}/users?",['ethAddress'=>$user_info['address']],["x-api-key:{$zealyUserApiKey}"]);
+//    $xpAmount = 0;
+//    $ret = json_decode($ret,1);
+//    if (isset($ret['xp'])) {
+////        $xpAmount = 100;
+//        $xpAmount = $ret['xp'];
+//    }
+    $xpAmount = getUserXP();
     $context['xpAmount'] = $xpAmount;
     if (isset($_SESSION['adm-save']))
     {

@@ -8459,5 +8459,42 @@ function curlGet($url,$params,$header){
 	curl_close($ch);
 	return $output;
 }
+function getUserXP(){
+	global $user_info,$zealySubdomain, $zealyUserApiKey,$zealyLeaderboardApiKey;
+	$ret  = curlGet("https://api.zealy.io/communities/{$zealySubdomain}/leaderboard?limit=1000&page=0",[],["x-api-key:{$zealyLeaderboardApiKey}"]);
+	$ret = json_decode($ret,1);
+	$xpAmount = 0;
+	$find = false;
+	if (isset($ret['totalPages'])) {
+		if (!empty($ret['leaderboard'])){
+			foreach ($ret['leaderboard'] as $row) {
+				if(strtolower($row['address']) == $user_info['address']){
+					$xpAmount = $row['xp'];
+					$find = true;
+					break;
+				}
+			}
+		}
+		if (!$find){
+			for ($i = 1;$i<=$ret['totalPages'];$i++){
+				$res  = curlGet("https://api.zealy.io/communities/{$zealySubdomain}/leaderboard?limit=1000&page={$i}",[],["x-api-key:{$zealyLeaderboardApiKey}"]);
+				$res = json_decode($res,1);
+				if (!empty($res['leaderboard'])){
+					foreach ($res['leaderboard'] as $row) {
+						if(strtolower($row['address']) == $user_info['address']){
+							$xpAmount = $row['xp'];
+							$find = true;
+							break;
+						}
+					}
+				}
+				if ($find){
+					break;
+				}
+			}
+		}
+	}
+	return $xpAmount;
+}
 
 ?>

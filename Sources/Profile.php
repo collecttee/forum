@@ -879,12 +879,13 @@ function ModifyProfile($post_errors = array())
 	$context['merit'] = $poolAmount['merit'] ?? 0;
 	$context['emerit'] = $poolAmount['emerit'] ?? 0;
 	$context['flm'] = $poolAmount['flm'] ?? 0;
-	$ret  = curlGet("https://api.zealy.io/communities/{$zealySubdomain}/users?",['ethAddress'=>$user_info['address']],["x-api-key:{$zealyUserApiKey}"]);
-	$xpAmount = 0;
-	$ret = json_decode($ret,1);
-	if (isset($ret['xp'])) {
-        $xpAmount = $ret['xp'];
-	}
+//	$ret  = curlGet("https://api.zealy.io/communities/{$zealySubdomain}/users?",['ethAddress'=>$user_info['address']],["x-api-key:{$zealyUserApiKey}"]);
+//	$xpAmount = 0;
+//	$ret = json_decode($ret,1);
+//	if (isset($ret['xp'])) {
+//        $xpAmount = $ret['xp'];
+//	}
+	$xpAmount = getUserXP();
 	$context['xp_amount'] = $xpAmount;
 }
 
