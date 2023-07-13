@@ -54,9 +54,10 @@ function updateXp($address,$xp){
     if ($smcFunc['db_num_rows']($request) != 0){
         $smcFunc['db_query']('', '
 					UPDATE {db_prefix}user_xp
-					SET xp = {int:xp}
+					SET xp = {int:xp},update_time = {int:time}
 					WHERE address = {string:address}',
             array(
+                'update_time' => time(),
                 'address' => $address,
                 'xp' => $xp
             )
@@ -66,9 +67,10 @@ function updateXp($address,$xp){
             '{db_prefix}user_xp',
             array(
                 'address' => 'string',
-                'xp' => 'int'
+                'xp' => 'int',
+                'update_time' => 'int'
             ),
-            [$address,$xp],
+            [$address,$xp,time()],
             array()
         );
     }
