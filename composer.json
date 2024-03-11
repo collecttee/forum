@@ -1,6 +1,7 @@
 {
   "require": {
     "sc0vu/web3.php": "dev-master",
-    "spatie/simple-excel": "^1.2"
+    "spatie/simple-excel": "^1.2",
+    "bitwasp/bitcoin": "^1.0"
   }
 }

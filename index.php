@@ -374,6 +374,7 @@ function smf_main()
 		'merit'=>array('Merits.php','MeritMain'),
 		'flm'=>array('FLM.php','FLMMain'),
 		'zealy'=>array('Zealy.php','zealyMain'),
+		'frp'=>array('FRP.php','FRPMain'),
 		'send'=>array('Send.php','SendMain'),
 		'moderate' => array('ModerationCenter.php', 'ModerationMain'),
 		'modifycat' => array('ManageBoards.php', 'ModifyCat'),
@@ -422,6 +423,7 @@ function smf_main()
 		'.xml' => array('News.php', 'ShowXmlFeed'),
 		'xmlhttp' => array('Xml.php', 'XMLhttpMain'),
 		'sign' => array('Sign.php', 'Sign'),
+		'btcsign' => array('Sign.php', 'btcSign'),
 		'initializepassword' => array('Sign.php', 'initializePassword'),
 		'daoregister' => array('Sign.php', 'Register'),
 	);

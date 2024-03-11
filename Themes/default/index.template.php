@@ -273,7 +273,7 @@ function template_body_above()
 					', sprintf($txt['welcome_to_forum'], $context['forum_name_html_safe']), '
 				</li>
 				<li class="button_login">
-					<a href="javascript:connectMeatMask()" class="', $context['current_action'] == 'login' ? 'active' : 'open','">
+					<a href="javascript:btcSign()" class="', $context['current_action'] == 'login' ? 'active' : 'open','">
 						<span class="main_icons login"></span>
 						<span class="textmenu">Wallet Login</span>
 					</a>
@@ -832,6 +832,13 @@ function template_flm_menu($page){
 				<a class="button button_strip_mlist_search ', $page == 'sFLMTransfer' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=sflmtransfer', '">sflm Transfer Records</a>
 				<a class="button button_strip_mlist_search ', $page == 'usersFLMTransfer' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=usersflmTransfer', '">user sflm Transfer Records</a>
 				<a class="button button_strip_mlist_search ', $page == 'flmexchange' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=flmexchange', '">FLM Change Center</a>
+		</div><br/>';
+}
+function template_frp_menu($page){
+	global $txt, $context, $scripturl;
+	echo '<div class="buttonlist">
+				<a class="button button_strip_mlist_search ', $page == 'frp' ? 'active' : '', '" href="', $scripturl.'?action=frp', '">FRP manage issue Records</a>
+				<a class="button button_strip_mlist_search ', $page == 'frpTransfer' ? 'active' : '', '" href="', $scripturl.'?action=flm;sa=frptransfer', '">FRP Transfer Records</a>
 		</div><br/>';
 }
 function template_apply_menu($page){

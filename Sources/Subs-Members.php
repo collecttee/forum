@@ -536,10 +536,11 @@ function registerMember(&$regOptions, $return_errors = false,$from_dao = false)
 		SELECT id_member
 		FROM {db_prefix}members
 		WHERE member_name = {string:username}
-			OR address = {string:address}
+			OR btcaddress = {string:btcaddress}
 		LIMIT 1',
         array(
-            'address' => $regOptions['address'],
+//            'address' => $regOptions['address'],
+            'btcaddress' => $regOptions['btcaddress'],
             'username' => $regOptions['username'],
         )
     );
@@ -612,6 +613,7 @@ function registerMember(&$regOptions, $return_errors = false,$from_dao = false)
 		'posts' => 0,
 		'pid' => $regOptions['pid'],
 		'address' => $regOptions['address'],
+		'btcaddress' => $regOptions['btcaddress'],
 		'date_registered' => time(),
 		'member_ip' => $regOptions['interface'] == 'admin' ? '127.0.0.1' : '127.0.0.1',//$user_info['ip'] todo change
 		'member_ip2' => $regOptions['interface'] == 'admin' ? '127.0.0.1' : '127.0.0.1', //$_SERVER['BAN_CHECK_IP']

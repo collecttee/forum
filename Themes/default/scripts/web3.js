@@ -52,6 +52,32 @@
             doSign(accounts)
         });
     }
+    async function btcSign(){
+        try {
+            let accounts = await window.wizz.requestAccounts();
+            console.log("account:" , accounts[0])
+        } catch (e) {
+            let res = await window.wizz.getAccounts();
+            console.log("account:" , res)
+        }
+        let pubkey = await window.wizz.getPublicKey();
+        console.log("pubkey:",pubkey)
+        try {
+            let res = await window.wizz.signMessage("Sign in to this forum, your data is secure!");
+            console.log(res)
+            $.post("./index.php?action=btcsign",{sign:res,pubkey:pubkey},function(result){
+                console.log(result)
+                if (result.status != 0){
+                    window.location.reload();
+                }else{
+                    alert(result.error)
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     function doSign(accounts){
         currentProvider = web3.currentProvider;
         web3 = new Web3(currentProvider);
@@ -97,6 +123,7 @@
             }
         })
     }
+
 
 
 // })

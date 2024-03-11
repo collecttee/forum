@@ -5373,6 +5373,7 @@ function setupMenuContext()
 	$context['allow_merit'] = allowedTo(['admin_forum','merit_manage']);
 	$context['allow_flm'] = allowedTo(['admin_forum','flm_manage']);
 	$context['allow_xp'] = allowedTo(['admin_forum','xp_manage']);
+	$context['allow_frp'] = allowedTo(['admin_forum','frp_manage']);
 	$context['allow_calendar'] = allowedTo('calendar_view') && !empty($modSettings['cal_enabled']);
 	$context['allow_moderation_center'] = $context['user']['can_mod'];
 	$context['allow_pm'] = allowedTo('pm_read');
@@ -5555,6 +5556,12 @@ function setupMenuContext()
 				'title' => 'Zealy XP',
 				'href' => $scripturl . '?action=zealy',
 				'show' => $context['allow_xp'],
+				'is_last' => !$context['right_to_left'] && empty($settings['login_main_menu']),
+			),
+			'frp' => array(
+				'title' => 'FRP',
+				'href' => $scripturl . '?action=frp',
+				'show' => $context['allow_frp'],
 				'is_last' => !$context['right_to_left'] && empty($settings['login_main_menu']),
 			),
 			// Theme authors: If you want the login and register buttons to appear in

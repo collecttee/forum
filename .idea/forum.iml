@@ -29,6 +29,13 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/translation" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/inflector" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/translation-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/pleonasm/merkle-tree" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/mdanter/ecc" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/bitwasp/buffertools" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/bitwasp/bitcoin" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/lastguest/murmurhash" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/fgrosse/phpasn1" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/bitwasp/bech32" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

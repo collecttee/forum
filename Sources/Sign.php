@@ -5,6 +5,10 @@ function Sign() {
    $res =  doSign();
    echo json_encode($res);die;
 }
+function btcSign() {
+    $res =  dobtcSign();
+    echo json_encode($res);die;
+}
 function initializePassword(){
     global  $modSettings, $sourcedir,$user_info;
     global $smcFunc;
@@ -34,7 +38,42 @@ function initializePassword(){
         echo json_encode(['status'=>0,'msg'=>'operation failed']);die;
     }
 }
+function dobtcSign(){
+    global $smcFunc,$sourcedir,$user_settings;
+    if(isset($_REQUEST['action']) && in_array($_REQUEST['action'],array('btcsign'))) {
+//        $message =  'Sign in to this forum, your data is secure!';
+        $signed = $_REQUEST['sign'] ?? "";
+        $pubkey = $_REQUEST['pubkey'] ?? "";
+        $command = "node ./node-verify-message/index.js  {$signed} {$pubkey}";
+        exec($command, $val, $err);
+        if ($err == 0 && $val[0] != "error") {
+            require_once($sourcedir .'/LogInOut.php');
+            $request = $smcFunc['db_query']('', '
+			SELECT  address,passwd, id_member, id_group, lngfile, is_activated, email_address, additional_groups, member_name, password_salt,
+				passwd_flood, tfa_secret
+			FROM {db_prefix}members
+			WHERE btcaddress = {string:btcaddress}
+			LIMIT 1',
+                array(
+                    'btcaddress' => $val[0],
+                )
+            );
+            $user_settings = $smcFunc['db_fetch_assoc']($request);
+            if (!empty($user_settings)) {
+                DoLogin('firedao');
+            }else{
+                if (isset($_REQUEST['verify']) && $_REQUEST['verify'] == 1) {
+                    return array('status'=>1,'error'=>'sign success');
+                } else {
+                    return array('status'=>0,'error'=>'not found this address');
+                }
 
+            }
+        }else{
+            return array('status'=>0,'error'=>'sign failed');
+        }
+    }
+}
 function doSign(){
     global $smcFunc,$boarddir,$sourcedir,$user_settings;
     require_once($boarddir . '/Ecrecover.php');

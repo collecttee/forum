@@ -455,12 +455,18 @@ function AdminMain()
 					'function' => 'ManageFLM',
 					'icon' => ''
 				),
-				'zealyXP' => array(
-					'label' => 'Zealy XP',
-					'file' => 'ZealyXP.php',
-					'function' => 'ManageXP',
+				'managefrp' => array(
+					'label' => 'FRP',
+					'file' => 'ManageFRP.php',
+					'function' => 'ManageFRP',
 					'icon' => ''
 				),
+//				'zealyXP' => array(
+//					'label' => 'Zealy XP',
+//					'file' => 'ZealyXP.php',
+//					'function' => 'ManageXP',
+//					'icon' => ''
+//				),
 //				'managefireseed' => array(
 //					'label' => 'FireSeed',
 //					'file' => 'ManageFireSeed.php',
